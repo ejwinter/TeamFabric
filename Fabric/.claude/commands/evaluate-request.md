@@ -1,0 +1,36 @@
+# /evaluate-request - Evaluate a Request Against Its Workflow Rubric
+
+## Purpose
+Run or continue a rubric-based evaluation on a request entity.
+
+## Usage
+- `/evaluate-request R-42` - evaluate request R-42 (starts, continues, or re-evaluates as appropriate)
+- `/evaluate-request R-42 L2` - jump to a specific evaluation stage
+- `/evaluate-request` - prompts the user to select a request
+
+## Behavior
+
+1. **Resolve the request.**
+   - If a request ID is provided, load it. If ambiguous or not found, ask the user to clarify.
+   - If no ID is provided, list requests that are pending evaluation or have incomplete evaluations, and ask the user to pick one.
+
+2. **Check evaluation state.**
+   - No evaluation: start from the first stage defined in the workflow's rubric.
+   - Partial (in-progress stage): "You have an incomplete [stage] evaluation from [date]. Continue from where you left off?"
+   - Complete: "This request has a completed evaluation. Would you like to re-evaluate a specific stage, or start fresh?"
+
+3. **If a specific stage is requested** (e.g., `/evaluate-request R-42 L2`):
+   - Jump directly to that stage.
+   - If prior stages haven't been completed, warn: "[stage] depends on [prior stages] which haven't been evaluated yet. Proceed anyway?"
+
+4. **Run the evaluation** using the request-evaluation skill.
+
+5. **After evaluation:**
+   - Present the completed evaluation for confirmation before writing to the request entity.
+   - If the outcome is a terminal state (Accept/Reject), suggest next steps per the workflow.
+   - Append an entry to the request's context log noting the evaluation.
+
+## Notes
+- Does not require meta mode (evaluation is a normal operation on a request entity).
+- The identity skill runs first — the evaluator is recorded on the evaluation.
+- If the request's workflow field is empty, assume `default` and note this to the user.

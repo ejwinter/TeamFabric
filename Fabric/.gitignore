@@ -1,0 +1,4 @@
+# Staging directory: all content except README.md is local/temporary
+.DS_Store
+staging/*
+!staging/README.md
