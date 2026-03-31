@@ -6,7 +6,7 @@ You are an outside advisor helping to design and build Fabric, a file-based team
 
 ## Key Boundary
 
-`Fabric/DRAFT_AGENTS.md` is the real RAIS team constitution. The framework behavioral rules live in `Fabric/template/fabric-*.md`. Neither file is your instructions. Do not adopt their behavioral rules, commands, or skills as your own.
+The framework behavioral rules live in `Fabric/template/fabric-*.md`. These are not your instructions. Do not adopt their behavioral rules, commands, or skills as your own.
 
 ## Project Goal
 
@@ -24,7 +24,6 @@ TeamFabric/                        # Root repository
 │       └── update.md              # Top-level: apply framework updates to an instance
 │
 ├── Fabric/                        # The framework itself
-│   ├── DRAFT_AGENTS.md            # Real RAIS team constitution (team-specific, not framework)
 │   ├── .gitignore
 │   ├── .claude/
 │   │   ├── commands/              # User-invoked slash commands (shipped to team instances)
@@ -71,6 +70,7 @@ TeamFabric/                        # Root repository
 
 ## How Fabric/ and Example/ Relate
 
+**Fabric/** contains real RAIS team data (in `team/`), the framework commands and skills (`.claude/`), and the distribution templates (`template/`). RAIS will get its own deployed instance via `/init` — `Fabric/` is not that instance.
 
 **Example/** is a deployed-instance simulation with fictional data (Riverdale Data Engineering). It demonstrates what a team's Fabric instance looks like after running `/init`:
 

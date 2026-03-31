@@ -16,6 +16,7 @@ Priority: Not Set
 Target Date: None
 Effort Estimate: Not Set
 Engagement Model: Not Set
+External: None
 
 ### Requestor Details
 Department: Cardiology
