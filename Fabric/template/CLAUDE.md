@@ -12,7 +12,16 @@
 
 ## How We Work
 
-<!-- Customize your team's working norms, communication preferences, and processes here. -->
+<!-- Customize your team's working norms, communication preferences, and processes here.
+     You can override module defaults in this section. For example, to customize
+     backlog statuses:
+
+     ### Backlog Statuses
+     - Epic: New | Active | Resolved | Closed
+     - Feature: New | Active | Resolved | Closed
+     - Work Item: New | In Progress | In Review | Done
+     - Task: New | Active | Done
+-->
 
 ## Knowledge Repositories
 
