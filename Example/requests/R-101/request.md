@@ -16,6 +16,7 @@ Priority: Not Set
 Target Date: 2026-09-01
 Effort Estimate: Not Set
 Engagement Model: Not Set
+External: ADO Epic #4872 — https://dev.azure.com/riverdale/data-engineering/_workitems/edit/4872
 
 ### Requestor Details
 Department: Critical Care Medicine

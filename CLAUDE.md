@@ -6,7 +6,7 @@ You are an outside advisor helping to design and build Fabric, a file-based team
 
 ## Key Boundary
 
-`Fabric/DRAFT_AGENTS.md` is the constitution for the Fabric agents, not your instructions. Do not adopt its behavioral rules, commands, or skills as your own. It is named `DRAFT_AGENTS.md` specifically to avoid confusion with your operating context.
+The framework behavioral rules live in `Fabric/template/fabric-*.md`. These are not your instructions. Do not adopt their behavioral rules, commands, or skills as your own.
 
 ## Project Goal
 
@@ -15,16 +15,25 @@ Build a general-purpose framework that teams can adopt to manage their working m
 ## Project Structure
 
 ```
-Fabric/                            # Root repository
+TeamFabric/                        # Root repository
 ├── CLAUDE.md                      # Your instructions (this file)
 ├── fabric-design-summary.md       # Foundational design document
+├── .claude/
+│   └── commands/
+│       ├── init.md                # Top-level: scaffold a new team instance
+│       └── update.md              # Top-level: apply framework updates to an instance
 │
 ├── Fabric/                        # The framework itself
-│   ├── DRAFT_AGENTS.md            # Constitution (AI behavioral contract + human reference)
 │   ├── .gitignore
 │   ├── .claude/
-│   │   ├── commands/              # User-invoked slash commands
-│   │   └── skills/                # Implicit AI capabilities
+│   │   ├── commands/              # User-invoked slash commands (shipped to team instances)
+│   │   └── skills/                # Implicit AI capabilities (shipped to team instances)
+│   ├── template/                  # Distribution source — copied by /init and /update
+│   │   ├── CLAUDE.md              # Template team CLAUDE.md with @imports
+│   │   ├── fabric-core.md         # Core framework behavioral rules (always shipped)
+│   │   ├── fabric-triage.md       # Triage module rules
+│   │   ├── fabric-product.md      # Product module rules
+│   │   └── fabric-backlog.md      # Backlog module rules
 │   ├── team/
 │   │   ├── team.md                # Team facts (RAIS — the real team)
 │   │   └── members/
@@ -35,12 +44,18 @@ Fabric/                            # Root repository
 │   │   ├── REQUESTS.md            # Request module definition
 │   │   └── workflow/
 │   │       └── default/           # Default request workflow (rubrics, evaluation process)
-│   └── products/                  # Product definitions
+│   └── products/
+│       └── template/              # Product entity template
+│           └── product.md
 │
-└── Example/                       # Test instance for development
-    ├── .claude/                   # → symlink to ../Fabric/.claude
-    ├── DRAFT_AGENTS.md            # → symlink to ../Fabric/DRAFT_AGENTS.md
-    ├── .gitignore                 # → symlink to ../Fabric/.gitignore
+└── Example/                       # Test instance — demonstrates a deployed Fabric instance
+    ├── CLAUDE.md                  # Generated CLAUDE.md with @imports (Riverdale Data Engineering)
+    ├── .claude/
+    │   ├── commands/              # → symlink to ../Fabric/.claude/commands (live for testing)
+    │   ├── skills/                # → symlink to ../Fabric/.claude/skills (live for testing)
+    │   ├── fabric-core.md         # Copy from Fabric/template/ (shows deployed instance state)
+    │   ├── fabric-triage.md
+    │   └── fabric-product.md
     ├── team/                      # Fictional team (Riverdale Data Engineering)
     │   ├── team.md
     │   └── members/
@@ -55,13 +70,23 @@ Fabric/                            # Root repository
 
 ## How Fabric/ and Example/ Relate
 
+**Fabric/** contains real RAIS team data (in `team/`), the framework commands and skills (`.claude/`), and the distribution templates (`template/`). RAIS will get its own deployed instance via `/init` — `Fabric/` is not that instance.
 
-**Example/** is a parallel test instance with fictional data (Riverdale Data Engineering). It symlinks the framework files (`.claude/`, `DRAFT_AGENTS.md`, `.gitignore`) back to `Fabric/` so that changes to skills, commands, and the constitution are immediately reflected in both directories. The data directories (`team/`, `requests/`, `staging/`, `products/`) are independent — test content here does not pollute the real Fabric.
+**Example/** is a deployed-instance simulation with fictional data (Riverdale Data Engineering). It demonstrates what a team's Fabric instance looks like after running `/init`:
 
-Use Example/ to test ingestion, evaluation, and other workflows without touching real team data. The symlinks ensure framework changes only need to be made once.
+- `CLAUDE.md` — a generated team CLAUDE.md with `@` imports
+- `.claude/fabric-*.md` — copies of the framework module files (not symlinks), as a real deployed instance would have
+- `.claude/commands/` and `.claude/skills/` — symlinks to `Fabric/.claude/` so framework changes are immediately testable without re-copying
+- `team/`, `requests/`, `staging/`, `products/` — independent test data
+
+Use Example/ to test ingestion, evaluation, and other workflows without touching real team data.
 
 ## Working Conventions
 
 - Work-specific content (RAIS rubrics, real request data) should wait for the work machine. Keep framework development general-purpose.
 - Structural files in Fabric/ are governed by the meta mode convention. When advising on changes to the constitution or skills, respect that separation even though you are not bound by it.
 - The design summary (`fabric-design-summary.md`) is the foundational reference. Significant departures from it should be discussed, not silently introduced.
+
+## Execution Mode
+
+You should always choose inline execution mode and not subagent driven unless I explicitly ask for subagent driven.

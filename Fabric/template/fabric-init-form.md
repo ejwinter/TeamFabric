@@ -1,0 +1,61 @@
+# Fabric Init Form
+
+<!--
+  Fill out this form at your own pace, then run /init again from the TeamFabric repo.
+  The agent will read your answers and complete setup without asking questions interactively.
+
+  Instructions:
+  - Replace placeholder text in [brackets] with your answers.
+  - For yes/no questions, delete the option that doesn't apply.
+  - Leave a field as-is if you don't know yet — the agent will flag gaps.
+  - For repeating sections (members, products), copy the block as many times as needed.
+
+  Note: Knowledge repositories, notification rules, and constraints are NOT collected here.
+  Init will create placeholder sections in CLAUDE.md for you to fill in after setup.
+-->
+
+## Team
+
+Team Name: [Your team name]
+Organization: [Parent org or department]
+Mission: [1-2 sentences describing what your team does and for whom]
+
+## Modules
+
+<!--
+  Mark each module Enabled or Disabled.
+  Core is always enabled. Scrum is not yet available.
+-->
+
+| Module  | Status               | Notes                                |
+|---------|----------------------|--------------------------------------|
+| Core    | Enabled              | Always on                            |
+| Triage  | [Enabled / Disabled] | Request intake and rubric evaluation |
+| Product | [Enabled / Disabled] | Product definitions and context      |
+| Backlog | [Enabled / Disabled] | Epic/feature/work-item hierarchy     |
+
+## Members
+
+<!-- Copy this block for each team member -->
+
+### Member
+
+Name: [Full name]
+Role: [Job title or function]
+Key Function: [1 sentence — what does this person primarily do]
+Allocation: [0-100%]
+Email: [email address]
+
+---
+
+## Products
+
+<!-- Only needed if Product module is Enabled. Copy this block for each product. -->
+
+### Product
+
+Name: [Product name]
+Status: [Active / Planned / Sunset]
+Description: [1-2 sentences]
+
+---
