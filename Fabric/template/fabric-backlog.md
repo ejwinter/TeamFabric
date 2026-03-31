@@ -76,6 +76,7 @@ Breakdown of a feature into assignable implementation work. A work item should t
 Properties:
 - State: New | Active | Resolved | Removed | Closed
 - Type: Story | Request | Bug
+- Iteration: [optional, named iteration or iteration path]
 - External URL: [optional link to an external representation such as ADO url]
 - Assigned to: [optional]
 
@@ -96,6 +97,16 @@ Sections: Description
 ## External System Linking
 
 Backlog entities can be linked to external work tracking systems (e.g. Azure DevOps) via the External URL property. This provides a reference point for future sync capabilities. The external system is not authoritative — the Fabric backlog files are the working copy.
+
+## Iterations
+
+An iteration is a named time block (typically two weeks) used to schedule work items. Iterations are referenced by name on work items via the Iteration property — they are not tracked as separate entities in the backlog hierarchy.
+
+Work items may be moved between iterations as priorities shift. This is normal and expected. The Iteration property simply reflects the current plan, not a commitment.
+
+Teams can define their iteration naming convention (e.g. "Sprint 42", "2026-Q2-W1", or an ADO iteration path) in the "How We Work" section of their constitution. The Backlog module does not prescribe a format.
+
+Note: If the Scrum module is enabled, it may extend iterations with ceremonies, velocity tracking, and sprint-level reporting. The Backlog module treats iterations only as a scheduling label.
 
 ## Behavioral Rules
 
