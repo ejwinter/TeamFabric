@@ -4,12 +4,13 @@
 Process content into Fabric's entity model. Supports three input modes and an optional planning step for structured review before execution.
 
 ## Usage
-- `/ingest` - paste or describe content, AI classifies and proposes filing
-- `/ingest R-42` - file content against a specific entity (quick file path)
+- `/ingest R-42` - file content against a specific request (quick file path)
+- `/ingest backlog/epics/ehr-pipeline-modernization` - file content against a specific backlog item
 - `/ingest for eric-winter` - file content to a member's context log
+- `/ingest requests` - paste or describe content, AI classifies within requests
+- `/ingest backlog` - paste or describe content, AI classifies within the backlog
 - `/ingest staging` - process all files in staging/ as a batch
 - `/ingest with planning` - produce a written plan before executing (works with any mode)
-- `/ingest with planning R-42` - plan against a specific entity
 - `/ingest with planning staging` - plan for all staged files
 
 ## Modifiers
@@ -34,13 +35,19 @@ When `with planning` is used, `/ingest staging` is implied if there are files in
 2. Load the entity's header and recent context log entries.
 3. Ask the user for the content if not already provided.
 
-**Without entity hint** (e.g., `/ingest`):
+**With scope hint** (e.g., `/ingest requests` or `/ingest backlog`):
 1. Ask the user for the content if not already provided.
-2. Scan entity headers (lightweight scan per the entity-maintenance skill) to find likely matches.
+2. Scan entity headers within the specified scope to find likely matches.
+   - **requests**: scan request entities.
+   - **backlog**: scan epics and features only. Work items and tasks are not included in classification scans — they are too granular. If the content fits a feature, suggest it; the user can refine to a specific work item if needed.
 3. Propose classification: "This looks like it relates to [entity]. Is that right?"
    - If multiple entities seem relevant, list them ranked by relevance.
    - If no match found, propose catch-all filing (team-level, member-level, or product-level).
 4. Once the user confirms or redirects, continue with the resolved entity.
+
+**Without any hint** (e.g., `/ingest`):
+1. Ask the user to scope the search: "Should I look in requests, backlog, or a specific entity?"
+2. Once scoped, proceed as above.
 
 **Staged** (e.g., `/ingest staging`):
 1. Read all files in staging/ (excluding README.md).

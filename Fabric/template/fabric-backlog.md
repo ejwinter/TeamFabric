@@ -156,4 +156,15 @@ Assignment recommendations are suggestions — always wait for confirmation befo
 
 ## Relationship to Triage
 
-When both Triage and Backlog modules are enabled, accepted requests can be promoted to epics. The epic's description or Related Items section links back to the request. The request entity is not modified — it stays in `requests/` as a historical record.
+When both Triage and Backlog modules are enabled, a user may ask to promote an accepted request to a backlog epic (e.g. "make R-044 an epic so we can start refining it"). This is a conversational action — no special command is needed.
+
+When promoting a request to an epic:
+
+1. **Create the epic** under `backlog/epics/` using the epic template.
+2. **Carry forward** the request's description as the epic's description. It can be refined later during backlog breakdown.
+3. **Carry forward the External URL** if the request already has one (e.g. an ADO epic link). The backlog epic inherits this link.
+4. **Link back to the request** in the epic's Related Items section (e.g. "Originated from request R-044").
+5. **Do not modify the request entity.** It stays in `requests/` as a historical record of intake and evaluation. The request's state is not changed by promotion — triage and backlog are independent records.
+6. **Confirm before creating.** Propose the epic (title, description, carried-over fields) and wait for the user to approve before writing.
+
+After promotion, the epic is a normal backlog item — the user can immediately begin refinement, breaking it into features and work items.
