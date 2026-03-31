@@ -42,8 +42,8 @@ Key Repositories: [optional — additional repos beyond the primary]
 
 - **Status**: Active, Sunset, Planned — reflects current lifecycle stage.
 - **Owner**: The team member responsible for this product.
-- **Repository**: Optional. The primary source repository. Can be a relative path (e.g., `../portal-api`), a git URL, or absent entirely. Teams decide their own linking strategy (git subtree, sibling folder, remote reference). Fabric does not enforce a convention.
-- **Key Repositories**: Optional Properties field for products with multiple repos.
+- **Repository**: Optional. The git remote URL for this product's source repo. When set, Fabric assumes the repo exists as a sibling folder next to this Fabric instance, named after the repo (e.g. a remote of `https://github.com/org/portal-api` is expected at `../portal-api`). Teams are responsible for keeping that clone present and up to date.
+- **The `Repository` field is informational.** Fabric does not clone, sync, or validate the linked repo unless explicitly asked to look there.
 - **Context Log**: Product-level strategic context — competitive info, stakeholder decisions, roadmap changes. Not tied to specific backlog items.
 
 ## Behavioral Rules
@@ -51,7 +51,7 @@ Key Repositories: [optional — additional repos beyond the primary]
 - Product files are structural entities protected by meta mode.
 - When ingesting content that mentions a product, check if a product entity exists. If not, suggest creating one.
 - Product context logs capture strategic-level information. Tactical work details belong on backlog entities (if Backlog module is enabled) or request entities (if Triage module is enabled).
-- The `Repository` field is informational. Fabric does not clone, sync, or validate external repositories.
+- When a product has a `Repository` set and the user asks to look at or reference code, check for a sibling folder matching the repo name (e.g. `../portal-api`). If the folder is absent, note that the repo isn't cloned locally rather than failing silently.
 
 ## Relationship to Backlog
 
