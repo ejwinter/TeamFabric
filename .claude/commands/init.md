@@ -36,6 +36,7 @@ After module selection, create the following structure in the target folder:
     fabric-triage.md    # Copy if Triage enabled
     fabric-product.md   # Copy if Product enabled
     fabric-backlog.md   # Copy if Backlog enabled
+    fabric-source.md    # Always copy from Fabric/template/ (fill in Local and Remote)
   team/
     members/
       template/
@@ -51,14 +52,22 @@ After module selection, create the following structure in the target folder:
 - If **Product** enabled: create `products/` with `products/template/` copied from `Fabric/products/template/`
 - If **Backlog** enabled: create `backlog/epics/`
 
-### 3. Generate CLAUDE.md
+### 3. Create `.claude/fabric-source.md`
+
+Ask the user:
+- "Where is your local clone of the TeamFabric repo?" (local path, can be blank if they don't have one yet)
+- "What is the TeamFabric git remote URL?" (used as fallback for `/update-fabric`)
+
+Copy `Fabric/template/fabric-source.md` into `<target>/.claude/fabric-source.md` and fill in both values. This file is used by `/update-fabric` to find framework updates.
+
+### 4. Generate CLAUDE.md
 
 Start from `Fabric/template/CLAUDE.md`. Modify it:
 - Include only the `@` imports for enabled modules (remove lines for disabled modules)
 - Replace `{{TEAM_NAME}}` with the team name (ask for it now if not already known)
 - Update the Enabled Modules table to reflect the selections
 
-### 4. Guided team setup
+### 5. Guided team setup
 
 After scaffolding, begin the guided team setup conversation:
 - Ask for team name, parent organization, and mission statement (1-2 sentences)
@@ -66,10 +75,10 @@ After scaffolding, begin the guided team setup conversation:
 - Collect initial members: for each, gather name, role, key function, allocation %, and email. Create `team/members/<name>/profile.md` for each.
 - If Product module is enabled, ask what products the team owns and create initial `products/<slug>/product.md` files using the template.
 
-### 5. Wrap up
+### 6. Wrap up
 
 Present the generated structure for review. Suggest next steps:
 - "Review your CLAUDE.md and customize the team-specific sections (notification rules, constraints, knowledge repositories)."
 - "Try `/describe-team` to see how the AI synthesizes your team's information."
 - "Start ingesting content with `/ingest` when you're ready."
-- "When TeamFabric releases updates, pull this repo and run `/update <your-folder>` to apply them."
+- "When TeamFabric releases updates, run `/update-fabric` from inside your Fabric instance to apply them."

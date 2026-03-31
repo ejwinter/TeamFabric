@@ -65,6 +65,7 @@ The `staging/` directory is a drop zone for raw content. All contents except `RE
 | /status | Quick summary of team state: active members and allocation, engagement counts, pending requests. |
 | /ingest | Ingest content into an entity. Accepts an entity hint (`/ingest R-42`), member target (`/ingest for eric-winter`), or `staging` to batch-process staged files. Add `with planning` to produce a structured digest plan for review before execution. |
 | /meta | Enter meta mode to edit structural files. Use `/meta done` to exit. |
+| /update-fabric | Apply updates from the TeamFabric source repo to this instance. Uses `.claude/fabric-source.md` to locate the source; falls back to cloning from the remote URL; asks if both fail. |
 
 ## Core Skills
 
