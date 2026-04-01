@@ -22,6 +22,8 @@ Guided creation of the initial Fabric structure for a new team. This command is 
    - team/members/<name>/profile.md (one per member)
    - requests/REQUESTS.md (request module doc, if Triage module enabled)
    - staging/README.md (staging directory marker)
+   - output/.gitkeep (report output directory — created but gitignored)
+   - .gitignore (includes: `output/`, `staging/*`, `!staging/README.md`)
 
 4. Present the generated files for review before committing.
 
