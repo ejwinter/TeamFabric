@@ -33,15 +33,21 @@ TeamFabric/                        # Root repository
 │   │   ├── fabric-core.md         # Core framework behavioral rules (always shipped)
 │   │   ├── fabric-triage.md       # Triage module rules
 │   │   ├── fabric-product.md      # Product module rules
-│   │   └── fabric-backlog.md      # Backlog module rules
+│   │   ├── fabric-backlog.md      # Backlog module rules
+│   │   ├── fabric-init-form.md    # Guided init conversation form
+│   │   └── fabric-source.md       # Source repo config for /update-fabric
+│   ├── backlog/                   # Backlog entity templates (copied by /init when Backlog enabled)
+│   │   ├── template-epic.md
+│   │   ├── template-feature.md
+│   │   ├── template-workitem.md
+│   │   ├── template-task.md
+│   │   ├── template-inbox-item.md
+│   │   └── template-inbox-README.md
 │   ├── team/
-│   │   ├── team.md                # Team facts (RAIS — the real team)
 │   │   └── members/
-│   │       ├── template/          # Profile template (not a real member)
-│   │       └── <name>/profile.md  # Member profiles
+│   │       └── template/          # Profile template (not a real member)
 │   ├── staging/                   # Drop zone for raw content (.gitignored except README.md)
 │   ├── requests/
-│   │   ├── REQUESTS.md            # Request module definition
 │   │   └── workflow/
 │   │       └── default/           # Default request workflow (rubrics, evaluation process)
 │   └── products/
@@ -53,13 +59,18 @@ TeamFabric/                        # Root repository
     ├── .claude/
     │   ├── commands/              # → symlink to ../Fabric/.claude/commands (live for testing)
     │   ├── skills/                # → symlink to ../Fabric/.claude/skills (live for testing)
-    │   ├── fabric-core.md         # Copy from Fabric/template/ (shows deployed instance state)
+    │   ├── fabric-core.md         # Copies from Fabric/template/ (show deployed instance state)
     │   ├── fabric-triage.md
-    │   └── fabric-product.md
+    │   ├── fabric-product.md
+    │   ├── fabric-backlog.md
+    │   └── fabric-source.md
     ├── team/                      # Fictional team (Riverdale Data Engineering)
     │   ├── team.md
     │   └── members/
     ├── staging/
+    ├── backlog/                   # Example backlog hierarchy (epics, features, work items, tasks)
+    │   └── inbox/
+    ├── output/                    # Report output directory (.gitignored)
     ├── requests/
     │   ├── REQUESTS.md
     │   ├── workflow/default/      # Example rubrics, evaluation process, request template
@@ -70,7 +81,7 @@ TeamFabric/                        # Root repository
 
 ## How Fabric/ and Example/ Relate
 
-**Fabric/** contains real RAIS team data (in `team/`), the framework commands and skills (`.claude/`), and the distribution templates (`template/`). RAIS will get its own deployed instance via `/init` — `Fabric/` is not that instance.
+**Fabric/** contains the framework commands and skills (`.claude/`), distribution templates (`template/`), and backlog entity templates (`backlog/`). `Fabric/team/` holds only the member profile template — no real team data lives here. RAIS will get its own deployed instance via `/init`.
 
 **Example/** is a deployed-instance simulation with fictional data (Riverdale Data Engineering). It demonstrates what a team's Fabric instance looks like after running `/init`:
 
