@@ -21,6 +21,7 @@ Regenerate Child Summary sections on epics and features to reflect current child
    - For each child, read the entity file header (everything before the first `##` section) to extract: name (from `# ` title), state, and level.
    - For features: count work item subdirectories and sum estimated hours from task files (if present) for the sizing signal.
    - For epics: count feature subdirectories and note their states.
+   - **Label collection (always deep):** Regardless of whether `--deep` is set, traverse *all* descendants (not just direct children) and collect every `Labels:` property value found. Parse each `key=value` pair and aggregate by key with occurrence counts. For boolean keys, count only `true` occurrences.
 
 3. **Compare against existing Child Summary.**
    - If the entity has a `## Child Summary` section, compare the scanned state against it.
@@ -37,7 +38,13 @@ Regenerate Child Summary sections on epics and features to reflect current child
 6. **Write on confirmation.**
    - Replace the existing `## Child Summary` section or insert it after the last existing section (before `## Context Log` if present).
    - Update the `Last updated` date to today.
+   - If any descendants have labels, include a `Labels (rolled up)` line in the Child Summary. Keys are separated by semicolons. Values within a key are comma-separated with counts in parentheses. Boolean keys show only the `true` count. Omit the line entirely if no descendants have labels. Example format:
+
+     ```text
+     - Labels (rolled up): service-type: data-extraction (5), reporting (2); security-sensitive: true (3)
+     ```
 
 ## Notes
+
 - Requires meta mode (modifies structural entity files).
 - The rollup logic is implemented in the entity-maintenance skill. This command handles target resolution, scan orchestration, and the `--deep` flag.
