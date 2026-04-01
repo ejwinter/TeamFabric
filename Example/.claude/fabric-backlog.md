@@ -51,6 +51,7 @@ Properties:
 - Duration: [optional]
 - Priority: [optional 1(lowest)-5(highest)]
 - Area: [optional area path representing a product or service line]
+- Labels: [optional, comma-separated key=value pairs e.g. service-type=data-extraction]
 
 Sections: Description, Related Items, Items this depends on, Child Summary
 
@@ -67,6 +68,7 @@ Properties:
 - Duration: [optional]
 - Priority: [optional 1(lowest)-5(highest)]
 - Area: [optional area path representing a product or service line]
+- Labels: [optional, comma-separated key=value pairs e.g. service-type=data-extraction]
 
 Sections: Description, Acceptance Criteria, Related Items, Items this depends on, Child Summary
 
@@ -79,6 +81,7 @@ Properties:
 - Iteration: [optional, named iteration or iteration path]
 - External URL: [optional link to an external representation such as ADO url]
 - Assigned to: [optional]
+- Labels: [optional, comma-separated key=value pairs e.g. service-type=data-extraction]
 
 Sections: Description, Acceptance Criteria, Related Items, Items this depends on
 
@@ -91,6 +94,7 @@ Properties:
 - Assigned to: [optional]
 - Estimated Hours: [optional]
 - Remaining Hours: [optional]
+- Labels: [optional, comma-separated key=value pairs e.g. service-type=data-extraction]
 
 Sections: Description
 
@@ -108,6 +112,46 @@ Teams can define their iteration naming convention (e.g. "Sprint 42", "2026-Q2-W
 
 Note: If the Scrum module is enabled, it may extend iterations with ceremonies, velocity tracking, and sprint-level reporting. The Backlog module treats iterations only as a scheduling label.
 
+## Labels
+
+Labels are key=value metadata applied to backlog entities. They let teams classify and filter work by custom dimensions (e.g. service type, domain, priority tier). Teams define their label schema in the `### Labels` subsection of "How We Work" in CLAUDE.md.
+
+### Schema Format
+
+Each key and each enumerated value has a description to guide consistent usage. Boolean keys (value type `boolean`) act as tags — only `true` or `false` are valid values.
+
+```markdown
+### Labels
+
+- **service-type** — The type of service this work relates to
+  - `data-extraction` — Work that pulls data from source systems
+  - `reporting` — Work that produces dashboards, reports, or metric outputs
+
+- **security-sensitive** — boolean — Set to true when this work touches sensitive data
+```
+
+### Storage
+
+Labels are stored on an entity as a single property line:
+
+```
+- Labels: service-type=data-extraction, security-sensitive=true
+```
+
+The line is omitted when no labels are applied — do not leave it blank or as a placeholder.
+
+### AI-Assisted Suggestion
+
+After any operation that writes or updates a description or acceptance criteria section (create, refine, ingest), read those sections and cross-reference against the label schema key and value descriptions. Offer specific suggestions proactively:
+
+> "Based on the description, would you like me to add `service-type=data-extraction`?"
+
+One suggestion per label key. Only suggest when confident from the content. The user confirms or declines each suggestion individually.
+
+### Rollup
+
+`/rollup-backlog` aggregates labels from all descendants (not just direct children) and writes a `Labels (rolled up)` line to the Child Summary section. See the `/rollup-backlog` command definition for aggregation details.
+
 ## Behavioral Rules
 
 - The statuses, types, and scoping definitions above are defaults. Teams can override any of these in the "How We Work" section of their constitution (CLAUDE.md). When custom values are defined there, use those instead of the defaults.
@@ -116,6 +160,8 @@ Note: If the Scrum module is enabled, it may extend iterations with ceremonies, 
 - Status rollup: when all child entities are complete, suggest updating the parent's status.
 - Do not create backlog entities autonomously. Propose the entity and wait for confirmation.
 - Children inherit context from their parent through folder nesting. A work item inherits the scope of its parent feature, which inherits from its parent epic.
+- When writing a label value, validate it against the team's label schema in CLAUDE.md. If the value is not listed, flag it and suggest the nearest valid option before writing. If no schema is defined, accept any key=value pair.
+- After writing or updating a description or acceptance criteria, cross-reference the content against the label schema descriptions and proactively offer label suggestions. One suggestion per key, only when confident.
 
 Classification, inbox refinement, assignment recommendations, and reclassification guidance are in the backlog-refinement skill.
 
