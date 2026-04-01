@@ -58,7 +58,7 @@ requests/
 
 When a request is promoted to a backlog epic (via the Backlog module's promotion flow), a `Backlog Epic` field may be added to the request entity header:
 
-```
+```markdown
 Backlog Epic: E-001
 ```
 
