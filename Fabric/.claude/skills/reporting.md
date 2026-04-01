@@ -211,3 +211,129 @@ Build the tree as a nested JavaScript object literal and embed it as `const tree
 ```
 
 Work items are leaf nodes — include `children: []` or omit `children` entirely. Include `assignee`, `iteration`, `est`, `rem` on work item nodes.
+
+---
+
+## Renderer: Gantt (`/report gantt`)
+
+Generate a self-contained interactive HTML file. White background, professional, print-friendly.
+
+### Page structure
+
+Same D3 v7 CDN script tag as mindmap. Layout:
+
+```
+[page header: team name + date range]
+[gantt table: label column (220px fixed) | timeline columns (flexible)]
+[legend strip]
+```
+
+### Timeline scale
+
+Compute the date range from the earliest `Start Date` and latest `Target Date` across all entities being shown. Expand to full month boundaries (first day of earliest month, last day of latest month). Use month-level columns.
+
+If an entity has no Start/Target Date, render its bar row with a muted `"No dates set"` text in the timeline area rather than omitting the row.
+
+### Row structure
+
+Render rows in this order. Insert a separator row (10px, `background: #f1f5f9`) between epics.
+
+1. Epic row — full-width bar spanning its date range, bold label
+2. Feature rows — indented 1.75rem, medium bar
+3. Work item rows — indented 2.5rem, thin accent bar (omit when `--epics-only` flag is set)
+
+### Bar styles
+
+| State | Fill | Border | Text |
+|---|---|---|---|
+| Active | `#0ea5e9` solid | none | white |
+| New | `#334155` | `1px dashed #475569` | `#94a3b8` |
+| Resolved | `#94a3b8` solid | none | white |
+
+Bar heights: epic 22px, feature 16px, work item 12px. Row height: 34px min.
+
+### Today line
+
+Amber vertical line (`#f59e0b`, 2px wide, 65% opacity) at today's date x-position. Render it as an absolutely-positioned element over the timeline area. If today falls outside the computed date range, clamp it to the nearest edge.
+
+### Click → detail panel
+
+Same detail panel implementation as the mindmap (310px, slides in from right, same content structure). Clicking a row label or bar cell opens the panel for that entity.
+
+### Color scheme and typography
+
+```
+Background:        #ffffff
+Header row bg:     #f8fafc
+Grid lines:        #f1f5f9 (vertical month separators)
+Epic label:        #1e293b, font-weight 700, font-size 13px
+Feature label:     #475569, font-weight 500, font-size 12px
+Work item label:   #94a3b8, font-weight 400, font-size 11.5px
+Font family:       -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif
+```
+
+### Legend
+
+Bottom strip inside the gantt container, `background: #f8fafc`, `border-top: 1px solid #e8e4e0`:
+
+```
+■ Active   □ New (planned)   ▪ Resolved   | Today
+```
+
+### Data shape
+
+Build a flat ordered array of row objects (not nested). Each row has a `level` field controlling indentation and bar style.
+
+```javascript
+const rows = [
+  {
+    id: "e1",
+    level: "epic",
+    label: "EHR Pipeline Modernization",    // display name (shortened if needed)
+    fullName: "EHR Pipeline Modernization",
+    state: "Active",
+    startDate: "2026-02-01",               // ISO date string or null
+    targetDate: "2026-09-30",
+    est: "56",                             // string or null
+    rem: "44",
+    desc: "First meaningful sentence.",
+    area: "Clinical Data Lake",
+    priority: "4",
+    childIds: ["f1", "f2", "f3"]          // for detail panel child list
+  },
+  {
+    id: "f1",
+    level: "feature",
+    parentId: "e1",
+    label: "FHIR R4 Support",
+    fullName: "FHIR R4 Support",
+    state: "Active",
+    startDate: "2026-02-01",
+    targetDate: "2026-05-15",
+    release: "v3.0",
+    est: "24",
+    rem: "16",
+    desc: "...",
+    childIds: ["w1", "w2", "w3"]
+  },
+  {
+    id: "w1",
+    level: "workitem",
+    parentId: "f1",
+    label: "FHIR Resource Parser",
+    fullName: "FHIR Resource Parser",
+    state: "Active",
+    startDate: null,
+    targetDate: null,
+    assignee: "marcus.chen@riverdale.org",
+    iteration: "Sprint 2026-08",
+    est: "24",
+    rem: "16",
+    desc: "...",
+    childIds: []
+  }
+  // ... all rows in display order (epics, then their features, then their work items)
+];
+```
+
+Embed actual data from the backlog files. Do not use placeholder values.
