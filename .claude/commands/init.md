@@ -82,7 +82,11 @@ After module selection, create the following structure in the target folder:
 
 - If **Triage** enabled: create `requests/workflow/default/` and copy `Fabric/requests/REQUESTS.md` and contents of `Fabric/requests/workflow/default/` if present
 - If **Product** enabled: create `products/` with `products/template/` copied from `Fabric/products/template/`
-- If **Backlog** enabled: create `backlog/epics/`
+- If **Backlog** enabled:
+  - Create `backlog/epics/`
+  - Create `backlog/inbox/` and copy `Fabric/backlog/template-inbox-README.md` as `backlog/inbox/README.md`
+  - Copy all `Fabric/backlog/template-*.md` files into `backlog/` (entity templates for new epics, features, work items, tasks, and inbox items)
+  - Create `output/.gitkeep` (report output directory — created but gitignored via `.gitignore`)
 
 ### 3. Create `.claude/fabric-source.md`
 

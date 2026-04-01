@@ -21,3 +21,7 @@
 ## Items this depends on
 
 [If there is another item such as a feature or workitem this depends on name or describe that here.]
+
+## Child Summary
+
+[Auto-maintained by /rollup-backlog. Summary of child features and their status.]
