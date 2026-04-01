@@ -38,10 +38,10 @@ Regenerate Child Summary sections on epics and features to reflect current child
 6. **Write on confirmation.**
    - Replace the existing `## Child Summary` section or insert it after the last existing section (before `## Context Log` if present).
    - Update the `Last updated` date to today.
-   - If any descendants have labels, include a `Labels (rolled up)` line in the Child Summary. Keys are separated by semicolons. Values within a key are comma-separated with counts in parentheses. Boolean keys show only the `true` count. Omit the line entirely if no descendants have labels. Example format:
+   - If any descendants have labels, include a `Labels (rolled up)` line in the Child Summary. Keys are separated by semicolons. Values within a key are comma-separated (unique values only — no counts). Omit the line entirely if no descendants have labels. Example format:
 
      ```text
-     - Labels (rolled up): service-type: data-extraction (5), reporting (2); security-sensitive: true (3)
+     - Labels (rolled up): service-type: data-extraction, reporting; security-sensitive: true
      ```
 
 ## Notes
