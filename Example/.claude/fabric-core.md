@@ -92,3 +92,11 @@ When ingesting content that references external artifacts, nudge (do not block) 
 - Do not autonomously update first-class fields on entities. Propose changes and wait for human confirmation.
 - When capacity is relevant (staffing, acceptance decisions), load team/team.md for current allocation and engagement counts.
 - When communications, escalations, or decisions involve external parties, load team/team.md and surface relevant stakeholders from the `## Stakeholders` section. Do not assume the user knows who to loop in.
+
+### Stakeholder Profiles
+
+Some stakeholders have profile directories at `team/stakeholders/<name>/profile.md`. Profiles are optional — not all stakeholders have them. The `## Stakeholders` table in `team/team.md` is always the index.
+
+- **Discovery**: When surfacing a stakeholder, check for `team/stakeholders/<name>/profile.md`. If it exists, load it for richer context (communication preferences, expertise, areas of interest). Fall back to the table row if no profile exists.
+- **Ingestion**: Stakeholder profiles are valid ingest targets. When the user targets a stakeholder by name (e.g., `/ingest for theresa-blount`), route to `team/stakeholders/<name>/profile.md` and append to the context log.
+- **Transitions**: Moving a stakeholder to a team member (or vice versa) is a conversational meta-mode action. Propose: move the profile directory (`team/stakeholders/<name>/` → `team/members/<name>/`), update profile fields to match the destination template, update `team.md` tables. The context log carries over intact.
