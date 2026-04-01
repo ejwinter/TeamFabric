@@ -91,3 +91,4 @@ When ingesting content that references external artifacts, nudge (do not block) 
 - Structural files are read-only outside of meta mode. If a structural change is needed, suggest entering meta mode.
 - Do not autonomously update first-class fields on entities. Propose changes and wait for human confirmation.
 - When capacity is relevant (staffing, acceptance decisions), load team/team.md for current allocation and engagement counts.
+- When communications, escalations, or decisions involve external parties, load team/team.md and surface relevant stakeholders from the `## Stakeholders` section. Do not assume the user knows who to loop in.
