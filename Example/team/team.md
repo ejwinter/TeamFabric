@@ -26,6 +26,7 @@ On-Call Contact: Leo Kim (primary), Marcus Chen (escalation)
 
 <!-- External stakeholders who should be kept in mind during work and communications. -->
 <!-- These are people outside the team who have influence over, or are significantly impacted by, the team's work. -->
+<!-- Engaged stakeholders may have a profile directory at team/stakeholders/<name>/profile.md -->
 
 | Name | Role / Organization | Relationship |
 |------|---------------------|--------------|
