@@ -18,16 +18,23 @@ Procedure:
 5. Set the entity's staleness flag if the summary may affect first-class fields.
 
 ### Direct Ingest
-User provides content with no entity hint.
+User provides content with a scope hint but no specific entity.
 
-Trigger: User provides content (paste, file, dictation) without specifying where it goes.
+Trigger: User provides content scoped to a domain (e.g., `/ingest requests` or `/ingest backlog`) without specifying a specific entity.
 
 Procedure:
-1. Scan existing entity headers to classify the content.
-2. Propose classification: "This looks like it relates to [entity]. Is that right?"
-3. If confirmed, proceed as Quick File.
-4. If redirected, follow the user's guidance.
-5. If no match found, propose catch-all filing (team-level, member-level, or product-level context).
+1. Require a scope before scanning. If the user provides no scope, ask: "Should I look in requests, backlog, or a specific entity?"
+2. Scan entity headers within the specified scope:
+   - **requests**: scan request entities.
+   - **backlog**: scan epics and features only. Work items and tasks are too granular for classification scans. If the content best fits a feature, propose it — the user can direct to a specific work item if needed.
+   - **members**: scan member profiles.
+   - **products**: scan product entities.
+3. Propose classification: "This looks like it relates to [entity]. Is that right?"
+4. If confirmed, proceed as Quick File.
+5. If redirected, follow the user's guidance.
+6. If no match found, propose catch-all filing (team-level, member-level, or product-level context).
+
+Note: Users can always target a specific work item or task directly via Quick File (e.g., "file this under backlog/epics/.../workitems/kafka-consumer-framework"). The scan restriction only applies to unscoped classification.
 
 ### Staged Batch
 User drops content into staging/ and triggers a digest.

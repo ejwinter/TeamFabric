@@ -53,3 +53,13 @@ requests/
 - Evaluations are appended to the request entity's evaluation section, not stored separately.
 - When evaluating, always load the full rubric from the workflow definition. Do not evaluate from memory.
 - After evaluation, surface the recommendation clearly but do not make the accept/reject decision — that belongs to the designated decision-maker.
+
+### Request–Backlog Cross-Reference
+
+When a request is promoted to a backlog epic (via the Backlog module's promotion flow), a `Backlog Epic` field may be added to the request entity header:
+
+```markdown
+Backlog Epic: E-001
+```
+
+This is an optional cross-reference — it does not change the request's triage state or lifecycle. It exists so that `/refine R-NNN` can locate the linked epic without scanning the backlog tree. The field is added to the request during epic creation (proposed and confirmed through the normal flow), not retroactively.

@@ -1,4 +1,6 @@
-# Staging directory: all content except README.md is local/temporary
+# Local/temporary content — only README.md files are tracked
 .DS_Store
 staging/*
 !staging/README.md
+backlog/inbox/*
+!backlog/inbox/README.md

@@ -3,7 +3,7 @@
 This is how Fabric will understand the project.  Unless asked to it will not dig into other
 code or content to find more.  In that context, this should be a fairly detailed guide.
 
-Status: [Active | Sunset | Planned]
+Status: [Active | Sunset | Planned | Retired]
 Owners: [email addresses of team members who primarily 'own' this product]
 Repository: [optional — git remote URL. If provided, the repo is expected as a sibling folder next to this Fabric instance, named after the repo (e.g. ../portal-api).]
 
