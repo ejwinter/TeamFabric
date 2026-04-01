@@ -16,6 +16,21 @@
 Request intake and triage process: requests/REQUESTS.md
 Default workflow and rubrics: requests/workflow/default/
 
+### Labels
+
+- **service-type** — The type of service this work relates to
+  - `data-extraction` — Work that pulls or transforms data from source systems (e.g. EHR feeds, ADT events)
+  - `reporting` — Work that produces dashboards, reports, or operational metrics
+  - `api` — Work that exposes or consumes internal or external APIs
+  - `infrastructure` — Work related to pipelines, platform reliability, or DevOps
+
+- **data-domain** — The clinical or operational data domain this work operates in
+  - `clinical` — Patient care data (FHIR, ADT, clinical events)
+  - `operational` — Non-clinical business data (department KPIs, census, access)
+  - `platform` — Cross-domain infrastructure with no single domain owner
+
+- **security-sensitive** — boolean — Set to true when this work involves PHI, PII, or requires IRB/compliance review
+
 ## Knowledge Repositories
 
 - Confluence: team wiki and runbooks
