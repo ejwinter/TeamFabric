@@ -1,6 +1,7 @@
 @.claude/fabric-core.md
 @.claude/fabric-triage.md
 @.claude/fabric-product.md
+@.claude/fabric-backlog.md
 
 # Riverdale Data Engineering
 
@@ -39,7 +40,7 @@ Default workflow and rubrics: requests/workflow/default/
 | Core | Enabled | Team definition, members, constitution, ingestion, queries |
 | Triage | Enabled | Request intake, workflows, rubric evaluation |
 | Product | Enabled | Product definitions and context |
-| Backlog | Disabled | Not currently in use |
+| Backlog | Enabled | Hierarchical work tracking — epics, features, work items, tasks |
 | Scrum | Disabled | Team does not follow scrum practices |
 
 ## Decision Log
