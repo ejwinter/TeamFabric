@@ -337,3 +337,79 @@ const rows = [
 ```
 
 Embed actual data from the backlog files. Do not use placeholder values.
+
+---
+
+## Renderer: Activity Report (`/report day|week|month|quarter|year`)
+
+Generate a markdown document summarising what changed in the Fabric instance over the specified period. Output to `output/activity-<period>-YYYY-MM-DD.md`.
+
+### Period lookback
+
+| Argument | Lookback | Granularity |
+|---|---|---|
+| `day` | Past 24 hours | Individual work items and request IDs |
+| `week` | Past 7 days | Individual work items and request IDs |
+| `month` | Past 30 days | Work items summarised by count, features by name |
+| `quarter` | Past 90 days | Features summarised by count, epics by name |
+| `year` | Past 365 days | Epic-level counts only |
+
+### Data collection
+
+**Step 1 — Git history.** Run:
+
+```bash
+git log --since="<lookback date>" --name-status --format="%H|%an|%ae|%ad|%s" --date=short
+```
+
+Parse the output to identify:
+- Files added (`A`) under `requests/` → new requests (extract ID from folder name)
+- Files modified under `requests/` where state changed → status changes
+- Files added under `backlog/epics/` → classify by path depth (epic/feature/workitem)
+- Files where a state field changed to `Resolved` or `Closed` → completed items
+- Files added or modified under `team/members/` → team changes (new member, allocation change)
+- Files added or modified under `products/` → product changes
+
+**Step 2 — Context logs.** For each entity file modified in the period, read the entity file and extract context log entries whose timestamps (`YYYY-MM-DD` prefix) fall within the lookback window. Collect the 2–5 most significant entries — prefer entries mentioning decisions, evaluations, accepts/rejects, or status changes over routine content updates.
+
+### Report format
+
+```markdown
+# Activity Report — <Period> ending <YYYY-MM-DD>
+
+_Covering <start date> to <end date>_
+
+## Requests
+- New: <n> — R-101 (Clinical ML Pipeline), R-102 (Cohort Analysis)
+- Completed evaluations: <n>
+- Status changes: R-099 → Accepted, R-098 → Rejected
+
+## Backlog
+- Work items completed (Resolved/Closed): <n> — <titles>
+- Work items added: <n> — <titles>
+- Features completed: <n> — <titles>
+- Features added: <n> — <titles>
+
+## Team
+- Members added: <names or "none">
+- Members benched: <names or "none">
+- Allocation changes: <name: old% → new%> or "none"
+
+## Products
+- Products added or updated: <names or "none">
+
+## Notable Context
+- <key decision or event from a context log entry>
+- <another notable entry>
+```
+
+### Rules
+
+- **Omit sections with no activity** — do not write empty sections. A quiet period may produce a very short report.
+- **Granularity scales with period:**
+  - `day`/`week`: list individual work item names and request IDs
+  - `month`: replace work item lists with counts (e.g. "8 work items added across 3 features"); list features by name
+  - `quarter`/`year`: replace feature lists with counts; list epics by name only
+- **Notable Context:** 2–5 bullets from context log entries. Each bullet captures a decision, outcome, or key event — not routine ingestion. Omit this section entirely if no relevant context log activity occurred in the period.
+- **Report header** always shows the exact date range, not just the period name.
+- **If git history is unavailable** (e.g. not a git repo), note this at the top of the report and fall back to reading current entity states only.
