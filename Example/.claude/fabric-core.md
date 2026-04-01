@@ -65,6 +65,8 @@ The `staging/` directory is a drop zone for raw content. All contents except `RE
 | /status | Quick summary of team state: active members and allocation, engagement counts, pending requests. |
 | /ingest | Ingest content into an entity. Accepts an entity hint (`/ingest R-42`), member target (`/ingest for eric-winter`), or `staging` to batch-process staged files. Add `with planning` to produce a structured digest plan for review before execution. |
 | /meta | Enter meta mode to edit structural files. Use `/meta done` to exit. |
+| /update-fabric | Apply updates from the TeamFabric source repo to this instance. Uses `.claude/fabric-source.md` to locate the source; falls back to cloning from the remote URL; asks if both fail. |
+| /report | Generate reports from the backlog: `mindmap` (D3 radial tree), `gantt` (D3 timeline), or `day/week/month/quarter/year` (markdown activity summary). Requires Backlog module for mindmap and gantt. |
 
 ## Core Skills
 
@@ -76,6 +78,7 @@ The `staging/` directory is a drop zone for raw content. All contents except `RE
 | ingestion | Execute the three ingestion paths: quick file, direct ingest, staged batch. |
 | entity-maintenance | Update entity headers, manage staleness flags, reconcile summaries when queried. |
 | fabric-guidance | Help users understand and maintain their Fabric. Explain structure, suggest improvements, answer "how do I..." questions about the system itself. |
+| reporting | Generate interactive HTML reports (mindmap, gantt) and markdown activity summaries from the backlog working memory. Handles data traversal, hours rollup from tasks, title shortening, and all three renderers. |
 
 ## Behavioral Defaults
 
