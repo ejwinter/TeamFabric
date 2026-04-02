@@ -6,6 +6,7 @@
 - Assigned to: marcus.chen@riverdale.org
 - Estimated Hours: 16
 - Remaining Hours: 8
+- Effort: 16
 
 ## Description
 

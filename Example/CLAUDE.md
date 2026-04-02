@@ -56,6 +56,7 @@ Default workflow and rubrics: requests/workflow/default/
 | Triage | Enabled | Request intake, workflows, rubric evaluation |
 | Product | Enabled | Product definitions and context |
 | Backlog | Enabled | Hierarchical work tracking — epics, features, work items, tasks |
+| Effort Tracking | Enabled | Capture actual hours on close, rollup to parent |
 | Scrum | Disabled | Team does not follow scrum practices |
 
 ## Decision Log
