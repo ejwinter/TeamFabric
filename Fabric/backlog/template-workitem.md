@@ -7,6 +7,7 @@
 - Iteration: [optional, if it is assigned to an iteration give the name here, often an ADO iteration path]
 - External URL: [optional link to an external representation of this work item such as ADO url]
 - Assigned to: [optional, the name or email of the person this is assigned to, it is probably a team member]
+- Effort: [actual hours spent, populated on close]
 - Labels: [optional, comma-separated key=value pairs matching the team's label schema, e.g. service-type=data-extraction, security-sensitive=true]
 
 ## Description

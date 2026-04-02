@@ -9,6 +9,7 @@
 - Duration: [optional, how long the epic is estimated to take once started]
 - Priority: [optional 1(lowest)-5(highest) representing the priority of the epic]
 - Area: [optional area path representing a product or service line]
+- Effort: [actual hours spent, populated on close]
 - Labels: [optional, comma-separated key=value pairs matching the team's label schema, e.g. service-type=data-extraction, security-sensitive=true]
 
 ## Description
