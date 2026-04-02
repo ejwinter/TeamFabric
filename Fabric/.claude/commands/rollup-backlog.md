@@ -19,8 +19,8 @@ Regenerate Child Summary sections on epics and features to reflect current child
 2. **Scan children.**
    - List all direct child directories of the target entity.
    - For each child, read the entity file header (everything before the first `##` section) to extract: name (from `# ` title), state, and level.
-   - For features: count work item subdirectories and sum estimated hours from task files (if present) for the sizing signal.
-   - For epics: count feature subdirectories and note their states.
+   - For features: count work item subdirectories. If Effort Tracking is enabled, read each child work item's `Effort:` field. For work items without `Effort:`, recurse into their task children and sum task-level `Effort:` values (applying the short-circuit rule: if a task has `Effort:`, use it; otherwise it contributes 0). Flag partial coverage when some descendants are missing effort entirely.
+   - For epics: count feature subdirectories and note their states. If Effort Tracking is enabled, read each child feature's `Effort:` field. For features without `Effort:`, recurse into their work item children and apply the same short-circuit rule.
    - **Label collection (always deep):** Regardless of whether `--deep` is set, traverse *all* descendants (not just direct children) and collect every `Labels:` property value found. Parse each `key=value` pair and aggregate by key with occurrence counts. For boolean keys, count only `true` occurrences.
 
 3. **Compare against existing Child Summary.**
@@ -43,6 +43,25 @@ Regenerate Child Summary sections on epics and features to reflect current child
      ```text
      - Labels (rolled up): service-type: data-extraction, reporting; security-sensitive: true
      ```
+
+   If Effort Tracking is enabled, include an effort column in the Child Summary table and an effort total line below it:
+
+     ```text
+     | Feature | State | Effort |
+     |---------|-------|--------|
+     | F-001 Auth redesign | Closed | 32h |
+     | F-002 Data pipeline | Active | 18h (partial) |
+     | F-003 Reporting | New | — |
+
+     - Effort (rolled up): 50h (1 feature pending)
+     ```
+
+   Column values:
+   - `Xh` — entity has its own `Effort:` value or a complete subtree sum
+   - `Xh (partial)` — subtree sum exists but some descendants have no effort
+   - `—` — no effort anywhere in the subtree
+
+   The total line's parenthetical counts direct children with no effort contribution. If Effort Tracking is disabled, omit the effort column and total line entirely.
 
 ## Notes
 
