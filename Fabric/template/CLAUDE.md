@@ -6,8 +6,16 @@
 
 <!--
   Everything below this line is yours. TeamFabric updates will not touch this section.
-  The @imports above load framework behavioral rules from .claude/fabric-*.md files.
-  Those files ARE updated when you run /update from the TeamFabric repo.
+
+  FRAMEWORK-OWNED FILES — do not edit directly, changes will be overwritten on /update:
+    .claude/fabric-*.md         Framework behavioral rules (@imported above)
+    .claude/commands/           Built-in slash commands
+    .claude/skills/             Built-in AI skills
+
+  TO CUSTOMIZE BEHAVIOR:
+    - Override or extend rules here, below the @imports (this section)
+    - Add team-specific commands to .claude/commands/ with new names
+    - Add team-specific skills to .claude/skills/ with new names
 -->
 
 ## How We Work

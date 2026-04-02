@@ -80,6 +80,22 @@ The `staging/` directory is a drop zone for raw content. All contents except `RE
 | fabric-guidance | Help users understand and maintain their Fabric. Explain structure, suggest improvements, answer "how do I..." questions about the system itself. |
 | reporting | Generate interactive HTML reports (mindmap, gantt) and markdown activity summaries from the backlog working memory. Handles data traversal, hours rollup from tasks, title shortening, and all three renderers. |
 
+## Framework File Ownership
+
+The following files are owned by the TeamFabric framework and will be overwritten when `/update-fabric` runs:
+
+- `.claude/fabric-*.md` — framework behavioral rules
+- `.claude/commands/` — built-in slash commands
+- `.claude/skills/` — built-in AI skills
+
+If a user asks to modify any of these files, do not edit them. Instead, redirect to the appropriate override mechanism:
+
+- **Behavioral rules** — add overrides in `CLAUDE.md` below the `@import` lines
+- **Command behavior** — add a new command in `.claude/commands/` with a team-specific name
+- **Skill behavior** — add a new skill in `.claude/skills/` with a team-specific name
+
+These files may only be edited via meta mode during an `/update-fabric` operation or when explicitly working on the framework itself (i.e., from the TeamFabric source repo). Surface this constraint clearly if a user attempts to modify them.
+
 ## Behavioral Defaults
 
 ### Knowledge Repository Nudges
