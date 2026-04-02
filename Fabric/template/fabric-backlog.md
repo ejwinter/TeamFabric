@@ -16,19 +16,40 @@ backlog/
   inbox/
     <item>.md
   epics/
-    <epic>/
+    <epic-id>/
       epic.md
       features/
-        <feature>/
+        <feature-id>/
           feature.md
           workitems/
-            <workitem>/
+            <workitem-id>/
               workitem.md
               tasks/
-                <task>.md
+                <task-id>.md
 ```
 
 Parent-child relationships are implicit via folder nesting. Each entity level contains a markdown file describing the item and a subfolder for its children.
+
+## Entity IDs
+
+Entity IDs are the folder names (or file stems for tasks) used in the backlog directory structure. The default convention is:
+
+```
+<2-3-word-slug>-<YYMMDD>
+```
+
+- **Slug**: 2–3 lowercase words derived from the entity title, joined by hyphens
+- **Date**: creation date in `YYMMDD` format (e.g. `260402` for April 2, 2026)
+
+Examples: `ehr-pipeline-260101`, `fhir-parser-260315`, `access-workflow-260402`
+
+The slug provides enough context to identify the item at a glance; the date suffix makes the ID unique without a central counter. The combination is treated as stable once created — renaming an ID is not required if the title later changes.
+
+When generating an ID, derive the slug from the entity's title (not its parent's). Choose the most distinctive words — avoid filler words like "the", "a", "for". If the title is "Add FHIR R4 Parser", the slug is `fhir-r4-parser` (3 words is fine) and the ID is `fhir-r4-parser-260315`.
+
+The user can always override the generated ID — either by specifying a full ID upfront (e.g. "create a work item with id `auth-token-260402`") or by adjusting the proposed ID before it is written. Accept any valid directory name the user provides.
+
+Teams can override the default convention in the `### Backlog IDs` subsection of "How We Work" in their constitution (CLAUDE.md). Any format is valid as long as it produces valid directory names. When a custom convention is defined there, use it instead of the default.
 
 ### Inbox
 
@@ -159,6 +180,7 @@ One suggestion per label key. Only suggest when confident from the content. The 
 ## Behavioral Rules
 
 - The statuses, types, and scoping definitions above are defaults. Teams can override any of these in the "How We Work" section of their constitution (CLAUDE.md). When custom values are defined there, use those instead of the defaults.
+- When creating any backlog entity (epic, feature, work item, task), generate an ID following the convention in the Entity IDs section above (or the team's custom convention if defined). Propose the generated ID to the user before writing so it can be adjusted.
 - Backlog entities are structural and protected by meta mode.
 - When creating a new feature, check if it should reference an existing product (if Product module is enabled).
 - Status rollup: when all child entities are complete, suggest updating the parent's status.
