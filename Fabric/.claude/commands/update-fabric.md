@@ -43,3 +43,17 @@ After updating, report:
 2. New commands or skills that were added (in source but not previously here)
 3. Commands or skills that were removed (here but not in source)
 4. New module files available in the source that aren't enabled here (e.g., "fabric-scrum.md is now available. Add `@.claude/fabric-scrum.md` to your CLAUDE.md to enable it.")
+
+## Schema & Data Recommendations
+
+After reporting file changes, inspect the instance's existing data against new framework capabilities and surface actionable suggestions. These are advisory — the team decides what applies to them. Do not make any changes automatically.
+
+For each recommendation, briefly explain the new capability and what the team could do to take advantage of it. Only surface a recommendation if the instance actually has relevant data to act on.
+
+### Stakeholder Profiles
+
+Check if `team/team.md` has a `## Stakeholders` table with entries AND `team/stakeholders/` either doesn't exist or has no profile directories.
+
+If so, suggest: "Stakeholder profile directories are now supported at `team/stakeholders/<name>/profile.md`. For stakeholders who are closely engaged with your team, a profile can capture communication preferences, areas of expertise, and an ingestion context log. Based on your current stakeholders table, candidates worth considering: [list names from the table]. You can create profiles via `/meta`."
+
+If `team/stakeholders/` already has profiles, no recommendation needed.

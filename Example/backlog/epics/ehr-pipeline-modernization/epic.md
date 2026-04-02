@@ -9,6 +9,7 @@
 - Duration: 8 months
 - Priority: 4
 - Area: Clinical Data Lake
+- Labels: service-type=data-extraction, data-domain=clinical
 
 ## Description
 

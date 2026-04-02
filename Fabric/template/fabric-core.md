@@ -80,6 +80,22 @@ The `staging/` directory is a drop zone for raw content. All contents except `RE
 | fabric-guidance | Help users understand and maintain their Fabric. Explain structure, suggest improvements, answer "how do I..." questions about the system itself. |
 | reporting | Generate interactive HTML reports (mindmap, gantt) and markdown activity summaries from the backlog working memory. Handles data traversal, hours rollup from tasks, title shortening, and all three renderers. |
 
+## Framework File Ownership
+
+The following files are owned by the TeamFabric framework and will be overwritten when `/update-fabric` runs:
+
+- `.claude/fabric-*.md` — framework behavioral rules
+- `.claude/commands/` — built-in slash commands
+- `.claude/skills/` — built-in AI skills
+
+If a user asks to modify any of these files, do not edit them. Instead, redirect to the appropriate override mechanism:
+
+- **Behavioral rules** — add overrides in `CLAUDE.md` below the `@import` lines
+- **Command behavior** — add a new command in `.claude/commands/` with a team-specific name
+- **Skill behavior** — add a new skill in `.claude/skills/` with a team-specific name
+
+These files may only be edited via meta mode during an `/update-fabric` operation or when explicitly working on the framework itself (i.e., from the TeamFabric source repo). Surface this constraint clearly if a user attempts to modify them.
+
 ## Behavioral Defaults
 
 ### Knowledge Repository Nudges
@@ -91,3 +107,12 @@ When ingesting content that references external artifacts, nudge (do not block) 
 - Structural files are read-only outside of meta mode. If a structural change is needed, suggest entering meta mode.
 - Do not autonomously update first-class fields on entities. Propose changes and wait for human confirmation.
 - When capacity is relevant (staffing, acceptance decisions), load team/team.md for current allocation and engagement counts.
+- When communications, escalations, or decisions involve external parties, load team/team.md and surface relevant stakeholders from the `## Stakeholders` section. Do not assume the user knows who to loop in.
+
+### Stakeholder Profiles
+
+Some stakeholders have profile directories at `team/stakeholders/<name>/profile.md`. Profiles are optional — not all stakeholders have them. The `## Stakeholders` table in `team/team.md` is always the index.
+
+- **Discovery**: When surfacing a stakeholder, check for `team/stakeholders/<name>/profile.md`. If it exists, load it for richer context (communication preferences, expertise, areas of interest). Fall back to the table row if no profile exists.
+- **Ingestion**: Stakeholder profiles are valid ingest targets. When the user targets a stakeholder by name (e.g., `/ingest for theresa-blount`), route to `team/stakeholders/<name>/profile.md` and append to the context log.
+- **Transitions**: Moving a stakeholder to a team member (or vice versa) is a conversational meta-mode action. Propose: move the profile directory (`team/stakeholders/<name>/` → `team/members/<name>/`), update profile fields to match the destination template, update `team.md` tables. The context log carries over intact.

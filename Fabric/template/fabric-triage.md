@@ -53,6 +53,7 @@ requests/
 - Evaluations are appended to the request entity's evaluation section, not stored separately.
 - When evaluating, always load the full rubric from the workflow definition. Do not evaluate from memory.
 - After evaluation, surface the recommendation clearly but do not make the accept/reject decision — that belongs to the designated decision-maker.
+- Request entities support a `Labels:` property in their Properties section, using the same key=value format as backlog entities. The team's label schema in CLAUDE.md applies. After ingesting or updating a request description, offer label suggestions the same way as for backlog entities.
 
 ### Request–Backlog Cross-Reference
 

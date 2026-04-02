@@ -22,6 +22,20 @@ Total Effective Capacity: 4.0 FTE
 Primary Contact: Dana Torres (tech lead, owns intake and prioritization)
 On-Call Contact: Leo Kim (primary), Marcus Chen (escalation)
 
+## Stakeholders
+
+<!-- External stakeholders who should be kept in mind during work and communications. -->
+<!-- These are people outside the team who have influence over, or are significantly impacted by, the team's work. -->
+<!-- Engaged stakeholders may have a profile directory at team/stakeholders/<name>/profile.md -->
+
+| Name | Role / Organization | Relationship |
+|------|---------------------|--------------|
+| Dr. Sandra Okafor | Chief Medical Officer, Riverdale Health System | Executive sponsor; approves major data access expansions; interested in clinical data availability and compliance |
+| Raj Mehta | VP of Information Services, Riverdale Health System | Direct organizational parent; owns infrastructure budget; key escalation path for resourcing |
+| Theresa Blount | Director of Compliance, Riverdale Health System | Reviews all PHI-adjacent data work; must sign off on new EHR data feeds |
+| Epic Systems (vendor) | EHR Vendor – Integration Support | Primary upstream data source; coordinate on extract changes, API deprecations, and support tickets |
+| Clinical Informatics Team | Internal – Clinical Informatics | Downstream consumer of the Clinical Data Lake; primary stakeholder for data quality and schema stability |
+
 ## Products
 
 <!-- Product definitions live in products/<product>/. This is a reference index only. -->

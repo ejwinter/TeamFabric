@@ -17,6 +17,7 @@ Target Date: [date or "None"]
 Effort Estimate: [Not Set | Small (< 1 week) | Medium (1-4 weeks) | Large (> 1 month)]
 Engagement Model: [Not Set | Full-Service | Collaborative | Advisory]
 External: [None | e.g., ADO Epic #1234 — https://dev.azure.com/org/project/_workitems/edit/1234]
+Labels: [optional, comma-separated key=value pairs matching the team's label schema, e.g. service-type=data-extraction]
 
 ### Requestor Details
 Department: [Requestor's department]

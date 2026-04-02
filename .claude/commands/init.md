@@ -121,7 +121,25 @@ After scaffolding, begin the guided team setup conversation:
 - Collect initial members: for each, gather name, role, key function, allocation %, and email. Create `team/members/<name>/profile.md` for each.
 - If Product module is enabled, ask what products the team owns and create initial `products/<slug>/product.md` files using the template.
 
-### 6. Wrap up
+### 6. Write checksums
+
+After all framework files have been copied, compute the SHA-256 hash of each framework-owned file in the target and write `.claude/fabric-checksums.md`:
+
+```markdown
+# Fabric Checksums
+
+<!-- Auto-maintained by /init and /update. Do not edit manually. -->
+
+| File | SHA-256 |
+|------|---------|
+| .claude/fabric-core.md | <hash> |
+| .claude/commands/ingest.md | <hash> |
+| ... | ... |
+```
+
+Use `shasum -a 256 <file>` to compute each hash. Record every file under `.claude/commands/`, `.claude/skills/`, and each `.claude/fabric-*.md` that was copied. Exclude `fabric-checksums.md` itself and `fabric-source.md` (team-filled, not a pure framework artifact).
+
+### 7. Wrap up
 
 Present the generated structure for review. Tell the user:
 
