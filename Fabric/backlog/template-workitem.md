@@ -3,7 +3,7 @@
 ## Properties
 
 - State: New | Active | Resolved | Removed | Closed
-- Type: Story | Request | Bug
+- Type: Story | Request | Bug | Support
 - Iteration: [optional, if it is assigned to an iteration give the name here, often an ADO iteration path]
 - External URL: [optional link to an external representation of this work item such as ADO url]
 - Assigned to: [optional, the name or email of the person this is assigned to, it is probably a team member]

@@ -98,9 +98,15 @@ Sections: Description, Acceptance Criteria, Related Items, Items this depends on
 ### Work Item
 Breakdown of a feature into assignable implementation work. A work item should take roughly a day to a week to complete.
 
+Work item types:
+- **Story** — a user-facing capability or behavior change
+- **Request** — work originating from a formal request (e.g. promoted from Triage)
+- **Bug** — a defect or unintended behavior that needs to be corrected
+- **Support** — planning, coordination, or enabling work that does not directly deliver a product change (e.g. research spike, architecture decision, process definition)
+
 Properties:
 - State: New | Active | Resolved | Removed | Closed
-- Type: Story | Request | Bug
+- Type: Story | Request | Bug | Support
 - Iteration: [optional, named iteration or iteration path]
 - External URL: [optional link to an external representation such as ADO url]
 - Assigned to: [optional]
