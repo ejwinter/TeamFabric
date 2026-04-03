@@ -429,6 +429,23 @@ Generate a self-contained Chart.js HTML file showing total effort broken down by
 
 ### Data traversal
 
+#### Label-aware attribution (backlog scopes)
+
+Labels can be set at any level of the backlog hierarchy. A team might put `service-tier` on epics but `modality` on features. The traversal uses **lowest-wins attribution**: effort is claimed by the most specific entity that has the `by=` key set. This means the same report command resolves naturally at whatever level the team actually applies the label, without any configuration.
+
+Algorithm for a single epic subtree:
+
+1. Walk the tree depth-first (tasks → work items → features → epic).
+2. At each node, check if its `Labels:` field contains the `by=` key.
+3. If yes: claim that node's own `Effort:` value plus the sum of all *unclaimed* `Effort:` values from its descendants. Mark those descendants as claimed.
+4. If no: leave the node's effort unclaimed for the parent to absorb.
+5. After the full tree walk, any effort still unclaimed at the root epic level is attributed to the epic's label value (if set) or to `"(unlabeled)"`.
+
+This means:
+- A feature labeled `modality=imaging` claims its own effort and its work items' effort, even if the parent epic has no `modality` label.
+- A work item labeled `modality=pathology` claims its own effort before its parent feature gets a chance to absorb it.
+- Tier labels on the epic claim whatever effort wasn't already claimed at a lower level.
+
 **scope=requests**
 Scan `requests/*/request.md`. For each request:
 - Read `Effort:` from the Properties section (pre-engagement hours).
@@ -436,17 +453,15 @@ Scan `requests/*/request.md`. For each request:
 - Apply date filter on the request's `Submitted:` field if a period is specified.
 
 **scope=backlog**
-Walk the backlog hierarchy. For each epic:
-- Recursively sum all `Effort:` fields across the epic and every descendant (features, work items, tasks). This is the epic's total effort.
-- Read `Labels:` from `epic.md` and extract the value for the `by=` key. If absent, attribute to `"(unlabeled)"`.
-- Apply date filter on the epic's `Target Date` field if a period is specified.
+Walk the full backlog hierarchy. Apply the label-aware attribution algorithm per epic subtree.
+Apply date filter on each entity's `Target Date` field if a period is specified — filter at the node level before attributing effort.
 
 **scope=all** (default)
 Merge both sources, avoiding double-counting on linked entities:
-1. Scan all requests. For each request with a `Backlog Epic:` link, compute total effort = request.Effort + recursive sum of the linked epic and all descendants. Attribute to the request's `by=` label value.
+1. Scan all requests. For each request with a `Backlog Epic:` link, combine request.Effort with the label-aware attribution result from the linked epic subtree. Attribute the request's own effort to the request's `by=` label value (requests are pre-engagement and labelled at the request level).
 2. Collect all epic IDs referenced via `Backlog Epic:` links across all requests.
-3. Walk the backlog. For any epic whose ID is **not** in the set from step 2 (i.e. it has no linked request), compute its recursive effort total and attribute to its own `by=` label value.
-4. Sum both sets together grouped by label value.
+3. Walk the backlog. For any epic whose ID is **not** in the set from step 2 (no linked request), apply label-aware attribution independently.
+4. Merge all attributed effort grouped by label value.
 
 ### Aggregation
 
