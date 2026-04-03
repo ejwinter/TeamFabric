@@ -29,6 +29,12 @@
      - Feature: New | Active | Resolved | Closed
      - Work Item: New | In Progress | In Review | Done
      - Task: New | Active | Done
+
+     If your team works in fixed iterations, add this subsection (remove it if you don't use sprints):
+
+     ### Iterations
+     Iteration Start: YYYY-MM-DD
+     Iteration Duration: 14 days
 -->
 
 ## Knowledge Repositories

@@ -12,6 +12,7 @@ File naming:
 - Mindmap: `output/mindmap-YYYY-MM-DD.html`
 - Gantt: `output/gantt-YYYY-MM-DD.html`
 - Activity: `output/activity-<period>-YYYY-MM-DD.md`
+- Effort: `output/effort-YYYY-MM-DD.html`
 
 If a file with today's date already exists, overwrite it.
 
@@ -413,3 +414,168 @@ _Covering <start date> to <end date>_
 - **Notable Context:** 2–5 bullets from context log entries. Each bullet captures a decision, outcome, or key event — not routine ingestion. Omit this section entirely if no relevant context log activity occurred in the period.
 - **Report header** always shows the exact date range, not just the period name.
 - **If git history is unavailable** (e.g. not a git repo), note this at the top of the report and fall back to reading current entity states only.
+
+---
+
+## Renderer: Effort Report (`/report effort`)
+
+Generate a self-contained Chart.js HTML file showing total effort broken down by a team-defined label dimension.
+
+### Arguments
+
+- `by=<label-key>` — required. The label key to group by (e.g. `service-type`, `service-tier`).
+- `scope=requests|backlog|all` — default `all`. Controls which data sources are traversed.
+- `period` — optional date range filter applied to entity close dates. Values: `month`, `quarter`, `year`, `YYYY-MM-DD:YYYY-MM-DD`. Default: all-time (no filter).
+
+### Data traversal
+
+#### Label-aware attribution (backlog scopes)
+
+Labels can be set at any level of the backlog hierarchy. A team might put `service-tier` on epics but `modality` on features. The traversal uses **lowest-wins attribution**: effort is claimed by the most specific entity that has the `by=` key set. This means the same report command resolves naturally at whatever level the team actually applies the label, without any configuration.
+
+Algorithm for a single epic subtree:
+
+1. Walk the tree depth-first (tasks → work items → features → epic).
+2. At each node, check if its `Labels:` field contains the `by=` key.
+3. If yes: claim that node's own `Effort:` value plus the sum of all *unclaimed* `Effort:` values from its descendants. Mark those descendants as claimed.
+4. If no: leave the node's effort unclaimed for the parent to absorb.
+5. After the full tree walk, any effort still unclaimed at the root epic level is attributed to the epic's label value (if set) or to `"(unlabeled)"`.
+
+This means:
+- A feature labeled `modality=imaging` claims its own effort and its work items' effort, even if the parent epic has no `modality` label.
+- A work item labeled `modality=pathology` claims its own effort before its parent feature gets a chance to absorb it.
+- Tier labels on the epic claim whatever effort wasn't already claimed at a lower level.
+
+**scope=requests**
+Scan `requests/*/request.md`. For each request:
+- Read `Effort:` from the Properties section (pre-engagement hours).
+- Read `Labels:` and extract the value for the `by=` key. If absent, attribute to `"(unlabeled)"`.
+- Apply date filter on the request's `Submitted:` field if a period is specified.
+
+**scope=backlog**
+Walk the full backlog hierarchy. Apply the label-aware attribution algorithm per epic subtree.
+Apply date filter on each entity's `Target Date` field if a period is specified — filter at the node level before attributing effort.
+
+**scope=all** (default)
+Merge both sources, avoiding double-counting on linked entities:
+1. Scan all requests. For each request with a `Backlog Epic:` link, combine request.Effort with the label-aware attribution result from the linked epic subtree. Attribute the request's own effort to the request's `by=` label value (requests are pre-engagement and labelled at the request level).
+2. Collect all epic IDs referenced via `Backlog Epic:` links across all requests.
+3. Walk the backlog. For any epic whose ID is **not** in the set from step 2 (no linked request), apply label-aware attribution independently.
+4. Merge all attributed effort grouped by label value.
+
+### Aggregation
+
+After traversal, produce a grouped result:
+
+```javascript
+[
+  { label: "data-integration", hours: 84, count: 12 },
+  { label: "analytics",        hours: 47, count:  8 },
+  { label: "advisory",         hours: 11, count:  5 },
+  { label: "(unlabeled)",      hours:  9, count:  3 }
+]
+```
+
+Sort descending by hours. Compute `totalHours` and `percentShare` per group.
+
+### Page structure
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>[Team Name] — Effort Report</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <style>/* see styles below */</style>
+</head>
+<body>
+  <div class="page-header">...</div>
+  <div class="kpi-card">...</div>
+  <div class="chart-row">
+    <div class="chart-wrap"><canvas id="effortDonut"></canvas></div>
+    <div class="summary-table-wrap">...</div>
+  </div>
+  <div class="footer">...</div>
+  <script>/* data + Chart.js init */</script>
+</body>
+</html>
+```
+
+### Visual design
+
+Background: `#f7f5f2`. Font: `-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`.
+
+**Page header:** Team name left, report title and date range right. `border-bottom: 2px solid #e8e4e0`, padding `20px 32px`.
+
+**KPI card:** centered, `background: #ffffff`, `border-radius: 12px`, `box-shadow: 0 2px 8px rgba(0,0,0,0.08)`. Two values side by side:
+- Total effort hours (large: `font-size: 48px, font-weight: 700, color: #1e293b`)
+- Total items with effort recorded (smaller: `font-size: 20px, color: #64748b`)
+
+**Chart row:** two-column flex layout, `gap: 32px`, `max-width: 960px`, centered.
+
+Left column — donut chart:
+- `Chart.js` doughnut, `cutout: '62%'`
+- Color palette (cycle if more labels): `['#4f86c6','#e07b54','#5ba05b','#c9a84c','#9b72b0','#5ba8a0','#c96e6e','#8c8c8c']`
+- Legend below chart, horizontal, label + hours + percentage
+- Center label (drawn via plugin): total hours in large text
+
+Right column — summary table:
+```
+| Label value | Hours | Items | Share |
+|-------------|-------|-------|-------|
+| data-int... |  84h  |   12  |  56%  |
+```
+`border-collapse: collapse`, alternating row background `#f8fafc`. Header `background: #1e293b, color: #ffffff`. Percentage share rendered as a thin inline bar (`background: #4f86c6`, height `6px`) below the number.
+
+**Footer:** `font-size: 11px, color: #94a3b8`. Content:
+`Generated by Fabric · Data range: <range> · Scope: <scope> · Label: <by=> · Generated <date>`
+
+### Chart.js initialisation
+
+```javascript
+const data = [/* array of {label, hours, count} objects embedded from traversal */];
+const totalHours = data.reduce((s, d) => s + d.hours, 0);
+const palette = ['#4f86c6','#e07b54','#5ba05b','#c9a84c','#9b72b0','#5ba8a0','#c96e6e','#8c8c8c'];
+
+new Chart(document.getElementById('effortDonut'), {
+  type: 'doughnut',
+  data: {
+    labels: data.map(d => d.label),
+    datasets: [{ data: data.map(d => d.hours), backgroundColor: palette, borderWidth: 2 }]
+  },
+  options: {
+    cutout: '62%',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.parsed}h (${Math.round(ctx.parsed / totalHours * 100)}%)`
+        }
+      }
+    }
+  }
+});
+```
+
+Center text plugin (inline, no external dependency):
+
+```javascript
+Chart.register({
+  id: 'centerText',
+  afterDraw(chart) {
+    const { ctx, chartArea: { width, height, left, top } } = chart;
+    ctx.save();
+    ctx.font = 'bold 32px -apple-system, sans-serif';
+    ctx.fillStyle = '#1e293b';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(totalHours + 'h', left + width / 2, top + height / 2);
+    ctx.restore();
+  }
+});
+```
+
+### Empty state
+
+If traversal produces no effort data (no `Effort:` fields found, or all are zero), render the page with the KPI card showing `0h` and a muted message in place of the chart: `"No effort recorded for this scope and period."` Do not fail silently.

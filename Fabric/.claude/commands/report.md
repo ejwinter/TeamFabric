@@ -12,6 +12,7 @@
 |---|---|---|
 | `mindmap` | HTML | Radial D3 mindmap of the backlog hierarchy |
 | `gantt` | HTML | D3 Gantt timeline of epics, features, and work items |
+| `effort` | HTML | Chart.js effort breakdown by label dimension |
 | `day` | Markdown | Activity summary for the past 24 hours |
 | `week` | Markdown | Activity summary for the past 7 days |
 | `month` | Markdown | Activity summary for the past 30 days |
@@ -24,11 +25,15 @@
 |---|---|---|
 | `--all` | mindmap, gantt | Include Resolved, Closed, and Removed items (default: Active + New only) |
 | `--epics-only` | gantt | Show epics and features only; omit work item rows |
+| `by=<label-key>` | effort | Required. Label key to use as the breakdown dimension (e.g. `by=service-type`) |
+| `scope=<value>` | effort | `requests` \| `backlog` \| `all` (default: `all`) |
+| `period` | effort | `month` \| `quarter` \| `year` \| `YYYY-MM-DD:YYYY-MM-DD` (default: all-time) |
 
 ## Behavior
 
 1. Check the argument. If missing or unrecognised, list valid types and stop.
 2. For `mindmap` or `gantt`: verify the Backlog module is enabled in `CLAUDE.md`. If not, tell the user and stop.
+   For `effort`: if `by=` is missing, tell the user it is required and stop. If `scope=all` or `scope=backlog`, verify the Backlog module is enabled.
 3. Ensure `output/` exists at the instance root. Create it if not.
 4. Load the reporting skill (`skills/reporting.md`) and invoke the appropriate renderer.
 5. Write the report to `output/` using today's date in the filename.
