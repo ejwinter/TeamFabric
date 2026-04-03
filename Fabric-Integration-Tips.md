@@ -101,9 +101,9 @@ An example of what's possible: an executive engagement portfolio report that rea
 
 Invoked as:
 
-```
+~~~
 /report executive quarter by=service-tier
-```
+~~~
 
 The report is label-driven — the `by=` parameter tells it which label key to use as the classification dimension. The output is a single self-contained HTML file dropped into `output/`.
 
@@ -113,7 +113,7 @@ Three things in your Fabric `CLAUDE.md` make this work:
 
 **1. A label schema** — define the dimensions that matter to your stakeholders. For example:
 
-```markdown
+~~~markdown
 ### Labels
 
 - **service-type** — The type of engagement
@@ -126,16 +126,16 @@ Three things in your Fabric `CLAUDE.md` make this work:
   - `2` — Significant engagement (weeks, defined deliverable)
   - `3` — Focused deliverable (days, narrow scope)
   - `4` — Consultation (hours, advisory only)
-```
+~~~
 
 **2. Effort tracking enabled** — turn on the Effort Tracking module so hours are captured as work closes. Once enabled, Fabric prompts for effort on close and rolls it up across the epic → feature → work item hierarchy.
 
 **3. A default classification label** — add an `### Executive Report` subsection to your CLAUDE.md so the report knows which label key to use without requiring `by=` every time:
 
-```markdown
+~~~markdown
 ### Executive Report
 Classification Label: service-tier
-```
+~~~
 
 ### Why this works
 
