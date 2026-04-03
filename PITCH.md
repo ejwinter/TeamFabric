@@ -20,7 +20,9 @@ A file-based framework that lives in a git repository. Drop in raw content — m
 
 **Modules** — Enable only what fits your team. Start with Core (team identity, members, ingestion, basic queries). Add Triage for structured request intake and evaluation. Add Backlog for epic-to-task tracking. Add Product for ownership context. Turn on what you need; leave the rest off.
 
-**Commands** — Slash commands your AI runs on demand: `/ingest` to file new content, `/status` for a team snapshot, `/evaluate-request` to run a structured rubric, `/describe-team` for a narrative synthesis, `/report` for management-ready output. Your history, made queryable.
+**Commands** — Slash commands your AI runs on demand: `/ingest` to file new content, `/status` for a team snapshot, `/evaluate-request` to run a structured rubric, `/describe-team` for a narrative synthesis, `/refine` to break down backlog work collaboratively. Your history, made queryable.
+
+**Reports** — Your Fabric data is structured markdown — which means it's queryable. `/report` generates self-contained HTML files from your working memory: an interactive mindmap of your backlog, a Gantt timeline, or an effort breakdown by any label dimension your team defines. Run `/report effort by=service-type` and get a Chart.js donut and summary table showing where your team's hours are actually going — no BI platform, no export, no pipeline. The data you're already maintaining becomes management-ready output on demand.
 
 **Skills** — Implicit AI behaviors that run behind the scenes: three-path ingestion with deduplication, staleness detection on curated content, rubric-based request evaluation, identity resolution (the AI knows who it's talking to), and self-help for Fabric itself.
 

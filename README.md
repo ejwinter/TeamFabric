@@ -89,45 +89,54 @@ Fabric is in active development. The framework is complete and running against a
 | Component | Status |
 |-----------|--------|
 | Framework design and architecture | Complete |
-| AI skill system (5 skills) | Complete |
-| AI command system (10 commands) | Complete |
+| AI skill system (7 skills) | Complete |
+| AI command system (13 commands) | Complete |
+| Core, Triage, Product, and Backlog modules | Complete |
 | Request evaluation framework (L1/L2 rubrics) | Complete |
-| Core, Triage, and Product modules | Complete |
+| Effort tracking with additive rollup | Complete |
+| Backlog refinement (DEEP principles) | Complete |
+| HTML reporting — mindmap, Gantt, effort breakdown | Complete |
 | Constitution format and defaults | Complete |
+| Product repo integration patterns | Complete |
 | Example team instance (Riverdale Data Engineering) | Complete |
 
-### Commands Available
+### Commands
 
 | Command | Description |
 |---------|-------------|
-| `/init` | First-time setup wizard — creates team.md, constitution, and member profiles |
-| `/ingest` | Ingest content into the working memory |
+| `/init` | First-time setup wizard — team profile, constitution, member setup |
+| `/ingest` | Ingest raw content into the working memory |
 | `/status` | Quick team status snapshot |
-| `/describe-team` | Synthesize a narrative of the team |
-| `/evaluate-request` | Run rubric evaluation on a request |
-| `/add-member` | Add a new team member (requires meta mode) |
-| `/bench-member` | Deactivate a member (requires meta mode) |
-| `/activate-member` | Restore a benched member (requires meta mode) |
-| `/meta` | Toggle meta mode for structural edits to the framework itself |
+| `/describe-team` | Narrative synthesis across the team's full history |
+| `/evaluate-request` | Run L1/L2 rubric evaluation on a request |
+| `/refine` | Backlog refinement conversation — classify, elaborate, split, estimate |
+| `/rollup-backlog` | Refresh Child Summary sections on epics and features |
+| `/report` | Generate reports: mindmap, gantt, effort breakdown, activity summaries |
+| `/add-member` | Add a new team member (meta mode) |
+| `/bench-member` | Deactivate a member (meta mode) |
+| `/activate-member` | Restore a benched member (meta mode) |
+| `/meta` | Toggle meta mode for structural edits |
 | `/readme` | Generate a human-readable README for the Fabric instance |
+| `/update-fabric` | Apply framework updates to an existing instance |
 
 ### Skills (Implicit AI Capabilities)
 
 | Skill | Description |
 |-------|-------------|
-| `identity` | Resolves the active user from git config — the AI knows who it's talking to |
+| `identity` | Resolves the active user from git config |
 | `ingestion` | Three-path ingestion with deduplication and staging support |
 | `request-evaluation` | Workflow-agnostic rubric engine that reads criteria from files |
+| `backlog-refinement` | Progressive refinement using DEEP principles — classification, elaboration, splitting, estimation |
+| `reporting` | Renderers for mindmap, Gantt, effort breakdown, and activity reports |
 | `entity-maintenance` | Staleness detection, dirty flags, and summary reconciliation |
-| `fabric-guidance` | Self-help for Fabric itself — "how do I...?" questions |
+| `fabric-guidance` | Self-help for Fabric itself |
 
 ### What's Not Built Yet
 
-- **Backlog module** — Epic → Feature → Work Item → Task hierarchy (designed, not implemented)
-- **Scrum module** — Daily communication facilitation (deferred)
-- **Query commands** — `personal-summary` ("what should I know this morning?"), `team-summary` by period
+- **Scrum module** — Sprint ceremonies, daily facilitation, velocity tracking (deferred)
+- **Query commands** — `personal-summary`, `team-summary` by period
 - **Azure DevOps sync** — Bidirectional backlog synchronization
-- **Multi-instance management** — Framework updates propagating across instances
+- **Multi-instance management** — Framework versioning and update propagation across instances
 
 ---
 
@@ -135,16 +144,14 @@ Fabric is in active development. The framework is complete and running against a
 
 ### Near Term
 
-- **Query commands** — personal and team summaries by time period, with staleness handling
-- **Refinement workflow** — the "check for new context before picking up work" pattern
-- **Cross-cutting content** — canonical home for meetings/emails beyond decomposed breadcrumbs; "what did we decide Tuesday?" queries
+- **Query commands** — personal and team summaries by time period
+- **Cross-cutting content** — canonical home for meetings/emails; "what did we decide Tuesday?" queries
 - **Initialization polish** — smoother `/init` experience for new teams
 
 ### Medium Term
 
-- **Backlog module** — Epic → Feature → Work Item → Task hierarchy with full ingestion support
-- **Products module** — richer product context beyond simple definitions
 - **Azure DevOps sync** — pull/push backlog items from ADO, reconcile differences
+- **Richer product context** — product module expansion beyond definitions
 
 ### Later
 
@@ -222,8 +229,8 @@ Fabric/                            # Root repository
 ├── Fabric/                        # The framework + real team instance (RAIS)
 │   ├── DRAFT_AGENTS.md            # Constitution (AI behavioral contract + human reference)
 │   ├── .claude/
-│   │   ├── commands/              # 10 slash commands
-│   │   └── skills/                # 5 implicit AI capabilities
+│   │   ├── commands/              # 13 slash commands
+│   │   └── skills/                # 7 implicit AI capabilities
 │   ├── team/                      # Team and member profiles
 │   ├── staging/                   # Drop zone for raw content (.gitignored)
 │   ├── requests/                  # Request tracking and workflow definitions
