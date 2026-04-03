@@ -194,6 +194,12 @@ If your team already has a Fabric instance and the framework has been updated:
 
 ---
 
+## Integrating with Product Repos
+
+Fabric manages work at the strategic level — epics, features, work items, and acceptance criteria. It is not designed to know the internals of every product repo. [`Fabric-Integration-Tips.md`](Fabric-Integration-Tips.md) documents patterns for bridging the gap: how to make a product repo Fabric-aware, how engineers pick up where Fabric's backlog breakdown ends, and how to pull a Fabric work item into [Backlog.md](https://backlog.md) to start planning an implementation.
+
+---
+
 ## Design Principles
 
 - **No raw content retention** — Fabric stores structured summaries, not original content. Raw content is discarded after processing unless explicitly told otherwise.
