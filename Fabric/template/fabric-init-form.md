@@ -48,6 +48,19 @@ Email: [email address]
 
 ---
 
+## Iterations
+
+<!-- Only needed if Backlog module is Enabled and your team works in fixed sprints/iterations. -->
+<!-- Leave blank or remove this section if your team does not use fixed iterations. -->
+
+Does your team work in fixed iterations (sprints)? [Yes / No]
+
+<!-- If Yes, fill in: -->
+Iteration Start: [YYYY-MM-DD — the start date of your first (or current) iteration]
+Iteration Duration: [e.g. 14 days, 7 days]
+
+---
+
 ## Products
 
 <!-- Only needed if Product module is Enabled. Copy this block for each product. -->

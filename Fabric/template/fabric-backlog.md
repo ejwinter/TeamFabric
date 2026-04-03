@@ -135,11 +135,37 @@ Backlog entities can be linked to external work tracking systems (e.g. Azure Dev
 
 ## Iterations
 
-An iteration is a named time block (typically two weeks) used to schedule work items. Iterations are referenced by name on work items via the Iteration property — they are not tracked as separate entities in the backlog hierarchy.
+An iteration is a named time block used to schedule work items. Iterations are referenced by name on work items via the `Iteration:` property — they are not tracked as separate entities in the backlog hierarchy.
 
-Work items may be moved between iterations as priorities shift. This is normal and expected. The Iteration property simply reflects the current plan, not a commitment.
+Work items may be moved between iterations as priorities shift. This is normal and expected. The `Iteration:` property simply reflects the current plan, not a commitment.
 
-Teams can define their iteration naming convention (e.g. "Sprint 42", "2026-Q2-W1", or an ADO iteration path) in the "How We Work" section of their constitution. The Backlog module does not prescribe a format.
+### Configuration
+
+If the team's "How We Work" section in CLAUDE.md contains an `### Iterations` subsection with `Iteration Start` and `Iteration Duration`, iterations are derived automatically:
+
+```markdown
+### Iterations
+Iteration Start: 2026-04-01
+Iteration Duration: 14 days
+```
+
+Given those two values and today's date, the current iteration is computed as:
+
+```
+n             = floor((today − Iteration Start) / Iteration Duration)
+current_start = Iteration Start + n × Iteration Duration
+current_end   = current_start + Iteration Duration − 1
+name          = YYMMDD-YYMMDD  (e.g. 260401-260414)
+```
+
+**Absence of the `### Iterations` subsection means the team does not use fixed iterations.** Do not infer, suggest, or prompt for iteration assignment when the subsection is missing.
+
+### Behavioral Rules
+
+- When the user says "add to current sprint/iteration", compute the current iteration name from today's date and write it to `Iteration:`.
+- When the user says "add to next sprint/iteration", compute iteration n+1 and write that name.
+- When displaying or suggesting iteration names, always derive them on the fly — never hard-code or cache names.
+- During backlog refinement, if an iteration config is present and a work item has no `Iteration:` set, offer to assign it to the current or next iteration as appropriate.
 
 Note: If the Scrum module is enabled, it may extend iterations with ceremonies, velocity tracking, and sprint-level reporting. The Backlog module treats iterations only as a scheduling label.
 

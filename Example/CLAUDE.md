@@ -16,6 +16,10 @@
 Request intake and triage process: requests/REQUESTS.md
 Default workflow and rubrics: requests/workflow/default/
 
+### Iterations
+Iteration Start: 2026-04-01
+Iteration Duration: 14 days
+
 ### Labels
 
 - **service-type** — The type of service this work relates to
