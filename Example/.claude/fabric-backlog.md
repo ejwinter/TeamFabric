@@ -16,19 +16,40 @@ backlog/
   inbox/
     <item>.md
   epics/
-    <epic>/
+    <epic-id>/
       epic.md
       features/
-        <feature>/
+        <feature-id>/
           feature.md
           workitems/
-            <workitem>/
+            <workitem-id>/
               workitem.md
               tasks/
-                <task>.md
+                <task-id>.md
 ```
 
 Parent-child relationships are implicit via folder nesting. Each entity level contains a markdown file describing the item and a subfolder for its children.
+
+## Entity IDs
+
+Entity IDs are the folder names (or file stems for tasks) used in the backlog directory structure. The default convention is:
+
+```
+<2-3-word-slug>-<YYMMDD>
+```
+
+- **Slug**: 2–3 lowercase words derived from the entity title, joined by hyphens
+- **Date**: creation date in `YYMMDD` format (e.g. `260402` for April 2, 2026)
+
+Examples: `ehr-pipeline-260101`, `fhir-parser-260315`, `access-workflow-260402`
+
+The slug provides enough context to identify the item at a glance; the date suffix makes the ID unique without a central counter. The combination is treated as stable once created — renaming an ID is not required if the title later changes.
+
+When generating an ID, derive the slug from the entity's title (not its parent's). Choose the most distinctive words — avoid filler words like "the", "a", "for". If the title is "Add FHIR R4 Parser", the slug is `fhir-r4-parser` (3 words is fine) and the ID is `fhir-r4-parser-260315`.
+
+The user can always override the generated ID — either by specifying a full ID upfront (e.g. "create a work item with id `auth-token-260402`") or by adjusting the proposed ID before it is written. Accept any valid directory name the user provides.
+
+Teams can override the default convention in the `### Backlog IDs` subsection of "How We Work" in their constitution (CLAUDE.md). Any format is valid as long as it produces valid directory names. When a custom convention is defined there, use it instead of the default.
 
 ### Inbox
 
@@ -51,7 +72,7 @@ Properties:
 - Duration: [optional]
 - Priority: [optional 1(lowest)-5(highest)]
 - Area: [optional area path representing a product or service line]
-- Effort: [optional, actual hours spent — populated on close when Effort Tracking is enabled]
+- Effort: [optional, direct hours at the epic level — planning, analysis, or coordination work not captured in child features]
 - Labels: [optional, comma-separated key=value pairs e.g. service-type=data-extraction]
 
 Sections: Description, Related Items, Items this depends on, Child Summary
@@ -69,7 +90,7 @@ Properties:
 - Duration: [optional]
 - Priority: [optional 1(lowest)-5(highest)]
 - Area: [optional area path representing a product or service line]
-- Effort: [optional, actual hours spent — populated on close when Effort Tracking is enabled]
+- Effort: [optional, direct hours at the feature level — refinement, design, or coordination work not captured in child work items; also used by teams that track at the feature level without breaking down further]
 - Labels: [optional, comma-separated key=value pairs e.g. service-type=data-extraction]
 
 Sections: Description, Acceptance Criteria, Related Items, Items this depends on, Child Summary
@@ -77,13 +98,19 @@ Sections: Description, Acceptance Criteria, Related Items, Items this depends on
 ### Work Item
 Breakdown of a feature into assignable implementation work. A work item should take roughly a day to a week to complete.
 
+Work item types:
+- **Story** — a user-facing capability or behavior change
+- **Request** — work originating from a formal request (e.g. promoted from Triage)
+- **Bug** — a defect or unintended behavior that needs to be corrected
+- **Support** — planning, coordination, or enabling work that does not directly deliver a product change (e.g. research spike, architecture decision, process definition)
+
 Properties:
 - State: New | Active | Resolved | Removed | Closed
-- Type: Story | Request | Bug
+- Type: Story | Request | Bug | Support
 - Iteration: [optional, named iteration or iteration path]
 - External URL: [optional link to an external representation such as ADO url]
 - Assigned to: [optional]
-- Effort: [optional, actual hours spent — populated on close when Effort Tracking is enabled]
+- Effort: [optional, direct hours at the work item level — review, coordination, or work not captured in child tasks; also used by teams that track at the work item level without breaking down further]
 - Labels: [optional, comma-separated key=value pairs e.g. service-type=data-extraction]
 
 Sections: Description, Acceptance Criteria, Related Items, Items this depends on
@@ -97,7 +124,7 @@ Properties:
 - Assigned to: [optional]
 - Estimated Hours: [optional]
 - Remaining Hours: [optional]
-- Effort: [optional, actual hours spent — populated on close when Effort Tracking is enabled]
+- Effort: [optional, direct hours spent on this task]
 - Labels: [optional, comma-separated key=value pairs e.g. service-type=data-extraction]
 
 Sections: Description
@@ -185,6 +212,7 @@ One suggestion per label key. Only suggest when confident from the content. The 
 ## Behavioral Rules
 
 - The statuses, types, and scoping definitions above are defaults. Teams can override any of these in the "How We Work" section of their constitution (CLAUDE.md). When custom values are defined there, use those instead of the defaults.
+- When creating any backlog entity (epic, feature, work item, task), generate an ID following the convention in the Entity IDs section above (or the team's custom convention if defined). Propose the generated ID to the user before writing so it can be adjusted.
 - Backlog entities are structural and protected by meta mode.
 - When creating a new feature, check if it should reference an existing product (if Product module is enabled).
 - Status rollup: when all child entities are complete, suggest updating the parent's status.
@@ -201,33 +229,43 @@ Effort tracking captures actual hours spent on backlog work. It is distinct from
 
 When Effort Tracking is **disabled** (or absent): no effort prompts on close, `Effort:` field not added to new entities, effort column omitted from Child Summary.
 
-When Effort Tracking is **enabled**: the agent collects effort as part of the close confirmation whenever it sets or confirms `State: Closed` on any backlog entity. Effort is collected before writing the file. The `Effort:` field is omitted from the file entirely when no effort has been recorded — same convention as `Labels`.
+When Effort Tracking is **enabled**: effort can be logged at any time during an entity's lifecycle, not only on close. The `Effort:` field is omitted from the file entirely when no effort has been recorded — same convention as `Labels`.
+
+Effort is **additive across all levels**. The `Effort:` field on any entity records only the direct hours at that level — work done at the epic, feature, work item, or task level respectively. Total effort for a subtree is the sum of all `Effort:` values across the entity and every descendant. No level's effort is a substitute for its children's effort; they represent different phases or types of work.
+
+### Incremental Logging
+
+When a user mentions time spent on a backlog entity in natural language (e.g. "I spent 3 hours on the FHIR parser today", "log 1.5h to the auth work item"), recognize this as an effort entry and propose updating the entity's `Effort:` field:
+
+- If `Effort:` is absent or not set: propose setting it to the logged amount.
+  > "Logging 3h to 'fhir-r4-parser-260315'. Set Effort to 3h? (confirm or skip)"
+- If `Effort:` already has a value: propose incrementing it.
+  > "Logging 3h to 'fhir-r4-parser-260315'. Current effort is 12h — update to 15h? (confirm, enter different total, or skip)"
+
+Always present the running total, not just the increment. The user confirms or adjusts before anything is written. Skipping is always valid.
+
+The entity does not need to be active or open to receive an effort log. Effort can be added after the fact if the user forgot to record it at the time.
 
 ### Close Prompts
 
-**Task (no children):**
-> "Closing '[title].' How many hours did this take? (Enter a number or skip)"
+On close, ask about direct effort at this level — work the person did that is not captured in child entities. Always show children's effort total as context so the user can see the full picture.
 
-**Work item / feature / epic — all direct children have effort:**
-> "Closing '[title].' All N children have effort — total is Xh. Use that, or enter a different value?"
+**Direct effort already accumulated at this level:**
+> "Closing '[title].' Direct effort at this level: Xh. Children total: Yh. Confirm direct effort, adjust, or skip?"
 
-**Work item / feature / epic — partial direct child coverage:**
-> "Closing '[title].' N of M children have effort — partial total is Xh. Enter a total effort (or skip)."
+**No direct effort at this level, children have effort:**
+> "Closing '[title].' Children total: Xh. Any direct effort at this level (planning, coordination, review)? (Enter hours or skip)"
 
-**Work item / feature / epic — no direct children have effort (or no children at all):**
-> "Closing '[title].' No children have effort recorded. How many hours did this take? (Enter a number or skip)"
+**No direct effort at this level, no children have effort:**
+> "Closing '[title].' How many hours? (Enter a number or skip)"
 
-This last case also applies when the entity has no children at all (e.g. a work item on a team that skips the task level).
+Children total shown in the prompt is computed by summing `Effort:` values across all descendants recursively. Skipping is always valid — effort is never required.
 
-The coverage check looks only at **direct children's `Effort:` fields**, not a deep scan. Skipping is always valid — effort is never required.
+### Effort Rollup Rule
 
-### Short-Circuit Rollup Rule
+Total effort for any entity = its own `Effort:` value (if set) + the sum of `Effort:` values across all descendants recursively.
 
-When rolling up effort from children:
-- If a child has its own `Effort:` value, use it directly. Do not sum that child's descendants.
-- If a child has no `Effort:` value, sum effort from its children recursively, applying the same rule at each level.
-
-A manually set effort at any level represents the authoritative cost for that subtree, regardless of what the children record.
+Every level's effort is additive. An epic with 8h of direct planning effort and features totaling 40h has 48h total. No level's effort overrides or replaces its children's — they represent work done at different stages of the engagement.
 
 ## Relationship to Triage
 
@@ -238,9 +276,11 @@ When promoting a request to an epic:
 1. **Create the epic** under `backlog/epics/` using the epic template.
 2. **Carry forward** the request's description as the epic's description. It can be refined later during backlog breakdown.
 3. **Carry forward the External URL** if the request already has one (e.g. an ADO epic link). The backlog epic inherits this link.
-4. **Link back to the request** in the epic's Related Items section (e.g. "Originated from request R-044").
-5. **Do not modify the request entity.** It stays in `requests/` as a historical record of intake and evaluation. The request's state is not changed by promotion — triage and backlog are independent records.
-6. **Confirm before creating.** Propose the epic (title, description, carried-over fields) and wait for the user to approve before writing.
+4. **Carry forward Labels** if the request has a `Labels:` field. Copy the value verbatim to the epic's `Labels:` property. Validate each label value against the backlog label schema; flag any mismatches and offer to reconcile before writing.
+5. **Link back to the request** in the epic's Related Items section (e.g. "Originated from request R-044").
+6. **Write the cross-reference back to the request.** Add or update the `Backlog Epic:` field in the request's header to point to the new epic ID. Include this in the confirmation proposal in step 7.
+7. **Do not change the request's triage state.** The request stays in `requests/` as a historical record. Its evaluation status, lifecycle stage, and evaluation data are independent of the backlog.
+8. **Confirm before creating.** Propose the epic (title, description, carried-over fields, and the `Backlog Epic:` update to the request) and wait for the user to approve before writing anything.
 
 After promotion, the epic is a normal backlog item — the user can immediately begin refinement, breaking it into features and work items.
 
