@@ -2,6 +2,7 @@
 @.claude/fabric-triage.md
 @.claude/fabric-product.md
 @.claude/fabric-standup.md
+@.claude/fabric-retro.md
 
 # {{TEAM_NAME}}
 
@@ -68,4 +69,5 @@
 | Backlog | Disabled | Epic/feature/work-item hierarchy |
 | Effort Tracking | Disabled | Capture actual hours on close, rollup to parent |
 | Standup | Disabled | Daily standup conversations and team summary |
+| Retrospective | Disabled | Periodic retros with team summary and action item routing |
 

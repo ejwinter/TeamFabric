@@ -33,7 +33,12 @@ Make the "Items this depends on" sections actionable. Add a `/blocked` or `/depe
 
 ## Retrospective Module
 
-Add a retro workflow as a complement to the Standup module. Covers what went well, what didn't, and action items. Produces a team-level retro summary and optionally feeds action items into the backlog inbox.
+**Implemented 2026-04-04.** Retro workflow as a complement to the Standup module. Covers what went well, what didn't, and action items. Produces a team-level retro summary and optionally feeds action items into the backlog inbox.
+
+Files added:
+- `Fabric/template/fabric-retro.md` — module behavioral rules
+- `Fabric/.claude/commands/retro.md` — `/retro` command (Q&A, narrative, and report modes)
+- `Fabric/.claude/skills/retro-report.md` — team summary synthesis skill
 
 ---
 

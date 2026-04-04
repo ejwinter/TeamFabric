@@ -3,6 +3,7 @@
 @.claude/fabric-product.md
 @.claude/fabric-backlog.md
 @.claude/fabric-standup.md
+@.claude/fabric-retro.md
 
 # Riverdale Data Engineering
 
@@ -63,6 +64,7 @@ Iteration Duration: 14 days
 | Backlog | Enabled | Hierarchical work tracking — epics, features, work items, tasks |
 | Effort Tracking | Enabled | Capture actual hours on close, rollup to parent |
 | Standup | Enabled | Daily standup conversations and team summary |
+| Retrospective | Enabled | Periodic retros with team summary and action item routing |
 
 ## Decision Log
 
