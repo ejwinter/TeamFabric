@@ -89,8 +89,8 @@ Fabric is in active development. The framework is complete and running against a
 | Component | Status |
 |-----------|--------|
 | Framework design and architecture | Complete |
-| AI skill system (7 skills) | Complete |
-| AI command system (13 commands) | Complete |
+| AI skill system (11 skills) | Complete |
+| AI command system (24 commands) | Complete |
 | Core, Triage, Product, and Backlog modules | Complete |
 | Request evaluation framework (L1/L2 rubrics) | Complete |
 | Effort tracking with additive rollup | Complete |
@@ -98,6 +98,11 @@ Fabric is in active development. The framework is complete and running against a
 | HTML reporting — mindmap, Gantt, effort breakdown | Complete |
 | Constitution format and defaults | Complete |
 | Product repo integration patterns | Complete |
+| Standup module — async daily standups with team summary | Complete |
+| Retrospective module — periodic retros with lifecycle and action item routing | Complete |
+| Entity transition guards with pre-flight checks and Definition of Done | Complete |
+| Open questions and blockers tracking on all entities | Complete |
+| Member onboarding orientation command | Complete |
 | Example team instance (Riverdale Data Engineering) | Complete |
 
 ### Commands
@@ -112,6 +117,16 @@ Fabric is in active development. The framework is complete and running against a
 | `/refine` | Backlog refinement conversation — classify, elaborate, split, estimate |
 | `/rollup-backlog` | Refresh Child Summary sections on epics and features |
 | `/report` | Generate reports: mindmap, gantt, effort breakdown, activity summaries |
+| `/standup-discussion` | Daily standup conversation (Q&A or narrative mode); writes per-member record |
+| `/retro create` | Open a new retrospective — sets period, questions, and participant list |
+| `/retro` | Member retro input conversation (async, Q&A or narrative mode) |
+| `/retro review` | Show participation status; optionally preview submitted themes |
+| `/retro report` | Synthesize member inputs into an annotated draft for the team review meeting |
+| `/retro close` | Finalize the annotated draft; write summary and mark retro closed |
+| `/onboard` | Personalized orientation for a new team member — team context, work flow, Fabric operations |
+| `/open-questions` | Surface unresolved questions and blockers across all entities (or scoped to one) |
+| `/transition` | Guard and execute entity state transitions with pre-flight checks and DoD enforcement |
+| `/submit-idea` | Submit feedback or feature suggestions for the Fabric framework |
 | `/add-member` | Add a new team member (meta mode) |
 | `/bench-member` | Deactivate a member (meta mode) |
 | `/activate-member` | Restore a benched member (meta mode) |
@@ -130,10 +145,14 @@ Fabric is in active development. The framework is complete and running against a
 | `reporting` | Renderers for mindmap, Gantt, effort breakdown, and activity reports |
 | `entity-maintenance` | Staleness detection, dirty flags, and summary reconciliation |
 | `fabric-guidance` | Self-help for Fabric itself |
+| `standup-context` | Pre-loads assigned work, recent commits, and team follow-ups before a standup conversation |
+| `standup-report` | Collects all member standup records and produces the team-wide summary |
+| `retro-report` | Synthesizes member retro inputs into a themed draft with addressal placeholders |
+| `entity-transitions` | Guards and executes state transitions with DoD checks and human confirmation |
 
 ### What's Not Built Yet
 
-- **Scrum module** — Sprint ceremonies, daily facilitation, velocity tracking (deferred)
+- **Scrum module** — Sprint planning, velocity tracking, formal ceremony facilitation (deferred; standup and retro are available as standalone modules)
 - **Query commands** — `personal-summary`, `team-summary` by period
 - **Azure DevOps sync** — Bidirectional backlog synchronization
 - **Multi-instance management** — Framework versioning and update propagation across instances

@@ -18,9 +18,9 @@ A file-based framework that lives in a git repository. Drop in raw content — m
 
 ## What's Inside
 
-**Modules** — Enable only what fits your team. Start with Core (team identity, members, ingestion, basic queries). Add Triage for structured request intake and evaluation. Add Backlog for epic-to-task tracking. Add Product for ownership context. Turn on what you need; leave the rest off.
+**Modules** — Enable only what fits your team. Start with Core (team identity, members, ingestion, basic queries). Add Triage for structured request intake and evaluation. Add Backlog for epic-to-task tracking with Definition of Done enforcement. Add Product for ownership context. Add Standup for async daily standups with team-wide summaries. Add Retro for structured retrospectives with themed synthesis and action item routing. Turn on what you need; leave the rest off.
 
-**Commands** — Slash commands your AI runs on demand: `/ingest` to file new content, `/status` for a team snapshot, `/evaluate-request` to run a structured rubric, `/describe-team` for a narrative synthesis, `/refine` to break down backlog work collaboratively. Your history, made queryable.
+**Commands** — Slash commands your AI runs on demand: `/ingest` to file new content, `/status` for a team snapshot, `/evaluate-request` to run a structured rubric, `/describe-team` for a narrative synthesis, `/refine` to break down backlog work collaboratively, `/standup-discussion` for async daily standups, `/retro` for structured retrospectives, `/transition` to guard entity state changes with Definition of Done checks, `/onboard` to orient new members, and `/open-questions` to surface unresolved blockers across your team's work. Your history, made queryable.
 
 **Reports** — Your Fabric data is structured markdown — which means it's queryable. `/report` generates self-contained HTML files from your working memory: an interactive mindmap of your backlog, a Gantt timeline, or an effort breakdown by any label dimension your team defines. Run `/report effort by=service-type` and get a Chart.js donut and summary table showing where your team's hours are actually going — no BI platform, no export, no pipeline. The data you're already maintaining becomes management-ready output on demand.
 
