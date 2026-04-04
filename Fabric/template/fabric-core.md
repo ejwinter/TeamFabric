@@ -110,6 +110,34 @@ Entities carry two companion sections for tracking knowledge gaps and choices:
 - Detect unresolved questions or blockers ("we need to figure out...", "open question:", "TBD:") and propose an Open Questions entry. Same confirmation requirement.
 - User can also explicitly request: "log a decision" or "add this as an open question on [entity]."
 
+### Definition of Done
+
+Every entity type has an **implicit Definition of Done** — structural completion criteria that apply without being written down:
+
+| Entity type | Implicit DoD |
+|---|---|
+| Epic | All child features are Closed, Resolved, or Removed |
+| Feature | All child work items are Closed, Resolved, or Removed |
+| Work item | All Acceptance Criteria are reviewed as met; all child tasks are Closed or Removed |
+| Task | No structural implicit DoD — explicit criteria only |
+
+Entities may also carry an **explicit `## Definition of Done` section** — a checklist of additional completion criteria beyond the implicit ones. This section is optional; most entities won't need it. Use it for criteria that aren't structurally detectable: "deployed to staging", "stakeholder sign-off received", "documentation updated."
+
+**Format:**
+```
+## Definition of Done
+
+- [ ] Additional criterion specific to this entity
+- [ ] Another criterion
+- [x] Criterion already confirmed met
+```
+
+**Agent behavior during close/resolve (invoked by the `entity-transitions` skill):**
+1. Run implicit DoD checks first (programmatically — count children by state, review acceptance criteria).
+2. If the entity has an explicit `## Definition of Done` section, walk through any unchecked items with the user.
+3. Present the full picture before asking for close confirmation.
+4. Do not close an entity over unmet DoD criteria without the user explicitly acknowledging and overriding.
+
 ### Staleness Detection
 
 When new content is ingested against an entity, its summary may become outdated. Do not proactively rewrite summaries. Instead, flag entities as potentially stale when new context arrives. When someone queries that entity, note the staleness and offer to reconcile.
@@ -135,6 +163,7 @@ The `staging/` directory is a drop zone for raw content. All contents except `RE
 | /update-fabric | Apply updates from the TeamFabric source repo to this instance. Uses `.claude/fabric-source.md` to locate the source; falls back to cloning from the remote URL; asks if both fail. |
 | /report | Generate reports from the backlog: `mindmap` (D3 radial tree), `gantt` (D3 timeline), or `day/week/month/quarter/year` (markdown activity summary). Requires Backlog module for mindmap and gantt. |
 | /open-questions | List all unchecked open questions across the instance. Default output groups by entity. Accepts an optional entity hint (`/open-questions R-42`) to scope to one entity. Useful for answering "what's blocking X?" |
+| /transition | Manage entity state transitions with pre-flight checks. Usage: `/transition [entity] [to-state]`. Supported transitions: New → Active (checks blockers and open questions), Active → Resolved/Closed (walks acceptance criteria), Any → Removed (scans dependents). Never deletes entity files. |
 
 ## Core Skills
 
@@ -146,6 +175,7 @@ The `staging/` directory is a drop zone for raw content. All contents except `RE
 | ingestion | Execute the three ingestion paths: quick file, direct ingest, staged batch. |
 | entity-maintenance | Update entity headers, manage staleness flags, reconcile summaries when queried. |
 | fabric-guidance | Help users understand and maintain their Fabric. Explain structure, suggest improvements, answer "how do I..." questions about the system itself. |
+| entity-transitions | Guard and execute state transitions for entities. Checks blockers, open questions, acceptance criteria, and dependents before writing any state change. Invoked by `/transition` or implicitly when state-change intent is detected in conversation. |
 | reporting | Generate interactive HTML reports (mindmap, gantt) and markdown activity summaries from the backlog working memory. Handles data traversal, hours rollup from tasks, title shortening, and all three renderers. |
 
 ## Framework File Ownership

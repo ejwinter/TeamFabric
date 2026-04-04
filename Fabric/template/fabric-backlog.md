@@ -217,6 +217,7 @@ One suggestion per label key. Only suggest when confident from the content. The 
 - When creating a new feature, check if it should reference an existing product (if Product module is enabled).
 - Status rollup: when all child entities are complete, suggest updating the parent's status.
 - Do not create backlog entities autonomously. Propose the entity and wait for confirmation.
+- State changes on backlog entities should invoke the `entity-transitions` skill. Do not directly update `State:` without running the appropriate transition path (blocker/question checks for activation; acceptance criteria review for close; dependent scan for removal).
 - Children inherit context from their parent through folder nesting. A work item inherits the scope of its parent feature, which inherits from its parent epic.
 - When writing a label value, validate it against the team's label schema in CLAUDE.md. If the value is not listed, flag it and suggest the nearest valid option before writing. If no schema is defined, accept any key=value pair.
 - After writing or updating a description or acceptance criteria, cross-reference the content against the label schema descriptions and proactively offer label suggestions. One suggestion per key, only when confident.

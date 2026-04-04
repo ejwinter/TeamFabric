@@ -31,6 +31,13 @@
 
 [If there is another item such as a feature or workitem this depends on name or describe that here.]
 
+## Definition of Done
+
+<!-- Implicit: all child work items are Closed, Resolved, or Removed.
+     Add any additional criteria for this feature below (e.g. deployed to staging, release notes written).
+- [ ] Additional criterion
+-->
+
 ## Blockers
 
 <!-- Active and resolved blocks on this entity.

@@ -27,6 +27,13 @@
 
 [If there is another item such as a feature or workitem this depends on name or describe that here.]
 
+## Definition of Done
+
+<!-- Implicit: all Acceptance Criteria reviewed as met; all child tasks are Closed or Removed.
+     Add any additional criteria for this work item below.
+- [ ] Additional criterion
+-->
+
 ## Blockers
 
 <!-- Active and resolved blocks on this entity.
