@@ -29,6 +29,7 @@ A new property field added to the Properties block of:
 | Request (`request.md`) | `Declined`, `Withdrawn`, `Complete` |
 | Product (`product.md`) | `Retired`, `Sunset` |
 | Member profile (`profile.md`) | `Departed` |
+| Stakeholder profile (`profile.md`) | `Departed` — also requires adding `Status:` and `Terminated:` fields to the stakeholder template |
 
 ### `Departed` replaces `Benched`
 
@@ -65,8 +66,9 @@ Default retention is 90 days after `Terminated:` for most artifacts, and 1 year 
 | Standup log | Date in filename | 90 days | Delete |
 | Member discuss-log | Date in filename | 90 days | Delete |
 | Retro folder | `Status: Closed` + `Closed:` date | 90 days | Delete |
-| Member profile | `Status: Departed` + `Terminated:` | 90 days | Delete |
-| Product | `Retired`, `Sunset` | 90 days | Delete |
+| Member profile | `Status: Departed` + `Terminated:` | 90 days | Archive → gravestone |
+| Stakeholder profile | `Status: Departed` + `Terminated:` | 90 days | Archive → gravestone |
+| Product | `Retired`, `Sunset` | 90 days | Archive → gravestone |
 
 Deletion removes the entity file or directory entirely. Archive creates a gravestone file and removes the original. Git history remains intact in both cases.
 
@@ -103,6 +105,54 @@ State at archive: Closed | Removed
 *Full history available via `git log -- backlog/epics/<slug>/`*
 ```
 
+### Member Gravestone — `team/archive/members/<slug>.md`
+
+```markdown
+# [Member Name] — Archived YYYY-MM-DD
+
+Terminated: YYYY-MM-DD
+Status at archive: Departed
+
+## Properties
+[Role, Team Function, Allocation, Email — copied verbatim]
+
+## Summary
+[Member summary]
+
+*Full history available via `git log -- team/members/<slug>/`*
+```
+
+### Stakeholder Gravestone — `team/archive/stakeholders/<slug>.md`
+
+```markdown
+# [Stakeholder Name] — Archived YYYY-MM-DD
+
+Terminated: YYYY-MM-DD
+Status at archive: Departed
+
+## Summary
+[Stakeholder summary]
+
+*Full history available via `git log -- team/stakeholders/<slug>/`*
+```
+
+### Product Gravestone — `products/archive/<slug>.md`
+
+```markdown
+# [Product Name] — Archived YYYY-MM-DD
+
+Terminated: YYYY-MM-DD
+State at archive: Retired | Sunset
+
+## Properties
+[Status, Owners, Repository — copied verbatim]
+
+## Summary
+[Product description]
+
+*Full history available via `git log -- products/<slug>/`*
+```
+
 ### Request Gravestone — `requests/archive/R-NNN.md`
 
 ```markdown
@@ -132,7 +182,7 @@ State at archive: Declined | Withdrawn | Complete
 3. **Write report** — save to `output/cleanup-report.md`.
 4. **Present summary** — show counts by artifact type and proposed actions.
 5. **Confirm** — ask "Proceed with cleanup?" before touching anything.
-6. **Execute** — for each eligible epic: run rollup, write gravestone, delete source tree. For each eligible request: write gravestone, delete source directory. For all other artifacts: delete file or directory.
+6. **Execute** — for each eligible epic: run rollup, write gravestone, delete source tree. For each eligible request, product, member, or stakeholder: write gravestone, delete source directory. For all other artifacts: delete file or directory.
 7. **Final report** — update `output/cleanup-report.md` with what was actually done. Prompt the user to commit the changes.
 
 ---
@@ -161,6 +211,20 @@ N items eligible for cleanup across N artifact types.
 |---------|-------|-----------|-----|------------|
 | R-042 | Sepsis Prediction Model | 2025-01-03 | 456 days | requests/archive/R-042.md |
 
+## To Be Archived (90 day retention)
+
+### Members (N)
+| Member | Terminated | Age | Gravestone |
+|--------|-----------|-----|------------|
+
+### Stakeholders (N)
+| Stakeholder | Terminated | Age | Gravestone |
+|-------------|-----------|-----|------------|
+
+### Products (N)
+| Product | State | Terminated | Age | Gravestone |
+|---------|-------|-----------|-----|------------|
+
 ## To Be Deleted (90 day retention)
 
 ### Features (N)
@@ -182,14 +246,6 @@ Members affected: Dana Torres (N files), Leo Kim (N files)
 ### Retros (N)
 | Retro | Closed | Age |
 |-------|--------|-----|
-
-### Departed Members (N)
-| Member | Terminated | Age |
-|--------|-----------|-----|
-
-### Products (N)
-| Product | State | Terminated | Age |
-|---------|-------|-----------|-----|
 
 ### Inbox Items (N)
 Files older than 90 days: N
@@ -221,6 +277,6 @@ When a team member asks "how do I change retention for standup logs?", the agent
 ## Out of Scope
 
 - Staging files — no defined lifecycle; teams manage manually.
-- Stakeholder profiles — no terminal state defined; excluded from GC.
+- Stakeholder profiles — included in GC when `Status: Departed` is set; `Departed` status and `Terminated:` field need to be added to the stakeholder profile template.
 - `discuss-today.md` / `discuss-yesterday.md` / `standup-today.md` / `standup-yesterday.md` — transient working files managed by their respective modules, not by `clean-fabric`.
 - Automated scheduling — `clean-fabric` is always run manually and always requires confirmation.
