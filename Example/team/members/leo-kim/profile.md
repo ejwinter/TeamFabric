@@ -5,6 +5,11 @@ Team Function: Maintenance and Monitoring
 Allocation: 100%
 Status: Active
 
+## Capacity Adjustments
+
+<!-- Current and upcoming periods of reduced or zero capacity. Cleared by GC. -->
+<!-- Omit this section entirely when no adjustments are present. -->
+
 ## Summary
 
 Leo handles day-to-day pipeline monitoring and is the primary on-call responder. He is building deeper expertise in pipeline development through maintenance work and mentorship from senior team members.

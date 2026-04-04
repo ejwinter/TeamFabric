@@ -152,9 +152,7 @@ The `staging/` directory is a drop zone for raw content. All contents except `RE
 
 | Command | Description |
 |---------|-------------|
-| /add-member | Guided creation of a new member profile. Requires meta mode. |
-| /bench-member | Set a member's status to Benched. Preserves profile and context log references but removes from active capacity. Requires meta mode. |
-| /activate-member | Restore a benched member to Active status. Requires meta mode. |
+| /member | Member lifecycle and capacity management. Subcommands: `add` (requires meta mode), `bench` (requires meta mode), `activate` (requires meta mode), `timeoff` (meta mode required only when recording for another member). |
 | /readme | Regenerate README.md from current state of CLAUDE.md, team/team.md, and member profiles. |
 | /describe-team | Synthesize a narrative description of the team from all sources. Optionally accepts an audience hint (e.g., "for leadership", "for onboarding"). Surfaces inconsistencies, gaps, or staleness. |
 | /status | Quick summary of team state: active members and allocation, engagement counts, pending requests. |

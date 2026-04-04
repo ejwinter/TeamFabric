@@ -5,6 +5,11 @@ Team Function: EHR Integration and Data Quality
 Allocation: 100%
 Status: Active
 
+## Capacity Adjustments
+
+<!-- Current and upcoming periods of reduced or zero capacity. Cleared by GC. -->
+<!-- Omit this section entirely when no adjustments are present. -->
+
 ## Summary
 
 Marcus is the team's EHR integration specialist. He builds and maintains the pipelines that extract data from Epic and load it into the clinical data lake. He also leads the data quality monitoring initiative.

@@ -5,6 +5,11 @@ Team Function: Reporting Pipelines and Dashboard Data
 Allocation: 100%
 Status: Active
 
+## Capacity Adjustments
+
+<!-- Current and upcoming periods of reduced or zero capacity. Cleared by GC. -->
+<!-- Omit this section entirely when no adjustments are present. -->
+
 ## Summary
 
 Priya builds and maintains the data pipelines that feed the hospital's operational dashboards. She works closely with the analytics team to ensure dashboard data is timely and accurate.
