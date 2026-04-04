@@ -61,9 +61,10 @@ Write to `team/standup/standup-today.md`. Include today's date in the header.
 [2–5 bullets: the most significant things the team is driving toward today across all members]
 
 ## Blockers & Needs
-[Consolidated list of unresolved blockers and open asks.
+[Actionable blockers and open asks only — those with no follow-up date, or whose follow-up date is today or past.
  Format: "**[Member]**: [blocker or need] — needs: [who or what]"
- If none: "No blockers reported."]
+ If parked blockers exist but none are actionable: "No actionable blockers. [N] parked (next follow-up: YYYY-MM-DD)."
+ If none at all: "No blockers reported."]
 
 ## Suggested Syncs & Breakouts
 [Flagged pairings from sync detection.
@@ -95,6 +96,7 @@ Note any members who had no update this cycle and suggest they run `/standup-dis
 - Per-member summaries: 1–2 sentences per section. Preserve specifics (item names, question text) over generic paraphrasing.
 - Team sections: prioritize signal. Do not inflate if little happened.
 - Blocked members and unresolved needs should be prominent, not buried at the end.
+- Apply follow-up date filtering consistently: actionable = no follow-up date or follow-up date ≤ today. Parked = follow-up date > today. Never surface parked items as if they need immediate action.
 
 ## Notes
 

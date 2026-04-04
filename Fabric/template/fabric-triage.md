@@ -55,6 +55,14 @@ requests/
 - After evaluation, surface the recommendation clearly but do not make the accept/reject decision — that belongs to the designated decision-maker.
 - Request entities support a `Labels:` property in their Properties section, using the same key=value format as backlog entities. The team's label schema in CLAUDE.md applies. After ingesting or updating a request description, offer label suggestions the same way as for backlog entities.
 
+### Blocked Requests
+
+Requests support the same `Blocked:` property flag and `## Blockers` section as backlog entities (see Core module). A request may be blocked during evaluation (waiting on IRB, missing data access, stakeholder unavailable) or during active engagement.
+
+Add `Blocked: Yes` to the request's Properties section and a corresponding `## Blockers` entry when flagged. The `## Blockers` section should be placed after `## Evaluation` and before `## Context Log` in the request file.
+
+When a request has a `Backlog Epic:` link, a blocker on the request is visible when `/open-questions` is run against either the request or the linked epic — the bridge traversal surfaces both directions.
+
 ### Effort Tracking on Requests
 
 Requests support an optional `Effort:` property representing hours spent on planning or discovery work — evaluation, stakeholder consultation, scoping — before the team decides to pursue or decline the engagement. This is pre-engagement effort, distinct from execution effort tracked in the backlog.

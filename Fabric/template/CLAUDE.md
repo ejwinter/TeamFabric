@@ -69,7 +69,3 @@
 | Effort Tracking | Disabled | Capture actual hours on close, rollup to parent |
 | Standup | Disabled | Daily standup conversations and team summary |
 
-## Decision Log
-
-<!-- Append significant team-level decisions here during ingestion. Format:
-     - YYYY-MM-DD: [decision]. Context: [brief reason]. -->

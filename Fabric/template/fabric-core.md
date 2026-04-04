@@ -43,6 +43,73 @@ Lean breadcrumbs with enough "why" to answer follow-up questions:
   Source: [location or reference to original artifact]
 ```
 
+### Blocked Entities
+
+Epics, features, work items, and requests can be marked blocked via a `Blocked:` property flag. The flag is an overlay on the entity's existing state — a work item can be Active and Blocked simultaneously.
+
+**Property field:**
+```
+- Blocked: Yes
+```
+Set when a Blockers entry is created with `Status: Active`. Cleared (removed) when all Blockers entries are resolved. The flag exists for scannability; the detail lives in `## Blockers`.
+
+**`## Blockers` section format:**
+```
+### [YYYY-MM-DD] Brief description of the block
+- **Flagged by:** Name
+- **Cause:** Open question / Dependency / External / Other — [reference the specific question or dependency by name if applicable]
+- **Follow-up:** YYYY-MM-DD — [what will happen on that date, e.g. "checking back with vendor", "revisit after architecture meeting"]
+- **Status:** Active | Resolved — YYYY-MM-DD ([how it resolved])
+```
+
+`Follow-up:` is optional. When set, the blocker is **parked** until that date — it is known and being managed. Omit when the blocker needs immediate attention or has no known check-in date.
+
+**Cause types:**
+- `Open question` — progress requires a decision that hasn't been made; reference the specific item in `## Open Questions`
+- `Dependency` — waiting on another entity to complete; reference the item in `## Items this depends on`
+- `External` — waiting on something outside the team's control (access, vendor, another team)
+- `Other` — anything else; be specific in the description
+
+**Agent behavior:**
+- When a user indicates an entity is blocked ("this is blocked", "we're stuck on", "can't proceed until"), propose a Blockers entry. Ask: who flagged it, what's the cause, is there an existing open question or dependency this relates to? Optionally ask if there is a follow-up date.
+- Do not write the entry or set `Blocked: Yes` without confirmation.
+- When a blocker is resolved, propose updating the entry's Status and clearing `Blocked:` from Properties if no other active entries remain.
+- When loading a blocked entity, surface the active blocker(s) prominently before other context.
+
+**Surfacing logic (used by standup and reports):**
+- A blocker or open question is **actionable** when: it has no follow-up date, or its follow-up date is today or in the past.
+- A blocker or open question is **parked** when its follow-up date is in the future.
+- Actionable items are surfaced prominently. Parked items are acknowledged in aggregate ("2 parked blockers") but not listed in detail until their follow-up date arrives.
+
+### Open Questions and Decisions
+
+Entities carry two companion sections for tracking knowledge gaps and choices:
+
+**`## Open Questions`** — unchecked items are unresolved questions. Format:
+```
+- [ ] Question text *(asked by Name, YYYY-MM-DD)*
+- [ ] Question text *(asked by Name, YYYY-MM-DD — follow-up: YYYY-MM-DD)*
+- [x] Resolved question *(asked by Name, YYYY-MM-DD — resolved YYYY-MM-DD)*
+```
+
+`follow-up: YYYY-MM-DD` is optional. When set, the question is parked until that date and not surfaced as actionable beforehand. Apply the same surfacing logic as blockers.
+
+**`## Decisions`** — structured record of choices made. Format:
+```
+### [YYYY-MM-DD] Decision title
+- **Decided by:** Name
+- **Recorded by:** Name or Claude (ingestion)
+- **Options considered:** Option A (rejected: reason), Option B (rejected: reason), chosen option
+- **Rationale:** Why this option was chosen
+```
+
+**Lifecycle:** An open question is an unresolved decision. When it resolves: check the box, add a Decisions entry. The resolved question provides the "why we asked" context; the decision entry provides the answer.
+
+**Agent behavior:**
+- During ingestion or conversation, detect decision language ("we decided to...", "going with X over Y", "we chose...") and propose a Decisions entry. Do not write silently — show the proposed entry and confirm.
+- Detect unresolved questions or blockers ("we need to figure out...", "open question:", "TBD:") and propose an Open Questions entry. Same confirmation requirement.
+- User can also explicitly request: "log a decision" or "add this as an open question on [entity]."
+
 ### Staleness Detection
 
 When new content is ingested against an entity, its summary may become outdated. Do not proactively rewrite summaries. Instead, flag entities as potentially stale when new context arrives. When someone queries that entity, note the staleness and offer to reconcile.
@@ -67,6 +134,7 @@ The `staging/` directory is a drop zone for raw content. All contents except `RE
 | /meta | Enter meta mode to edit structural files. Use `/meta done` to exit. |
 | /update-fabric | Apply updates from the TeamFabric source repo to this instance. Uses `.claude/fabric-source.md` to locate the source; falls back to cloning from the remote URL; asks if both fail. |
 | /report | Generate reports from the backlog: `mindmap` (D3 radial tree), `gantt` (D3 timeline), or `day/week/month/quarter/year` (markdown activity summary). Requires Backlog module for mindmap and gantt. |
+| /open-questions | List all unchecked open questions across the instance. Default output groups by entity. Accepts an optional entity hint (`/open-questions R-42`) to scope to one entity. Useful for answering "what's blocking X?" |
 
 ## Core Skills
 

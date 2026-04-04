@@ -163,13 +163,14 @@ Link lines: `stroke: #c8c0b8`, `stroke-width: 1.8`. Links to New-state target no
 **Click → detail panel:** clicking any node opens a 310px panel sliding in from the right (CSS `transition: width 0.22s ease`). The selected node gets `stroke-width: 3.5`. Closing the panel deselects.
 
 Detail panel contents (in order):
-1. Type badge — colour-coded pill: blue (`#dbeeff`/`#1a5a8a`) for Epic, yellow (`#fff4cc`/`#7a5800`) for Feature, pink (`#ffe4ee`/`#7a1838`) for Work Item
+1. Type badge — colour-coded pill: blue (`#dbeeff`/`#1a5a8a`) for Epic, yellow (`#fff4cc`/`#7a5800`) for Feature, pink (`#ffe4ee`/`#7a1838`) for Work Item. If `Blocked: Yes`, append a red "⊘ Blocked" badge (`#fdecea`/`#c0392b`) beside the type badge.
 2. Full entity name as `<h2>`
-3. Properties grid (2-column label/value): State (★ Active or plain text for New), Dates, Release, Area, Priority, Assigned to, Iteration
-4. Est / Rem hours from rollup — format as `"36h / 28h"` or `"— / —"` if null; note partial coverage if applicable
-5. Description paragraph (omit if no meaningful description)
-6. Child list: one bullet per child, coloured dot (blue = Active, `#ccc` = New), ★ suffix on active children
-7. ✕ button in top-right corner of panel closes it
+3. If blocked: show active blocker(s) inline before the properties grid — amber alert box (`background: #fff8e1, border-left: 3px solid #f59e0b`): cause and flagged-by for each active entry. If a follow-up date exists and is in the future, show it as "Follow-up: YYYY-MM-DD" rather than treating it as urgent.
+4. Properties grid (2-column label/value): State (★ Active or plain text for New), Dates, Release, Area, Priority, Assigned to, Iteration
+5. Est / Rem hours from rollup — format as `"36h / 28h"` or `"— / —"` if null; note partial coverage if applicable
+6. Description paragraph (omit if no meaningful description)
+7. Child list: one bullet per child, coloured dot (blue = Active, `#ccc` = New), ★ suffix on active children
+8. ✕ button in top-right corner of panel closes it
 
 ### Legend
 
@@ -248,8 +249,11 @@ Render rows in this order. Insert a separator row (10px, `background: #f1f5f9`) 
 | State | Fill | Border | Text |
 |---|---|---|---|
 | Active | `#0ea5e9` solid | none | white |
+| Active + Blocked | `#ef4444` solid | none | white |
 | New | `#334155` | `1px dashed #475569` | `#94a3b8` |
 | Resolved | `#94a3b8` solid | none | white |
+
+When an entity has `Blocked: Yes`, use the blocked bar color regardless of state. Append `⊘` to the row label.
 
 Bar heights: epic 22px, feature 16px, work item 12px. Row height: 34px min.
 
@@ -390,6 +394,18 @@ _Covering <start date> to <end date>_
 - Work items added: <n> — <titles>
 - Features completed: <n> — <titles>
 - Features added: <n> — <titles>
+
+## Blockers & Open Questions
+[Scan all active entities (requests, epics, features, work items) for Blocked: Yes and unchecked Open Questions items.
+ Separate actionable from parked using follow-up date logic (actionable = no follow-up date or follow-up ≤ today).
+
+ For day/week reports — list individually:
+   **Actionable blockers:** [entity] — [brief cause] *(flagged by Name, YYYY-MM-DD)*
+   **Actionable open questions:** [entity] — [question text] *(asked by Name, YYYY-MM-DD)*
+   **Parked:** [N] blockers and [M] questions with future follow-up dates (next: YYYY-MM-DD)
+
+ For month/quarter/year reports — summarise by count and entity name, list only actionable items.
+ Omit this section entirely if no active blockers or open questions exist.]
 
 ## Team
 - Members added: <names or "none">

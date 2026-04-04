@@ -27,6 +27,24 @@ Repository: [optional — git remote URL. If provided, the repo is expected as a
 
 [special instructions for how Fabric should work with this product]
 
+## Open Questions
+
+<!-- Unresolved questions that may be blocking progress.
+     When resolved, check the box and add a Decisions entry below.
+- [ ] Question text *(asked by Name, YYYY-MM-DD)*
+-->
+
+## Decisions
+
+<!-- Structured record of key decisions made on this product.
+     Agent will propose an entry when decision language is detected during ingestion or conversation.
+     ### [YYYY-MM-DD] Decision title
+     - **Decided by:** Name
+     - **Recorded by:** Name or Claude (ingestion)
+     - **Options considered:** Option A (rejected: reason), Option B (rejected: reason), chosen option
+     - **Rationale:** Why this option was chosen
+-->
+
 ## Context Log
 
 <!-- Append-only breadcrumb trail. Format:

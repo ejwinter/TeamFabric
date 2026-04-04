@@ -6,7 +6,16 @@ Ideas for future framework capabilities. Not prioritized — use this as a start
 
 ## Decision Capture in Context Logs
 
-Strengthen context log conventions and ingestion prompts to treat decisions as a first-class entry type — not just summaries of what happened, but explicit "decided X because Y" breadcrumbs on the entity where the decision was made (request, backlog item, product, member profile). Add a query path so teams can ask "what decisions have we made about X?" and surface decision entries across an entity's context log. Also evaluate whether the `## Decision Log` section in the CLAUDE.md template serves a purpose or should be removed.
+**Implemented 2026-04-04.** Entities now carry two companion sections:
+
+- **`## Open Questions`** — checkbox list of unresolved questions or blockers. An open question is an unresolved decision. Checking the box closes it; a Decisions entry records the answer.
+- **`## Decisions`** — structured entries: decided by, recorded by, options considered (with rejection reasons), rationale.
+
+Agent behavior: detects decision language and unresolved-question language during ingestion/conversation, proposes entries (confirm before writing). User can also explicitly request entries.
+
+Query path: `/open-questions` lists all unchecked questions instance-wide, grouped by entity. Scoped with `/open-questions [entity]`. Broader search (e.g., "what have we decided about auth?") handled via natural language over all Decisions sections.
+
+`## Decision Log` removed from CLAUDE.md template — superseded by per-entity sections.
 
 ---
 
@@ -39,13 +48,13 @@ Allow members to declare temporary unavailability (OOO, partial weeks, leave) on
 Add a `/report changelog` (or similar) that generates a product-focused summary of what was completed in a given period — drawing from closed backlog items, resolved requests, and context logs. Useful for stakeholder updates and release communication.
 
 ## Stakeholder Lifecycle Management
-
+priority: medium
 Add an `/add-stakeholder` command and a lightweight stakeholder lifecycle (active, disengaged, archived). Extend ingestion and triage to proactively surface which stakeholders are affected by a given request or product change.
 
 ---
 
 ## Scrum Module
-
+priority: low
 Build out the Scrum module listed in the init form as "not yet available." Minimum viable scope: sprint ceremonies (planning, review, retro), velocity tracking, and sprint-level reporting. Should compose with the existing Standup, Backlog, and Iteration support.
 
 ---
