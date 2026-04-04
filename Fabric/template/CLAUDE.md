@@ -1,6 +1,7 @@
 @.claude/fabric-core.md
 @.claude/fabric-triage.md
 @.claude/fabric-product.md
+@.claude/fabric-standup.md
 
 # {{TEAM_NAME}}
 
@@ -66,7 +67,7 @@
 | Product | Enabled | Product definitions and context |
 | Backlog | Disabled | Epic/feature/work-item hierarchy |
 | Effort Tracking | Disabled | Capture actual hours on close, rollup to parent |
-| Scrum | Disabled | Sprint ceremonies and daily facilitation |
+| Standup | Disabled | Daily standup conversations and team summary |
 
 ## Decision Log
 

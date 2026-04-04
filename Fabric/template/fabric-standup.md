@@ -1,0 +1,112 @@
+# TeamFabric Module: Standup
+
+<!--
+  Framework-owned file. Do not edit directly.
+  Updates to this file are applied by running /update from the TeamFabric repo.
+-->
+
+## Overview
+
+The Standup module supports asynchronous daily standups. Each team member runs a brief conversation with the agent to share progress, surface blockers, and flag questions or needs. The agent collates these into a per-member daily record and a team-level summary.
+
+## Directory Structure
+
+```
+team/members/<name-slug>/
+  discuss-today.md        # Current standup cycle record (overwritten each run)
+  discuss-yesterday.md    # Prior cycle record (rolled over when a new standup begins)
+  discuss-log/            # Archived member records
+    YYYY-MM-DD.md         # Named by the date of that standup
+
+team/standup/
+  standup-today.md        # Current team-wide summary
+  standup-yesterday.md    # Prior team-wide summary
+  standup-log/            # Archived team summaries
+    YYYY-MM-DD.md
+```
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `/standup-discussion` | Interactive standup conversation (Q&A mode). |
+| `/standup-discussion narrative` | Narrative-first standup — member provides a stream-of-consciousness summary, agent follows up only on gaps. |
+
+## Skills
+
+| Skill | Description |
+|-------|-------------|
+| `standup-context` | Enriches standup context: loads assigned work, scans product repos for contributions, reads team standup for follow-up items. Invoked by `/standup-discussion` before conversation begins. |
+| `standup-report` | Reads all members' standup records, produces a team-wide summary with sync opportunities and breakout suggestions. Handles team-level rollover on generation. |
+
+## Behavioral Rules
+
+### Defining "Yesterday"
+
+"Yesterday" is relative, not literal. For each member, yesterday means their most recent prior `discuss-today.md` — regardless of how many calendar days have passed. For the team, yesterday means the period covered by `team/standup/standup-today.md` before the current report was generated.
+
+Members who have not run `/standup-discussion` since the last team standup are noted as having no update for this cycle. Their prior record remains in place and is not re-rolled.
+
+### Member File Lifecycle
+
+- `discuss-today.md` is created or overwritten each time a member completes `/standup-discussion`.
+- When a standup begins and `discuss-today.md` exists from a prior date: roll it over to `discuss-yesterday.md`, archive it to `discuss-log/YYYY-MM-DD.md` (named by the date in its header), then proceed.
+- `discuss-yesterday.md` is always the single most-recent prior record and is overwritten on each rollover.
+- `discuss-log/` is append-only. A future cleanup command will manage culling.
+
+### Team Standup File Lifecycle
+
+- `team/standup/standup-today.md` is written by the `standup-report` skill each time it runs.
+- Before writing a new team summary, the skill rolls over `standup-today.md` → `standup-yesterday.md` → `standup-log/YYYY-MM-DD.md`.
+- The date in `standup-today.md`'s header is the authoritative "last team standup" date used to detect stale member records.
+
+### Standup Record Format
+
+Each `discuss-today.md` uses this structure:
+
+```markdown
+# Standup — [Member Name] — YYYY-MM-DD
+
+## Yesterday
+[What the member worked on / accomplished]
+
+## Today
+[What the member plans to work on]
+
+## Blockers
+[Blockers raised; "None" if clear]
+
+## Needs & Questions
+[Items the member needs from others, or open questions]
+
+## Resolved in Standup
+[Questions or blockers the agent resolved during the conversation — omit section if none]
+
+## Notes
+[Any additional context from the conversation — omit section if none]
+```
+
+### Backlog Notes from Standup
+
+During standup, a member may mention something worth capturing on a backlog item — a discovery, a risk, a decision made, a dependency identified. At the end of the conversation, the agent reviews the discussion for such items and offers to append a dated note to the relevant entity file.
+
+- Notes are appended to a `## Notes` section on the backlog entity. If the section does not exist, it is created.
+- Note format: `- YYYY-MM-DD [standup]: [note text]`
+- The agent offers once per item, does not write without confirmation, and does not change status or priority — notes only.
+- If the member cannot identify the item, the agent may search `backlog/` by keyword and propose the best match for confirmation.
+- Assigned items already in context are matched directly without a search.
+
+### Scope of Agent Assistance
+
+- The agent uses the `standup-context` skill to arrive at the conversation informed. It does not recite context back — it uses it to ask specific questions.
+- During the conversation, the agent may resolve questions by checking the repo before deciding whether to log them. Items resolved in-conversation go under "Resolved in Standup" rather than "Needs & Questions".
+- The agent should encourage specific, named blockers and asks. Vague blockers ("things are slow") should be gently probed.
+- The agent does not make commitments on behalf of other team members.
+
+### Identity Resolution
+
+The member is identified at the start of `/standup-discussion` by matching the user's git email against `Email:` fields in member profiles, or by asking directly if no match is found.
+
+### Narrative Mode
+
+`/standup-discussion narrative` accepts a stream-of-consciousness summary (typically via OS dictation) as the starting point. The agent digests the narrative and asks follow-up questions only for genuine gaps — it does not re-run the full Q&A if the narrative is sufficient. The end-of-conversation backlog note pass still applies.
