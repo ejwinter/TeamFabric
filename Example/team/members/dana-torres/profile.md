@@ -5,6 +5,11 @@ Team Function: Pipeline Architecture and Team Coordination
 Allocation: 100%
 Status: Active
 
+## Capacity Adjustments
+
+<!-- Current and upcoming periods of reduced or zero capacity. Cleared by GC. -->
+<!-- Omit this section entirely when no adjustments are present. -->
+
 ## Summary
 
 Dana leads the Riverdale Data Engineering team. She owns the technical direction for all data pipelines and is the primary point of contact for new data requests from clinical and operational stakeholders.
