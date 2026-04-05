@@ -2,3 +2,6 @@
 .DS_Store
 staging/*
 !staging/README.md
+
+# Git worktrees
+.worktrees/
