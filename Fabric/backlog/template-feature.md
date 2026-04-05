@@ -5,6 +5,7 @@
 - Product: [the product that this feature impacts, a feature should be scoped to a single primary product, may or may not be a fabric registered product]
 - Product Target Release: [optional name of a release of the product this will impact]
 - State: New | Active | Resolved | Removed | Closed
+- Terminated: [YYYY-MM-DD — set when State becomes Closed or Removed]
 - Blocked: [optional — Yes | No; if Yes, see ## Blockers for details. Cleared when all blocker entries are resolved.]
 - External URL: [optional link to an external representation of this feature such as ADO url]
 - Start Date: [optional date (e.g. 2026-05-01) we want to start work on the feature]

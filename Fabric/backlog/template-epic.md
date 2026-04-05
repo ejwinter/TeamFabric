@@ -3,6 +3,7 @@
 ## Properties
 
 - State: New | Active | Resolved | Removed | Closed
+- Terminated: [YYYY-MM-DD — set when State becomes Closed or Removed]
 - Blocked: [optional — Yes | No; if Yes, see ## Blockers for details. Cleared when all blocker entries are resolved.]
 - External URL: [optional link to an external representation of this epic such as ADO url]
 - Start Date: [optional date (e.g. 2026-05-01) we want to start work on the epic]

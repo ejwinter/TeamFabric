@@ -3,6 +3,7 @@
 ## Properties
 
 - State: New | Active | Closed | Removed
+- Terminated: [YYYY-MM-DD — set when State becomes Closed or Removed]
 - External URL: [optional link to an external representation of this task such as ADO url]
 - Assigned to: [optional, the name or email of the person this is assigned to, it is probably a team member]
 - Estimated Hours: [number of hours this should take or was originally estimated at]
