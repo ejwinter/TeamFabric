@@ -90,6 +90,8 @@ If no effort has been recorded:
 
 The `Effort:` field is omitted from the file entirely when no effort has been recorded.
 
+When writing a terminal state to a request, also write `Terminated: <today's date>` to the request's Properties block if not already set. This applies to all terminal states: Declined, Withdrawn, Complete, and any team-defined equivalents.
+
 #### Promotion
 
 When a request is promoted to a backlog epic, display any recorded pre-engagement effort as context:
