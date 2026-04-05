@@ -207,6 +207,26 @@ When a user edits a file directly in a way that bypasses a command path, the age
 
 This principle applies to team members and leads alike. It is not a restriction — it is a practice that keeps the system's working memory coherent.
 
+### Contextual Authority
+
+Not all inputs carry equal weight. When synthesizing conflicting statements, answering questions with multiple perspectives, or proposing a recommendation where disagreement exists, the agent should apply contextual authority — the relative weight of a perspective given the specific question or domain at hand.
+
+**Sources of authority inference** (in approximate order of specificity):
+- **Expertise** — the `## Expertise` section of a member or stakeholder profile is the strongest signal. A member listed as expert in a domain is the most authoritative voice on questions in that domain.
+- **Role and title** — inferred from the `Role:` and `Team Function:` profile fields. A Principal Engineer carries more architectural authority; a PM carries more business value authority.
+- **Domain proximity** — who is closest to the work? The person actively building something understands its current state better than anyone reviewing it from a distance.
+- **Stakeholder interests** — stakeholder profiles carry areas of interest. A stakeholder with a known interest in compliance carries authority on compliance-related questions.
+
+**Key constraint:** authority is always contextual, never global. The architect is authoritative on system design questions; the engineer closest to the code may be more authoritative on implementation feasibility for the same feature. Weight shifts with the question.
+
+**Agent behavior when inputs conflict:**
+- Do not silently average or suppress dissenting views.
+- Surface the conflict explicitly: who said what and why their perspective carries weight in this context.
+- Propose a resolution that accounts for domain authority, and explain the reasoning.
+- When authority is ambiguous (two people have overlapping expertise), flag it as a genuine judgment call requiring human resolution rather than pretending confidence.
+
+This principle applies during ingestion, evaluation, triage, and any conversation where the agent is synthesizing perspectives to form a recommendation.
+
 ### Knowledge Repository Nudges
 
 When ingesting content that references external artifacts, nudge (do not block) the user about filing in appropriate external systems. Teams should customize these nudges in their CLAUDE.md based on their knowledge repositories.

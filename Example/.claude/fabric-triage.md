@@ -11,11 +11,10 @@ The Triage module manages request intake, evaluation workflows, and rubric-based
 
 ## Request Lifecycle
 
-Requests flow through a configurable workflow. The default workflow provides a two-level evaluation (L1 screening, L2 consultation) but teams can define their own stages.
+Requests flow through a team-defined workflow. The number of stages, their names, rubrics, and outcome options are all configured by the team in `requests/workflow/`. There is no prescribed stage structure — some teams use a single screening pass, others use multiple staged reviews.
 
 ```
-Intake → L1 Screening → L2 Consultation → Decision (Accept / Reject / Needs More Info)
-  → If accepted: Staffing and approach planning → Active engagement
+Intake → [Team-defined evaluation stages] → Decision → If accepted: Staffing and planning → Active engagement
 ```
 
 ## Directory Structure
@@ -26,9 +25,8 @@ requests/
   workflow/
     default/                     # Default workflow (team-customized)
       request-template.md        # Template for new request entities
-      l1-rubric.md               # L1 evaluation rubric
-      l2-rubric.md               # L2 evaluation rubric
-      evaluation.md              # Evaluation process definition
+      evaluation.md              # Defines stages, stage order, rubric references, and outcomes
+      <stage>-rubric.md          # One rubric file per stage (named by the team)
   <request-id>/                  # Per-request folder
     request.md                   # Request entity file
     [supporting documents]
