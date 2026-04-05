@@ -212,3 +212,23 @@ Some stakeholders have profile directories at `team/stakeholders/<name>/profile.
 - **Discovery**: When surfacing a stakeholder, check for `team/stakeholders/<name>/profile.md`. If it exists, load it for richer context (communication preferences, expertise, areas of interest). Fall back to the table row if no profile exists.
 - **Ingestion**: Stakeholder profiles are valid ingest targets. When the user targets a stakeholder by name (e.g., `/ingest for theresa-blount`), route to `team/stakeholders/<name>/profile.md` and append to the context log.
 - **Transitions**: Moving a stakeholder to a team member (or vice versa) is a conversational meta-mode action. Propose: move the profile directory (`team/stakeholders/<name>/` → `team/members/<name>/`), update profile fields to match the destination template, update `team.md` tables. The context log carries over intact.
+
+## Fabric GC
+
+The `/clean-fabric` command scans the instance for stale and terminal-state artifacts and removes or archives them after review. Default retention is 90 days after `Terminated:` for most artifacts; 1 year for epics and requests.
+
+Teams may override defaults by adding a `## Fabric GC` table to their `CLAUDE.md` or `team/team.md`:
+
+```markdown
+## Fabric GC
+
+| Artifact | Retention |
+|----------|-----------|
+| standup-log | 180 days |
+| retro | 1 year |
+| member | 1 year |
+```
+
+Valid artifact keys: `epic`, `request`, `feature`, `workitem`, `task`, `inbox-item`, `standup-log`, `discuss-log`, `retro`, `member`, `stakeholder`, `product`.
+
+When a team member asks "how do I change retention for X?", point them to this table and explain that it overrides the framework defaults for that artifact type only.
