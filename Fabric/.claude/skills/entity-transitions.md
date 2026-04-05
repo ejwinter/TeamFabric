@@ -94,7 +94,7 @@ When invoked implicitly, identify the target entity and desired state from conte
 
 8. If implicit DoD is unmet (children not closed, criteria not confirmed), require explicit acknowledgement before proceeding: "The definition of done is not fully met. Close anyway? (yes / no)"
 
-9. On confirmation: set `State: Resolved` or `State: Closed` as appropriate for the entity type. Update any confirmed explicit DoD checkboxes.
+9. On confirmation: set `State: Resolved` or `State: Closed` as appropriate for the entity type. Update any confirmed explicit DoD checkboxes. Write `Terminated: <today's date>` to the Properties block if not already set.
 
 ---
 
@@ -122,6 +122,7 @@ When invoked implicitly, identify the target entity and desired state from conte
    If no dependents found: "No other entities reference this item. Proceed with removal? (yes / no)"
 4. On confirmation:
    - Set `State: Removed`.
+   - Write `Terminated: <today's date>` to the Properties block if not already set.
    - Do NOT delete the file.
    - Suggest a git commit: "Recommend committing this change: `git commit -m 'Remove [entity title]'`"
 5. Offer to open the dependent entities to update their references, one at a time.
