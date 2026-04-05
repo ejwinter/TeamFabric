@@ -221,6 +221,7 @@ One suggestion per label key. Only suggest when confident from the content. The 
 - Status rollup: when all child entities are complete, suggest updating the parent's status.
 - Do not create backlog entities autonomously. Propose the entity and wait for confirmation.
 - State changes on backlog entities should invoke the `entity-transitions` skill. Do not directly update `State:` without running the appropriate transition path (blocker/question checks for activation; acceptance criteria review for close; dependent scan for removal).
+- When `entity-transitions` writes a terminal state (Closed or Removed), it also writes `Terminated: <today>` to the entity's Properties block. This date is used by `/clean-fabric` to calculate retention eligibility.
 - Children inherit context from their parent through folder nesting. A work item inherits the scope of its parent feature, which inherits from its parent epic.
 - When writing a label value, validate it against the team's label schema in CLAUDE.md. If the value is not listed, flag it and suggest the nearest valid option before writing. If no schema is defined, accept any key=value pair.
 - After writing or updating a description or acceptance criteria, cross-reference the content against the label schema descriptions and proactively offer label suggestions. One suggestion per key, only when confident.
