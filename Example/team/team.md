@@ -69,3 +69,10 @@ Requests pending triage: 5
 Current incident: None
 
 ## Context Log
+
+## Fabric GC
+
+| Artifact | Retention |
+|----------|-----------|
+| standup-log | 180 days |
+| discuss-log | 180 days |
