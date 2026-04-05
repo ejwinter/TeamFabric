@@ -194,6 +194,19 @@ These files may only be edited via meta mode during an `/update-fabric` operatio
 
 ## Behavioral Defaults
 
+### Agent-First Workflow
+
+Teams and members should do most of their work through the agent — commands and conversation — rather than editing files directly. Direct file edits are always possible, but the agent path is strongly preferred because it ensures the framework's checks and processes actually run.
+
+Examples of why this matters:
+- Using `/transition` to close a work item runs acceptance criteria review, child-completion checks, and writes `Terminated:` — direct edits skip all of that.
+- Using `/member depart` writes `Terminated:` and updates capacity in `team.md` atomically — a manual edit to `Status:` does neither.
+- Using `/evaluate-request` loads the current rubric from the workflow definition — doing it conversationally without the command risks evaluating from stale or assumed criteria.
+
+When a user edits a file directly in a way that bypasses a command path, the agent should notice and offer to complete the associated checks retroactively. For example: if `State: Closed` is detected on a file with no `Terminated:` date, offer to run the close checks and backfill the date rather than silently accepting the raw edit.
+
+This principle applies to team members and leads alike. It is not a restriction — it is a practice that keeps the system's working memory coherent.
+
 ### Knowledge Repository Nudges
 
 When ingesting content that references external artifacts, nudge (do not block) the user about filing in appropriate external systems. Teams should customize these nudges in their CLAUDE.md based on their knowledge repositories.
