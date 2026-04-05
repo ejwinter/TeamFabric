@@ -54,7 +54,7 @@ Add a `/report changelog` (or similar) that generates a product-focused summary 
 
 ## Stakeholder Lifecycle Management
 priority: medium
-Add an `/add-stakeholder` command and a lightweight stakeholder lifecycle (active, disengaged, archived). Extend ingestion and triage to proactively surface which stakeholders are affected by a given request or product change.
+Add a `/stakeholder` command mirroring the `/member` command — covers onboarding, profile updates, and marking a stakeholder as departed. Needs `Status:` and `Terminated:` fields added to the stakeholder profile template (already flagged as a schema gap in the clean-fabric spec). Extend ingestion and triage to proactively surface which stakeholders are affected by a given request or product change.
 
 ---
 
