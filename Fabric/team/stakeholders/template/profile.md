@@ -2,7 +2,8 @@
 
 Role: [Job title or functional role]
 Organization: [Their organization or team]
-Status: Active | Former
+Status: Active | Departed
+Terminated: [YYYY-MM-DD — set when Status becomes Departed]
 
 ## Summary
 

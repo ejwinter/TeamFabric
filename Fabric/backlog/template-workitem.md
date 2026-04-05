@@ -3,6 +3,7 @@
 ## Properties
 
 - State: New | Active | Resolved | Removed | Closed
+- Terminated: [YYYY-MM-DD — set when State becomes Closed or Removed]
 - Blocked: [optional — Yes | No; if Yes, see ## Blockers for details. Cleared when all blocker entries are resolved.]
 - Type: Story | Request | Bug | Support
 - Iteration: [optional, if it is assigned to an iteration give the name here, often an ADO iteration path]

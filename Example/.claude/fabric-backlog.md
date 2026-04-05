@@ -71,6 +71,7 @@ Properties:
 - Target Date: [optional]
 - Duration: [optional]
 - Priority: [optional 1(lowest)-5(highest)]
+- Size: [optional, relative size estimate — any numeric value or ?. Fibonacci sequence (1, 2, 3, 5, 8, 13, 21) is conventional but not enforced. Distinct from Effort and task hour fields.]
 - Area: [optional area path representing a product or service line]
 - Effort: [optional, direct hours at the epic level — planning, analysis, or coordination work not captured in child features]
 - Labels: [optional, comma-separated key=value pairs e.g. service-type=data-extraction]
@@ -89,6 +90,7 @@ Properties:
 - Target Date: [optional]
 - Duration: [optional]
 - Priority: [optional 1(lowest)-5(highest)]
+- Size: [optional, relative size estimate — any numeric value or ?. Fibonacci sequence (1, 2, 3, 5, 8, 13, 21) is conventional but not enforced. Distinct from Effort and task hour fields.]
 - Area: [optional area path representing a product or service line]
 - Effort: [optional, direct hours at the feature level — refinement, design, or coordination work not captured in child work items; also used by teams that track at the feature level without breaking down further]
 - Labels: [optional, comma-separated key=value pairs e.g. service-type=data-extraction]
@@ -110,6 +112,7 @@ Properties:
 - Iteration: [optional, named iteration or iteration path]
 - External URL: [optional link to an external representation such as ADO url]
 - Assigned to: [optional]
+- Size: [optional, relative size estimate — any numeric value or ?. Fibonacci sequence (1, 2, 3, 5, 8, 13, 21) is conventional but not enforced. Distinct from Effort and task hour fields.]
 - Effort: [optional, direct hours at the work item level — review, coordination, or work not captured in child tasks; also used by teams that track at the work item level without breaking down further]
 - Labels: [optional, comma-separated key=value pairs e.g. service-type=data-extraction]
 
@@ -217,9 +220,12 @@ One suggestion per label key. Only suggest when confident from the content. The 
 - When creating a new feature, check if it should reference an existing product (if Product module is enabled).
 - Status rollup: when all child entities are complete, suggest updating the parent's status.
 - Do not create backlog entities autonomously. Propose the entity and wait for confirmation.
+- State changes on backlog entities should invoke the `entity-transitions` skill. Do not directly update `State:` without running the appropriate transition path (blocker/question checks for activation; acceptance criteria review for close; dependent scan for removal).
+- When `entity-transitions` writes a terminal state (Closed or Removed), it also writes `Terminated: <today>` to the entity's Properties block. This date is used by `/clean-fabric` to calculate retention eligibility.
 - Children inherit context from their parent through folder nesting. A work item inherits the scope of its parent feature, which inherits from its parent epic.
 - When writing a label value, validate it against the team's label schema in CLAUDE.md. If the value is not listed, flag it and suggest the nearest valid option before writing. If no schema is defined, accept any key=value pair.
 - After writing or updating a description or acceptance criteria, cross-reference the content against the label schema descriptions and proactively offer label suggestions. One suggestion per key, only when confident.
+- `Size:` is a relative estimate for backlog prioritization. Do not infer or suggest values — only set it when the user provides one.
 
 Classification, inbox refinement, assignment recommendations, and reclassification guidance are in the backlog-refinement skill.
 

@@ -16,8 +16,8 @@ With no subcommand, list the available subcommands and one-line descriptions.
 | Subcommand | Description |
 |---|---|
 | add | Guided creation of a new member profile |
-| bench [name] | Set a member's status to Benched |
-| activate [name] | Restore a benched member to Active |
+| depart [name] | Set a member's status to Departed |
+| activate [name] | Restore a departed member to Active |
 | timeoff [name] | Record a capacity adjustment |
 
 ---
@@ -59,15 +59,15 @@ Member directory names use lowercase hyphenated full names: `jag-balan`, `eric-w
 
 ### Valid Status Values
 - Active: contributing member, included in capacity calculations
-- Benched: inactive but preserved, excluded from capacity calculations
+- Departed: inactive but preserved, excluded from capacity calculations
 - Onboarding: new member in setup, included in capacity at stated allocation
 
 ---
 
-## /member bench
+## /member depart
 
 ### Purpose
-Set a member's status to Benched. The profile and all context log references are preserved. The member is removed from active capacity calculations and staffing suggestions.
+Set a member's status to Departed. The profile and all context log references are preserved. The member is removed from active capacity calculations and staffing suggestions.
 
 ### Prerequisites
 - Meta mode must be active.
@@ -76,42 +76,44 @@ Set a member's status to Benched. The profile and all context log references are
 
 1. Accept a member name (fuzzy match against existing profiles).
 
-2. Confirm the action: "Bench [name]? They will be excluded from capacity calculations and staffing suggestions. Their profile and all context references will be preserved."
+2. Confirm the action: "Mark [name] as Departed? They will be excluded from capacity calculations and staffing suggestions. Their profile and all context references will be preserved."
 
 3. Update the member's profile:
-   - Set Status: Benched
-   - Append to their context log: "[date] - Status changed to Benched. [reason if provided]"
+   - Set Status: Departed
+   - Also write `Terminated: <today's date>` to the Properties block.
+   - Append to their context log: "[date] - Status changed to Departed. [reason if provided]"
 
 4. Update team/team.md:
-   - Mark the member's row or move to a Benched section
+   - Mark the member's row or move to a Departed section
    - Recalculate Total Effective Capacity
 
 5. Present changes for confirmation before writing.
 
 ### Notes
-- Benching is reversible via `/member activate`.
-- The AI should never suggest removing or deleting a member. Benching is the correct action.
-- Context log entries that reference a benched member remain valid and unchanged.
+- Departure is reversible via `/member activate`.
+- The AI should never suggest removing or deleting a member. `/member depart` is the correct action.
+- Context log entries that reference a departed member remain valid and unchanged.
 
 ---
 
 ## /member activate
 
 ### Purpose
-Restore a benched member to Active status.
+Restore a departed member to Active status.
 
 ### Prerequisites
 - Meta mode must be active.
 
 ### Behavior
 
-1. Accept a member name (fuzzy match, filtered to Benched members).
-   - If no benched members exist, inform the user.
+1. Accept a member name (fuzzy match, filtered to Departed members).
+   - If no departed members exist, inform the user.
 
-2. Optionally update allocation if it has changed since benching.
+2. Optionally update allocation if it has changed since departure.
 
 3. Update the member's profile:
    - Set Status: Active
+   - Remove the `Terminated:` line entirely from the Properties block.
    - Update Allocation if changed
    - Append to context log: "[date] - Status changed to Active. [allocation note if changed]"
 

@@ -3,7 +3,8 @@
 Role: [Job title or functional role]
 Team Function: [One-line summary of what they do for this team]
 Allocation: [0-100]%
-Status: [Active | Benched | Onboarding]
+Status: [Active | Departed | Onboarding]
+Terminated: [YYYY-MM-DD — set when Status becomes Departed]
 
 ## Capacity Adjustments
 
