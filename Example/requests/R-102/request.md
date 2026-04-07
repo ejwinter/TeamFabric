@@ -31,7 +31,15 @@ AI/ML Goal: Predict 30-day readmission risk at point of discharge. Output a risk
 
 ## Evaluation
 
-<!-- No evaluation yet — ready for L1 screening -->
+## What's Next
+
+Preparing for L1 screening:
+- [ ] Confirm data sources are identified and accessible
+- [ ] Clarify the AI/ML goal to a specific, evaluable question
+- [ ] Determine IRB status
+- [ ] Determine funding status
+- [ ] Estimate cohort size — volume of heart failure discharges at Riverdale is currently unknown
+- [ ] Clarify funding situation with Dr. Whitfield — departmental vs. grant funding affects prioritization
 
 ## Context Log
 
