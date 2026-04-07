@@ -81,3 +81,77 @@ When a request already has a completed evaluation for a stage:
 - If a criterion references data the AI can look up (e.g., team capacity, existing context), offer to pull it but let the human confirm the assessment.
 - Staleness: if the request entity is stale, note it before starting evaluation so the user can reconcile first.
 - Defer to the workflow's `evaluation.md` for any process questions. If the workflow doc doesn't cover a situation, ask the user rather than assuming.
+
+### What's Next Lifecycle
+
+The `## What's Next` section on a request entity is maintained by this skill at each evaluation stage transition.
+
+**On evaluation write:**
+Clear the existing What's Next content and replace it with new content based on the outcome. Present the proposed What's Next alongside the evaluation summary for user confirmation — both are written together on a single confirmation.
+
+**Outcome-based content:**
+
+- **Advance to next stage** (e.g., L1 → L2): Generate a pre-stage checklist for the next stage. Use the next stage's rubric criteria as the basis, supplemented by items tailored to gaps or notes identified in the just-completed evaluation. Omit items already satisfied.
+
+  Example after L1 advances to L2:
+  ```markdown
+  ## What's Next
+
+  Preparing for L2 consultation:
+  - [ ] Schedule consultation meeting with requestor
+  - [ ] Review a data sample for quality assessment
+  - [ ] Load current team capacity before the staffing discussion
+  - [ ] Identify team member(s) with relevant expertise for this request
+  ```
+
+- **Needs More Information**: List the specific questions or gaps the evaluator identified during the rubric walkthrough as directly actionable checklist items.
+
+  Example:
+  ```markdown
+  ## What's Next
+
+  Needs more information before L1 can advance:
+  - [ ] Requestor to clarify cohort definition — current description is too vague to assess viability
+  - [ ] Confirm whether pre-2022 EHR data is accessible (known system migration)
+  - [ ] Get IRB status — unknown at this time
+  ```
+
+- **Defer**: Note the specific conditions required to re-enter evaluation, with follow-up date if provided.
+
+  Example:
+  ```markdown
+  ## What's Next
+
+  Deferred — revisit after 2026-06-01:
+  - [ ] IRB approval must be in place before re-screening (pending protocol submission)
+  - [ ] Follow up with requestor on 2026-06-01 to check IRB status
+  ```
+
+- **Accept** (terminal): Post-decision steps toward active engagement.
+
+  Example:
+  ```markdown
+  ## What's Next
+
+  Accepted — moving to engagement:
+  - [ ] Assign team member owner
+  - [ ] Schedule kickoff with requestor
+  - [ ] Promote to backlog epic
+  - [ ] Confirm engagement model and effort estimate with team
+  ```
+
+- **Reject** (terminal): Post-decision communication steps.
+
+  Example:
+  ```markdown
+  ## What's Next
+
+  Declined — close out:
+  - [ ] Notify requestor with rationale (see evaluation notes)
+  - [ ] Update request status to Declined
+  ```
+
+**Rules:**
+- Do not generate generic items. Root each item in the specific evaluation notes, next-stage rubric criteria, or known gaps about this request.
+- Omit items already satisfied given the request's current field values.
+- The agent proposes What's Next content; the human confirms before it is written.
