@@ -33,6 +33,13 @@ AI/ML Goal: [What the requestor wants to achieve]
 
 ## Evaluation
 
-<!-- Populated by /evaluate-request using the workflow's rubrics -->
+## What's Next
+
+Preparing for L1 screening:
+- [ ] Confirm data sources are identified and accessible
+- [ ] Clarify the AI/ML goal to a specific, evaluable question
+- [ ] Determine IRB status
+- [ ] Determine funding status
+- [ ] Confirm investigator availability for consultation
 
 ## Context Log
