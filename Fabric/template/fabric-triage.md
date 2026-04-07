@@ -53,11 +53,24 @@ requests/
 - After evaluation, surface the recommendation clearly but do not make the accept/reject decision — that belongs to the designated decision-maker.
 - Request entities support a `Labels:` property in their Properties section, using the same key=value format as backlog entities. The team's label schema in CLAUDE.md applies. After ingesting or updating a request description, offer label suggestions the same way as for backlog entities.
 
+### What's Next Section
+
+Request entities carry a `## What's Next` section between `## Evaluation` and `## Context Log`. It tracks actionable next steps throughout the request lifecycle.
+
+**At request creation:** Populate with the team's pre-L1 baseline checklist from `request-template.md`, supplemented by AI-generated items for gaps detected in the specific request content. Omit baseline items already answered by the request's field values (e.g., if `IRB Status: Approved`, skip the IRB item).
+
+**During evaluation prep:** As information arrives via ingestion, conversation, or standup, propose checking off resolved items:
+- When a checklist item is satisfied, propose: *"IRB status is now confirmed. Check off 'Determine IRB status' on R-NNN?"*
+- Do not auto-check items. Always propose and confirm — consistent with entity update rules in fabric-core.
+- When all items are checked, suggest running `/evaluate-request`.
+
+**After evaluation:** The section is replaced based on the outcome by the request-evaluation skill. See that skill for outcome-specific behavior.
+
 ### Blocked Requests
 
 Requests support the same `Blocked:` property flag and `## Blockers` section as backlog entities (see Core module). A request may be blocked during evaluation (waiting on IRB, missing data access, stakeholder unavailable) or during active engagement.
 
-Add `Blocked: Yes` to the request's Properties section and a corresponding `## Blockers` entry when flagged. The `## Blockers` section should be placed after `## Evaluation` and before `## Context Log` in the request file.
+Add `Blocked: Yes` to the request's Properties section and a corresponding `## Blockers` entry when flagged. The `## Blockers` section should be placed after `## What's Next` and before `## Context Log` in the request file.
 
 When a request has a `Backlog Epic:` link, a blocker on the request is visible when `/open-questions` is run against either the request or the linked epic — the bridge traversal surfaces both directions.
 
