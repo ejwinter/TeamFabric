@@ -48,6 +48,12 @@ Evaluated by: Dana Torres
 Outcome: Advance to L2
 Notes: Strong request. Clear goal, good data situation, funded, IRB in place. Scheduled L2 consultation for March 25.
 
+## What's Next
+
+Preparing for L2 evaluation:
+- [ ] Run `/evaluate-request R-101 L2` to record L2 findings (consultation already held 2026-03-25)
+- [ ] Resolve consistent definition of sepsis onset timestamp before L2 — flagged as key risk in consultation notes
+
 ## Context Log
 
 - 2026-03-15 - Dr. Sarah Okonkwo (s.okonkwo@riverdale.org) via email: Submitted request for sepsis prediction model. Referenced her lab's prior work on manual sepsis screening protocols. Wants to explore ML-based approach.
