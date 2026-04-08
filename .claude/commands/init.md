@@ -86,6 +86,7 @@ After module selection, create the following structure in the target folder:
   - Create `backlog/epics/`
   - Create `backlog/inbox/` and copy `Fabric/backlog/template-inbox-README.md` as `backlog/inbox/README.md`
   - Copy all `Fabric/backlog/template-*.md` files into `backlog/` (entity templates for new epics, features, work items, tasks, and inbox items)
+  - Create `backlog/templates/` (empty — team-defined item templates live here; see fabric-backlog.md Team Templates section)
   - Create `output/.gitkeep` (report output directory — created but gitignored via `.gitignore`)
 
 ### 3. Create `.claude/fabric-source.md`
