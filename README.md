@@ -86,12 +86,17 @@ Enable only what fits your team. All modules are opt-in at `/init` time.
 | Command system (19 commands) | Complete |
 | Example instance (Riverdale Data Engineering) | Complete |
 
-### What's Not Built Yet
+### Roadmap
 
-- **Scrum module** — Sprint planning, velocity tracking, formal ceremony facilitation
-- **Query commands** — `personal-summary`, `team-summary` by time period
-- **Azure DevOps sync** — Bidirectional backlog synchronization
-- **Multi-instance management** — Framework versioning across deployed instances
+| Item | Status |
+|------|--------|
+| Scrum module — sprint planning, velocity tracking, ceremony facilitation | Planned |
+| Query commands — `personal-summary`, `team-summary` by time period | Planned |
+| Azure DevOps sync — bidirectional backlog synchronization | Planned |
+| Multi-agent support — adapters for agents beyond Claude Code | Planned |
+| PM-accessible UX — lower the barrier for non-technical team members | Future |
+
+**On multi-agent support:** TeamFabric is built around Claude Code today, but the file-based, agent-agnostic architecture is intentional. The markdown entity model, ingestion workflow, and command patterns are designed to be portable. If you want to build an adapter for another agent (Copilot, Cursor, Gemini CLI, etc.), open an Issue — this is actively wanted.
 
 ---
 
