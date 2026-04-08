@@ -1,52 +1,90 @@
-# Welcome to Team Fabric
+# Welcome to Fabric
 
-Team Fabric is your team's working memory — a git-based system where an AI agent keeps track of requests, backlog, products, and team context so you don't have to. Instead of hunting through emails and documents to remember where things stand, you talk to the agent.
+Fabric is your team's working memory — a git-based system where an AI agent keeps track of requests, backlog, products, and team context so you don't have to. Instead of hunting through emails and documents to remember where things stand, you talk to the agent.
+
+---
 
 ## What Fabric Does
 
 Fabric organizes the things that slow teams down:
 
-- **Request triage** — new asks go through a structured workflow with rubric-based evaluation before the team commits
-- **Backlog tracking** — epics break into features, features into work items, work items into tasks; the agent maintains relationships and surfaces blockers
-- **Daily standups** — brief async conversations with the agent feed into a team-wide summary
-- **Retrospectives** — structured reflection with individual input and synthesized team summary
-- **Working memory** — context accumulates on entities over time so you can ask "where does this stand and why" without digging
+- **Request triage** — new asks go through a structured workflow with rubric-based evaluation before the team commits. Each request tracks its What's Next checklist, evaluation status, and promotion to the backlog when accepted.
+- **Backlog tracking** — epics break into features, features into work items, work items into tasks. The agent maintains relationships, surfaces blockers, enforces Definition of Done, and tracks effort across the hierarchy.
+- **Team templates** — your team can define reusable templates for epics, features, and work items you create repeatedly. The agent suggests them when context matches or applies them on request.
+- **Daily standups** — brief async conversations with the agent feed into a team-wide summary.
+- **Retrospectives** — structured reflection with individual input and synthesized team summary with themed action items.
+- **Working memory** — context accumulates on entities over time so you can ask "where does this stand and why" without digging.
 
 You interact through slash commands (`/standup-discussion`, `/refine`, `/evaluate-request`, `/transition`) or plain conversation. The agent knows your team, your products, and your workflows.
 
 ---
 
-## NotebookLM: Reports and Audio Overviews
+## Your First Five Minutes
 
-The NotebookLM instance is a companion to Fabric for consuming team context in a different format — reports you can read or listen to on your own time.
+**See the current state of the team:**
+```
+/status
+```
 
-### For Tech Leads and Managers
+**Pick up where the standup left off — log your update:**
+```
+/standup-discussion
+```
 
-- **Weekly team summary** — status of active epics, pending requests, capacity snapshot
-- **Request triage briefing** — what's in the queue, what's been evaluated, what needs a decision
-- **Escalation digest** — blockers with no follow-up date, actionable open questions, stale entities
+**Work your backlog:**
+```
+/refine
+```
+Give it a new idea or an existing epic to refine. It will classify, elaborate, and propose before writing anything.
 
-### For Engineers
-
-- **Sprint context** — your assigned work items, current iteration scope, open questions on your work
-- **Standup prep** — a quick recap of what the team worked on recently before your daily update
-- **Backlog overview** — the shape of the work ahead, with blockers and dependencies surfaced
-
-### For Stakeholders
-
-- **Request status** — where your request is in the evaluation workflow and what's next
-- **Product update** — current state of the products you care about, in plain language
-- **Team capacity briefing** — what the team is focused on and when they can take on new work
-
-### Audio Overviews
-
-NotebookLM can generate audio versions of any of the above for commutes, reviews, or async catch-ups. Ask for an audio overview of the weekly summary, a specific request, or the current sprint state — it reads from the same Fabric data.
+**Ask anything in plain language.** The agent knows your team's context — ask about a specific request, what's blocking a feature, who owns what, or what the team worked on last week.
 
 ---
 
-## Getting Started
+## NotebookLM: Deeper Reading and Audio Overviews
 
-1. **For day-to-day work**: open a terminal in your team's Fabric repo and start a conversation with the agent — `/standup-discussion` to log your standup, `/refine` to work your backlog, `/status` for a quick snapshot
-2. **For reports and listening**: open the NotebookLM instance and select the report type for your role
+A companion NotebookLM project provides a different way to consume team context — documents you can read or listen to on your own time. Content there is continuously updated and may drift from the current state of the codebase; treat it as a supplement, not a reference.
 
-Questions about how Fabric is configured for your team? Ask the agent: *"How do I..."* — it knows your setup.
+[notebooklm.google.com/notebook/7288a5b1-773a-4dfa-86b5-3e8296cf4cd9](https://notebooklm.google.com/notebook/7288a5b1-773a-4dfa-86b5-3e8296cf4cd9)
+
+### For Tech Leads and Managers
+
+- **TeamFabric AI Agent Working Memory System** — deep dive on what Fabric is, how it works, and the architectural decisions behind it
+- **TeamFabric: The AI Agent Architecture and Governance Framework** — governance model, meta mode, human-in-the-loop design, and how the constitution works
+- **Operational Implementation Plan** — a structured guide for transitioning a team to AI-driven working memory
+
+### For Engineers
+
+- **Brief Overview of TeamFabric** — quick orientation before your first session
+- **The AI Collaboration Handbook: Mastering the TeamFabric Ingestion Workflow** — how to get content into Fabric efficiently across all three ingestion paths
+
+### Audio Overviews
+
+NotebookLM can generate audio versions of any of the above for commutes, reviews, or async catch-ups. Select a document and choose "Audio Overview" to get a conversational summary you can listen to anywhere.
+
+---
+
+## Where Things Live
+
+| What | Where |
+|------|-------|
+| Team definition and members | `team/` |
+| Request intake and evaluation | `requests/` |
+| Backlog (epics, features, work items, tasks) | `backlog/` |
+| Team-defined item templates | `backlog/templates/` |
+| Product definitions | `products/` |
+| Raw content for ingestion | `staging/` (local only, gitignored) |
+| Framework behavioral rules | `.claude/fabric-*.md` |
+
+---
+
+## Getting Help
+
+Ask the agent directly — it knows how Fabric is configured for your team:
+
+> "How do I add a new request?"
+> "What templates do we have for epics?"
+> "Where does standup output go?"
+> "How do I close a work item?"
+
+For framework questions, the [TeamFabric README](https://github.com/ejwinter/TeamFabric) is the authoritative reference.
