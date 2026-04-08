@@ -86,12 +86,17 @@ Enable only what fits your team. All modules are opt-in at `/init` time.
 | Command system (19 commands) | Complete |
 | Example instance (Riverdale Data Engineering) | Complete |
 
-### What's Not Built Yet
+### Roadmap
 
-- **Scrum module** — Sprint planning, velocity tracking, formal ceremony facilitation
-- **Query commands** — `personal-summary`, `team-summary` by time period
-- **Azure DevOps sync** — Bidirectional backlog synchronization
-- **Multi-instance management** — Framework versioning across deployed instances
+| Item | Status |
+|------|--------|
+| Scrum module — sprint planning, velocity tracking, ceremony facilitation | Planned |
+| Query commands — `personal-summary`, `team-summary` by time period | Planned |
+| Azure DevOps sync — bidirectional backlog synchronization | Planned |
+| Multi-agent support — adapters for agents beyond Claude Code | Planned |
+| PM-accessible UX — lower the barrier for non-technical team members | Future |
+
+**On multi-agent support:** TeamFabric is built around Claude Code today, but the file-based, agent-agnostic architecture is intentional. The markdown entity model, ingestion workflow, and command patterns are designed to be portable. If you want to build an adapter for another agent (Copilot, Cursor, Gemini CLI, etc.), open an Issue — this is actively wanted.
 
 ---
 
@@ -231,3 +236,23 @@ TeamFabric/
 - **Token-efficient by design** — Entity files use a layered structure so lightweight headers can be scanned cheaply, with full context loaded on demand.
 - **Nudges, not blockers** — The AI is a gentle enforcer of team norms. It reminds; it doesn't block.
 - **Framework-agnostic** — Fabric is not tied to any particular methodology. Teams bring their own rubrics, workflows, and definitions of done.
+
+---
+
+## Who Built This
+
+TeamFabric was built by Eric Winter — a project management practitioner with a Master of Science in Project Management and 20 years of experience leading and supporting software delivery teams. The framework was built in parallel with its first real-world deployment, solving a problem the author has felt firsthand across two decades of team work.
+
+The premise: most AI tools for teams are built by engineers guessing at the problem. TeamFabric is built by someone who lived it.
+
+---
+
+## Attribution
+
+TeamFabric is MIT licensed and free to use. If your team is running on Fabric, a mention in your repo README is appreciated — it helps others find the framework.
+
+Suggested note:
+
+```markdown
+<!-- Working memory powered by [TeamFabric](https://github.com/ejwinter/TeamFabric) -->
+```
