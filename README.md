@@ -231,3 +231,11 @@ TeamFabric/
 - **Token-efficient by design** — Entity files use a layered structure so lightweight headers can be scanned cheaply, with full context loaded on demand.
 - **Nudges, not blockers** — The AI is a gentle enforcer of team norms. It reminds; it doesn't block.
 - **Framework-agnostic** — Fabric is not tied to any particular methodology. Teams bring their own rubrics, workflows, and definitions of done.
+
+---
+
+## Who Built This
+
+TeamFabric was built by Eric Winter — a project management practitioner with a Master of Science in Project Management and 20 years of experience leading and supporting software delivery teams. The framework was built in parallel with its first real-world deployment, solving a problem the author has felt firsthand across two decades of team work.
+
+The premise: most AI tools for teams are built by engineers guessing at the problem. TeamFabric is built by someone who lived it.
