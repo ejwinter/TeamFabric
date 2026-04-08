@@ -277,7 +277,9 @@ Every level's effort is additive. An epic with 8h of direct planning effort and 
 
 ## Relationship to Triage
 
-When both Triage and Backlog modules are enabled, a user may ask to promote an accepted request to a backlog epic (e.g. "make R-044 an epic so we can start refining it"). This is a conversational action — no special command is needed.
+When both Triage and Backlog modules are enabled, an accepted request can be promoted to a backlog epic or feature. The promotion path is driven by the `Promotion Target` field in the request's workflow `evaluation.md`. This is a conversational action — no special command is needed.
+
+### Promoting a request to an Epic
 
 When promoting a request to an epic:
 
@@ -287,11 +289,26 @@ When promoting a request to an epic:
 4. **Carry forward the Repository** if the request has a `Repository:` field. Copy the value verbatim to the epic's `Repository:` property.
 5. **Carry forward Labels** if the request has a `Labels:` field. Copy the value verbatim to the epic's `Labels:` property. Validate each label value against the backlog label schema; flag any mismatches and offer to reconcile before writing.
 6. **Link back to the request** in the epic's Related Items section (e.g. "Originated from request R-044").
-7. **Write the cross-reference back to the request.** Add or update the `Backlog Epic:` field in the request's header to point to the new epic ID. Include this in the confirmation proposal in step 8.
+7. **Write the cross-reference back to the request.** Add or update the `Backlog Epic:` field in the request's header to point to the new epic ID. Include this in the confirmation proposal in step 9.
 8. **Do not change the request's triage state.** The request stays in `requests/` as a historical record. Its evaluation status, lifecycle stage, and evaluation data are independent of the backlog.
 9. **Confirm before creating.** Propose the epic (title, description, carried-over fields, and the `Backlog Epic:` update to the request) and wait for the user to approve before writing anything.
 
 After promotion, the epic is a normal backlog item — the user can immediately begin refinement, breaking it into features and work items.
+
+### Promoting a request to a Feature
+
+Use this path when the request is feature-scale — it fits within an existing epic rather than warranting a new one.
+
+1. **Scan `backlog/epics/` for Active epics** and present the list to the user. This is proactive — surface what already exists so the user can place the feature correctly and avoid creating unnecessary epics. If the user indicates that none of the existing epics are appropriate, suggest the epic promotion path instead.
+2. **User selects the parent epic.**
+3. **Carry forward** the request's description as the feature's description. It can be refined later.
+4. **Carry forward the External URL**, **Repository**, and **Labels** from the request using the same rules as epic promotion above.
+5. **Link back to the request** in the feature's Related Items section (e.g. "Originated from request R-044").
+6. **Write the cross-reference back to the request.** Add or update the `Backlog Feature:` field in the request's header to point to the new feature ID. Include this in the confirmation proposal in step 8.
+7. **Do not change the request's triage state.**
+8. **Confirm before creating.** Propose the feature (title, parent epic, description, carried-over fields, and the `Backlog Feature:` update to the request) and wait for the user to approve before writing anything.
+
+After promotion, the feature is a normal backlog item under its parent epic — the user can immediately begin refinement, breaking it into work items.
 
 ## Commands
 

@@ -80,7 +80,7 @@ After module selection, create the following structure in the target folder:
 
 ### 2. Module-specific directories
 
-- If **Triage** enabled: create `requests/workflow/default/` and copy `Fabric/requests/REQUESTS.md` and contents of `Fabric/requests/workflow/default/` if present
+- If **Triage** enabled: create `requests/workflow/default/` and copy `Fabric/requests/REQUESTS.md` and contents of `Fabric/requests/workflow/default/` if present. **Skip workflow files if `requests/workflow/default/` already contains files** — on reinit of an existing instance, workflow files are team-owned and must not be overwritten.
 - If **Product** enabled: create `products/` with `products/template/` copied from `Fabric/products/template/`
 - If **Backlog** enabled:
   - Create `backlog/epics/`

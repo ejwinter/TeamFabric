@@ -72,14 +72,24 @@ If the sibling folder is absent, note this clearly rather than failing silently:
 
 Request entities carry a `## What's Next` section between `## Evaluation` and `## Context Log`. It tracks actionable next steps throughout the request lifecycle.
 
-**At request creation:** Populate with the team's pre-L1 baseline checklist from `request-template.md`, supplemented by AI-generated items for gaps detected in the specific request content. Omit baseline items already answered by the request's field values (e.g., if `IRB Status: Approved`, skip the IRB item).
+**At request creation:** Populate with the team's pre-screening baseline checklist from `request-template.md`, supplemented by AI-generated items for gaps detected in the specific request content. Omit baseline items already answered by the request's field values.
 
 **During evaluation prep:** As information arrives via ingestion, conversation, or standup, propose checking off resolved items:
-- When a checklist item is satisfied, propose: *"IRB status is now confirmed. Check off 'Determine IRB status' on R-NNN?"*
+- When a checklist item is satisfied, propose: *"Requestor availability is confirmed. Check off 'Confirm requestor availability' on R-NNN?"*
 - Do not auto-check items. Always propose and confirm — consistent with entity update rules in fabric-core.
 - When all items are checked, suggest running `/evaluate-request`.
 
 **After evaluation:** The section is replaced based on the outcome by the request-evaluation skill. See that skill for outcome-specific behavior.
+
+### Promotion Target
+
+When a request is accepted, the agent reads `Promotion Target` from the workflow's `evaluation.md` to determine what backlog artifact to create:
+
+- **Epic** — proceed with the standard epic promotion flow (see Backlog module)
+- **Feature** — proceed with the feature promotion flow (see Backlog module); agent proactively presents active epics for the user to select a parent
+- **Either** — agent asks at acceptance time: *"Should this become an Epic or a Feature?"* If Feature is chosen, proceed immediately to the feature promotion flow with the epic list
+
+The `Promotion Target` field is set by the team in their workflow's `evaluation.md`. If the field is absent, treat it as `Either`.
 
 ### Blocked Requests
 
@@ -87,7 +97,7 @@ Requests support the same `Blocked:` property flag and `## Blockers` section as 
 
 Add `Blocked: Yes` to the request's Properties section and a corresponding `## Blockers` entry when flagged. The `## Blockers` section should be placed after `## What's Next` and before `## Context Log` in the request file.
 
-When a request has a `Backlog Epic:` link, a blocker on the request is visible when `/open-questions` is run against either the request or the linked epic — the bridge traversal surfaces both directions.
+When a request has a `Backlog Epic:` or `Backlog Feature:` link, a blocker on the request is visible when `/open-questions` is run against either the request or the linked backlog entity — the bridge traversal surfaces both directions.
 
 ### Effort Tracking on Requests
 
@@ -120,28 +130,31 @@ When writing a terminal state to a request, also write `Terminated: <today's dat
 
 #### Promotion
 
-When a request is promoted to a backlog epic, display any recorded pre-engagement effort as context:
+When a request is promoted to a backlog epic or feature, display any recorded pre-engagement effort as context:
 
-> "R-NNN has Xh of pre-engagement effort recorded. This stays on the request — it is not transferred to the epic."
+> "R-NNN has Xh of pre-engagement effort recorded. This stays on the request — it is not transferred to the epic/feature."
 
-The request's `Effort:` and the linked epic's effort are separate costs representing different phases of the engagement.
+The request's `Effort:` and the linked backlog entity's effort are separate costs representing different phases of the engagement.
 
 ### Request–Backlog Cross-Reference
 
-When a request is promoted to a backlog epic (via the Backlog module's promotion flow), a `Backlog Epic` field is written to the request entity header:
+When a request is promoted to a backlog artifact (via the Backlog module's promotion flow), one of the following cross-reference fields is written to the request entity header:
 
 ```markdown
-Backlog Epic: sepsis-prediction-260315
+Backlog Epic: epic-id-260315
+```
+```markdown
+Backlog Feature: feature-id-260315
 ```
 
-The value is the epic's ID (folder name under `backlog/epics/`). This cross-reference is written as part of the promotion confirmation — it is proposed alongside the new epic and written only after the user approves.
+The value is the entity's ID (folder name under `backlog/epics/` or the feature path). The cross-reference is proposed alongside the new entity and written only after the user approves.
 
-The cross-reference does not change the request's triage state or lifecycle. It exists so that reporting and refinement commands can locate the linked epic without scanning the backlog tree.
+The cross-reference does not change the request's triage state or lifecycle. It exists so that reporting and refinement commands can locate the linked backlog entity without scanning the tree.
 
-Not every request is promoted. Declined, withdrawn, or consultation-only requests may have no linked epic — the field is simply absent.
+Not every request is promoted. Declined, withdrawn, or consultation-only requests have neither field — both are absent.
 
-### Effort Resolution via Linked Epic
+### Effort Resolution via Linked Backlog Entity
 
-When a request has a `Backlog Epic:` link, the linked epic is the authoritative source of effort for that engagement. When reporting or summarizing effort on a request, traverse to the linked epic and apply the backlog's short-circuit rollup rule — do not look for an effort value on the request entity itself.
+When a request has a `Backlog Epic:` or `Backlog Feature:` link, the linked entity is the authoritative source of effort for that engagement. When reporting or summarizing effort on a request, traverse to the linked entity and apply the backlog's rollup rule — do not look for an effort value on the request itself.
 
-Requests with no `Backlog Epic:` link have no reportable effort unless the team tracks it externally.
+Requests with no backlog cross-reference have no reportable effort unless the team tracks it externally.
