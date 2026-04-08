@@ -6,6 +6,7 @@
 - Terminated: [YYYY-MM-DD — set when State becomes Closed or Removed]
 - Blocked: [optional — Yes | No; if Yes, see ## Blockers for details. Cleared when all blocker entries are resolved.]
 - External URL: [optional link to an external representation of this epic such as ADO url]
+- Repository: [optional — git remote URL of the working repository for this engagement, e.g. https://github.com/org/repo]
 - Start Date: [optional date (e.g. 2026-05-01) we want to start work on the epic]
 - Target Date: [optional date (e.g. 2027-01-01) we want to deliver the epic]
 - Duration: [optional, how long the epic is estimated to take once started]

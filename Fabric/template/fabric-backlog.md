@@ -67,6 +67,7 @@ High-level initiative that can span multiple products and run for months. May or
 Properties:
 - State: New | Active | Resolved | Removed | Closed
 - External URL: [optional link to an external representation such as ADO url]
+- Repository: [optional — git remote URL of the working repository for this engagement, e.g. https://github.com/org/repo]
 - Start Date: [optional]
 - Target Date: [optional]
 - Duration: [optional]
@@ -226,6 +227,7 @@ One suggestion per label key. Only suggest when confident from the content. The 
 - When writing a label value, validate it against the team's label schema in CLAUDE.md. If the value is not listed, flag it and suggest the nearest valid option before writing. If no schema is defined, accept any key=value pair.
 - After writing or updating a description or acceptance criteria, cross-reference the content against the label schema descriptions and proactively offer label suggestions. One suggestion per key, only when confident.
 - `Size:` is a relative estimate for backlog prioritization. Do not infer or suggest values — only set it when the user provides one.
+- When an epic has `Repository:` set, the repo is expected as a sibling folder next to the Fabric instance, named after the repository slug (e.g. `https://github.com/org/sepsis-model` → `../sepsis-model`). When the user asks about implementation status, code structure, recent commits, or technical details for that epic, check whether the sibling folder exists and read from it on request. Do not read the repo proactively on every query. If the folder is absent, surface this clearly: "This epic has a linked repository (github.com/org/repo) but it isn't cloned locally."
 
 Classification, inbox refinement, assignment recommendations, and reclassification guidance are in the backlog-refinement skill.
 
@@ -282,11 +284,12 @@ When promoting a request to an epic:
 1. **Create the epic** under `backlog/epics/` using the epic template.
 2. **Carry forward** the request's description as the epic's description. It can be refined later during backlog breakdown.
 3. **Carry forward the External URL** if the request already has one (e.g. an ADO epic link). The backlog epic inherits this link.
-4. **Carry forward Labels** if the request has a `Labels:` field. Copy the value verbatim to the epic's `Labels:` property. Validate each label value against the backlog label schema; flag any mismatches and offer to reconcile before writing.
-5. **Link back to the request** in the epic's Related Items section (e.g. "Originated from request R-044").
-6. **Write the cross-reference back to the request.** Add or update the `Backlog Epic:` field in the request's header to point to the new epic ID. Include this in the confirmation proposal in step 7.
-7. **Do not change the request's triage state.** The request stays in `requests/` as a historical record. Its evaluation status, lifecycle stage, and evaluation data are independent of the backlog.
-8. **Confirm before creating.** Propose the epic (title, description, carried-over fields, and the `Backlog Epic:` update to the request) and wait for the user to approve before writing anything.
+4. **Carry forward the Repository** if the request has a `Repository:` field. Copy the value verbatim to the epic's `Repository:` property.
+5. **Carry forward Labels** if the request has a `Labels:` field. Copy the value verbatim to the epic's `Labels:` property. Validate each label value against the backlog label schema; flag any mismatches and offer to reconcile before writing.
+6. **Link back to the request** in the epic's Related Items section (e.g. "Originated from request R-044").
+7. **Write the cross-reference back to the request.** Add or update the `Backlog Epic:` field in the request's header to point to the new epic ID. Include this in the confirmation proposal in step 8.
+8. **Do not change the request's triage state.** The request stays in `requests/` as a historical record. Its evaluation status, lifecycle stage, and evaluation data are independent of the backlog.
+9. **Confirm before creating.** Propose the epic (title, description, carried-over fields, and the `Backlog Epic:` update to the request) and wait for the user to approve before writing anything.
 
 After promotion, the epic is a normal backlog item — the user can immediately begin refinement, breaking it into features and work items.
 
