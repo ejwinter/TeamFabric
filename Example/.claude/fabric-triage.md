@@ -53,6 +53,21 @@ requests/
 - After evaluation, surface the recommendation clearly but do not make the accept/reject decision — that belongs to the designated decision-maker.
 - Request entities support a `Labels:` property in their Properties section, using the same key=value format as backlog entities. The team's label schema in CLAUDE.md applies. After ingesting or updating a request description, offer label suggestions the same way as for backlog entities.
 
+### Repository Linking on Requests
+
+Requests support an optional `Repository:` field in their Properties section. This is the git remote URL of the working repository for the engagement — where the team's implementation work lives. It is a work repository, not a product entity.
+
+```
+Repository: https://github.com/org/sepsis-model
+```
+
+**Lookup convention:** The repo is expected as a sibling folder next to this Fabric instance, named after the repository slug (e.g. `https://github.com/org/sepsis-model` → `../sepsis-model`). Teams are responsible for keeping that clone present.
+
+**Context surfacing:** When a request has `Repository:` set and someone asks about the request, check whether the sibling folder exists. If it does, the agent may read from it on request — recent commits, file structure, open issues — to provide relevant context. Do not read the repo proactively on every query; surface it when the user asks about implementation status, technical details, or code context for the request.
+
+If the sibling folder is absent, note this clearly rather than failing silently:
+> "R-NNN has a linked repository (github.com/org/sepsis-model) but it isn't cloned locally. Clone it as a sibling folder to access code context."
+
 ### What's Next Section
 
 Request entities carry a `## What's Next` section between `## Evaluation` and `## Context Log`. It tracks actionable next steps throughout the request lifecycle.

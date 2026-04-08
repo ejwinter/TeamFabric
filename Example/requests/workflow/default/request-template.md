@@ -18,6 +18,7 @@ Effort Estimate: [Not Set | Small (< 1 week) | Medium (1-4 weeks) | Large (> 1 m
 Effort: [hours of planning/discovery work invested in this request — populated on close]
 Engagement Model: [Not Set | Full-Service | Collaborative | Advisory]
 External: [None | e.g., ADO Epic #1234 — https://dev.azure.com/org/project/_workitems/edit/1234]
+Repository: [optional — git remote URL of the working repository for this engagement, e.g. https://github.com/org/repo]
 Labels: [optional, comma-separated key=value pairs matching the team's label schema, e.g. service-type=data-extraction]
 
 ### Requestor Details
