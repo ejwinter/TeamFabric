@@ -213,10 +213,103 @@ One suggestion per label key. Only suggest when confident from the content. The 
 
 `/rollup-backlog` aggregates labels from all descendants (not just direct children) and writes a `Labels (rolled up)` line to the Child Summary section. See the `/rollup-backlog` command definition for aggregation details.
 
+## Team Templates
+
+Teams can define custom backlog item templates for recurring patterns — epics or features they create regularly with common structure, pre-set Definition of Done criteria, or standard child items.
+
+### Storage
+
+Team templates live in `backlog/templates/`. Each template is a markdown file following the naming convention `<level>-<name>.md`:
+
+- `epic-<name>.md`
+- `feature-<name>.md`
+- `workitem-<name>.md`
+- `task-<name>.md`
+
+### Template Format
+
+Each template file begins with a metadata comment block, followed by the entity content:
+
+````markdown
+<!--
+Template: [Display Name]
+Applies To: Epic | Feature | Work Item | Task
+Suggest When: [Natural language description of when this template fits — used to assess contextual fit]
+Labels: [optional — comma-separated key=value pairs]
+-->
+
+# [Entity title — replace with actual title]
+
+## Properties
+...
+````
+
+The content below the comment block is the pre-filled entity. Use the standard entity structure with team-specific defaults already filled in. Leave context-specific fields as `[placeholders]`.
+
+#### Child Stubs
+
+The `## Child Stubs` section is optional. When present, each line defines a child entity to create alongside the parent:
+
+````markdown
+## Child Stubs
+
+- Feature: Discovery & Requirements
+- Feature: Implementation [template: feature-data-pipeline-impl]
+- Feature: Validation & Cutover
+````
+
+The `[template: <name>]` suffix is optional. When present, the agent loads that template from `backlog/templates/` and uses it as the base for that child. If the referenced template does not exist, warn and fall back to the base framework template for that level — do not block creation. Templates compose: a stub can reference another template that itself has child stubs; the normal propose-and-confirm flow bounds the recursion.
+
+### Metadata Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `Template:` | Yes | Display name shown to the user when suggesting |
+| `Applies To:` | Yes | Entity level: `Epic`, `Feature`, `Work Item`, or `Task` |
+| `Suggest When:` | Yes | Natural language description the agent uses to assess contextual fit |
+| `Labels:` | No | Comma-separated `key=value` pairs; entity or parent must have a matching label for label-based suggestion to trigger |
+
+### Matching & Suggestion
+
+When the user initiates creation of a backlog entity, scan `backlog/templates/` for files at the matching entity level. If the directory does not exist or has no matching files, proceed silently with the base framework template.
+
+For each candidate template, assess fit using two signals:
+
+1. **Natural language match** — read `Suggest When:` and evaluate against the current context: entity title/description, parent entity context (title/description), and conversation details.
+2. **Label match** — if the entity being created or its parent already has a label value appearing in the template's `Labels:` field, that amplifies confidence. Label match is a positive signal, not a standalone requirement.
+
+A match is confident when the agent would naturally reach for the template given the context — err toward not suggesting rather than offering weak matches.
+
+**One confident match:**
+> "This looks like it might fit the 'Data Pipeline' epic template — it includes a standard Definition of Done and three standard child features. Use it, or start from scratch?"
+
+**Multiple matches:** List them briefly and let the user choose.
+
+**No confident match:** Proceed with base framework template, no mention of templates.
+
+**Explicit use:** If the user names a template directly ("use the data-pipeline template", "create an epic from the reporting template"), apply it without the matching step.
+
+**Discoverability:** If the user asks "what templates do we have?" or "what epic templates are available?", list `backlog/templates/` with each template's display name and `Suggest When:` summary.
+
+### Application
+
+1. Read the template file and strip the comment metadata block — use only the entity content below it.
+2. Layer user-provided details (title, description, properties) on top of template content — user-provided values win over `[placeholders]`.
+3. Propose the composed entity using the normal backlog creation confirmation flow. List any child stubs in the proposal as items that will also be created.
+4. On approval: write the parent entity file first, then process child stubs in order. For stubs with a `[template: <name>]` reference, repeat this application flow for that child.
+5. For stubs without a template reference, use the base framework template for that level.
+
+**Label pre-fill:** If the template metadata includes `Labels:`, pre-populate those labels in the entity's Properties section. Still validate against the team's label schema and run the normal post-write label suggestion pass.
+
+**ID generation:** Unchanged — derive slug from user-provided title and propose before writing.
+
+**Scope:** Templates affect only the initial content of the new file. All normal behavioral rules still apply: entity-transitions for state changes, meta mode protection, DoR gap surfacing during refinement.
+
 ## Behavioral Rules
 
 - The statuses, types, and scoping definitions above are defaults. Teams can override any of these in the "How We Work" section of their constitution (CLAUDE.md). When custom values are defined there, use those instead of the defaults.
 - When creating any backlog entity (epic, feature, work item, task), generate an ID following the convention in the Entity IDs section above (or the team's custom convention if defined). Propose the generated ID to the user before writing so it can be adjusted.
+- When creating a backlog entity, check `backlog/templates/` for applicable team templates before drafting. See the Team Templates section for matching, suggestion, and application rules.
 - Backlog entities are structural and protected by meta mode.
 - When creating a new feature, check if it should reference an existing product (if Product module is enabled).
 - Status rollup: when all child entities are complete, suggest updating the parent's status.
