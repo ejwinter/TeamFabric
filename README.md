@@ -239,3 +239,15 @@ TeamFabric/
 TeamFabric was built by Eric Winter — a project management practitioner with a Master of Science in Project Management and 20 years of experience leading and supporting software delivery teams. The framework was built in parallel with its first real-world deployment, solving a problem the author has felt firsthand across two decades of team work.
 
 The premise: most AI tools for teams are built by engineers guessing at the problem. TeamFabric is built by someone who lived it.
+
+---
+
+## Attribution
+
+TeamFabric is MIT licensed and free to use. If your team is running on Fabric, a mention in your repo README is appreciated — it helps others find the framework.
+
+Suggested note:
+
+```markdown
+<!-- Working memory powered by [TeamFabric](https://github.com/ejwinter/TeamFabric) -->
+```
