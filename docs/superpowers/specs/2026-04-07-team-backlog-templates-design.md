@@ -105,6 +105,8 @@ For each candidate template, the agent assesses fit using two signals:
 
 - **No confident match** → proceed with base framework template, no mention of templates.
 
+A match is "confident" when the agent would naturally reach for the template given the entity context — err on the side of not suggesting rather than offering templates that are a stretch. A weak keyword overlap is not enough; the overall intent should align.
+
 ### Explicit Use
 
 At any point the user can name a template directly ("use the data-pipeline template", "create an epic from the reporting template") and the agent applies it without the matching step.
