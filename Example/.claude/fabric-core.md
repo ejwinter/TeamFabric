@@ -229,7 +229,41 @@ This principle applies during ingestion, evaluation, triage, and any conversatio
 
 ### Knowledge Repository Nudges
 
-When ingesting content that references external artifacts, nudge (do not block) the user about filing in appropriate external systems. Teams should customize these nudges in their CLAUDE.md based on their knowledge repositories.
+Teams define their knowledge repositories in the `## Knowledge Repositories` section of their CLAUDE.md using level-3 headings — one heading per repository. During `/ingest` and `/refine`, evaluate content against all defined repositories and nudge (do not block) the user when something looks like it belongs in one of them. Use the free-form description under each heading to inform what triggers a nudge for that repository.
+
+#### Repository Entry Format
+
+```markdown
+### Repository Name
+Readable: Yes          # optional — default No
+Writable: Yes          # optional — default No
+Expect-Local: Yes      # optional — default No; signals a local clone is expected
+URL: https://...       # optional — web URL or git remote
+
+Free-form description: what lives here, what triggers a nudge, how the team uses it.
+```
+
+All fields are optional. A minimal entry is just a heading and description.
+
+#### Local Path Resolution
+
+When `Expect-Local: Yes` is set, the agent expects a sibling directory next to the Fabric instance:
+- If `URL:` is present: infer the folder name from the last path segment of the URL (e.g. `https://github.com/org/internal-docs` → `../internal-docs`).
+- If no `URL:`: use the heading name lowercased and hyphenated.
+
+The sibling check is **lazy** — performed only when the agent actually attempts to read or write the repository, not on session load. If the folder is not found at that moment, surface a warning and continue:
+
+> "We are unable to locate [repo name] at [expected path]. Clone the repository to enable [read/write] access."
+
+#### Readable Behavior
+
+When `Readable: Yes` and `Expect-Local: Yes`: the agent may read from the sibling folder to provide context (recent content, existing pages) when relevant to the current ingest or refine session. Do not read proactively on every query — read on demand when the content would improve a nudge or answer.
+
+#### Writable Behavior
+
+When `Writable: Yes` and `Expect-Local: Yes`: the agent may propose drafting content into the sibling folder. Always propose the draft content and target path for confirmation before writing. After writing:
+1. Append a context log entry to the originating entity noting the draft path and date.
+2. Remind the user that they need to go to that repository to review and commit the draft — the agent does not commit on their behalf.
 
 ### Constraints
 
