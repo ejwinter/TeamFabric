@@ -97,6 +97,7 @@ Use Example/ to test ingestion, evaluation, and other workflows without touching
 - Work-specific content (RAIS rubrics, real request data) should wait for the work machine. Keep framework development general-purpose.
 - Structural files in Fabric/ are governed by the meta mode convention. When advising on changes to the constitution or skills, respect that separation even though you are not bound by it.
 - The design summary (`fabric-design-summary.md`) is the foundational reference. Significant departures from it should be discussed, not silently introduced.
+- **Example/ drift discipline:** Any change to `Fabric/template/` or `Fabric/backlog/template-*.md` requires a sweep of `Example/` to keep it in sync. The Example is the public signal of framework discipline — it must reflect the current state of the templates. Update `Example/` in the same commit as the template change. This applies to structural removals (sections dropped from templates), additions (new sections or fields), and schema changes.
 
 ## Execution Mode
 

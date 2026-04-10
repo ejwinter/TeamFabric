@@ -82,7 +82,3 @@ describes environment setup, cross-product patterns, or recurring operational st
 | Effort Tracking | Enabled | Capture actual hours on close, rollup to parent |
 | Standup | Enabled | Daily standup conversations and team summary |
 | Retrospective | Enabled | Periodic retros with team summary and action item routing |
-
-## Decision Log
-
-- 2026-03-28: Adopted Fabric as team working memory system. Context: Growing request volume needs structured triage.
