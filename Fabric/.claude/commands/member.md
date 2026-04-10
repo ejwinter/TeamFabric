@@ -89,6 +89,21 @@ Set a member's status to Departed. The profile and all context log references ar
 
 5. Present changes for confirmation before writing.
 
+6. **Cascade scan** (after writing state change): scan all backlog entity files for assignments referencing the departed member. Match against:
+   - `Assigned to:` fields
+   - `Owners:` fields
+
+   For each entity found, propose reassignment or clearing the field. Work through affected entities one at a time:
+   ```
+   [Member name] is listed as [Assigned to / Owner] on the following items:
+   - [entity name] — Assigned to
+
+   Reassign [entity name] to another member, or clear the field? (reassign / clear / skip)
+   ```
+   If reassigning, suggest active members as options. Follow propose-confirm-write for each entity.
+
+   If no assignments are found, note this and conclude.
+
 ### Notes
 - Departure is reversible via `/member activate`.
 - The AI should never suggest removing or deleting a member. `/member depart` is the correct action.
