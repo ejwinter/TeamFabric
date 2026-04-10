@@ -13,6 +13,22 @@ Read `.claude/fabric-source.md` to find the source:
 
 If `.claude/fabric-source.md` doesn't exist, ask the user for both a local path and remote URL, create the file, then proceed.
 
+## Staleness Check (Local Path Only)
+
+When using a local clone, check whether it is behind the remote before applying updates:
+
+1. Run `git fetch origin` in the local clone directory.
+2. Compare `git rev-parse HEAD` to `git rev-parse origin/HEAD` (or the tracking branch).
+3. If they differ (local is behind), **stop and warn the user**:
+
+   > "Your local TeamFabric clone at `<path>` appears to be behind the remote. Running the update now would apply an older version of the framework. You can pull the latest changes by running `git pull` in that directory (or type `! git -C <path> pull` here), then re-run `/update-fabric`."
+
+   Offer to run `git pull` automatically: "Would you like me to pull the latest changes now before proceeding?"
+   - If the user confirms, run `git -C <path> pull` and continue with the update.
+   - If the user declines, abort.
+
+4. If `git fetch` fails (no network, no remote configured, etc.), surface a non-blocking warning — "Could not verify whether the local clone is up to date (fetch failed). Proceeding with the local version." — and continue with the update.
+
 ## What Gets Updated
 
 ### Always overwrite
