@@ -96,6 +96,31 @@ When invoked implicitly, identify the target entity and desired state from conte
 
 9. On confirmation: set `State: Resolved` or `State: Closed` as appropriate for the entity type. Update any confirmed explicit DoD checkboxes. Write `Terminated: <today's date>` to the Properties block if not already set.
 
+10. **Cascade scan** (after writing state change): scan for entities that reference this entity and may need updating. Work through each category in order; skip any with no results.
+
+    a. **Dependency cascade**: search all entity files for `## Items this depends on` sections referencing this entity (match by ID or title). For each found:
+       - Propose removing the dependency entry (the work is done — the dependency is resolved).
+       - Follow propose-confirm-write for each affected entity, one at a time.
+       ```
+       [Entity Title] has been closed. The following entities list it as a dependency:
+       - [entity name] — Items this depends on
+
+       Remove this dependency entry from [entity name]? (yes / no / skip all)
+       ```
+
+    b. **Related Items (informational)**: search all entity files for `## Related Items` sections referencing this entity. Surface each as informational — no write action required.
+       ```
+       FYI — these entities list [Entity Title] in Related Items:
+       - [entity name]
+       No action needed unless the relationship is no longer relevant.
+       ```
+
+    c. **Request cascade** (epics only): if closing an epic, scan all request files for `Backlog Epic:` fields pointing to this epic. Surface each and ask whether to clear the field or leave it as a historical reference.
+       ```
+       Request [R-NNN] references this epic in Backlog Epic:.
+       Clear the Backlog Epic field, or leave as historical reference? (clear / leave)
+       ```
+
 ---
 
 ### Any → Removed
@@ -124,8 +149,26 @@ When invoked implicitly, identify the target entity and desired state from conte
    - Set `State: Removed`.
    - Write `Terminated: <today's date>` to the Properties block if not already set.
    - Do NOT delete the file.
-   - Suggest a git commit: "Recommend committing this change: `git commit -m 'Remove [entity title]'`"
-5. Offer to open the dependent entities to update their references, one at a time.
+
+5. **Cascade updates** (after writing state change): work through each affected entity found in step 2, proposing concrete updates one at a time. Follow propose-confirm-write for each.
+
+   - **`## Items this depends on` references**: propose removing the entry from the dependent entity.
+     ```
+     [Dependent entity name] lists this item as a dependency.
+     Remove the dependency entry? (yes / no / skip all)
+     ```
+   - **`## Related Items` references**: surface as informational. Ask whether to remove or leave.
+     ```
+     [Entity name] lists this item in Related Items.
+     Remove the reference, or leave it? (remove / leave)
+     ```
+   - **`Backlog Epic:` references** (epics only): propose clearing the field.
+     ```
+     Request [R-NNN] references this epic in Backlog Epic:.
+     Clear the field? (yes / no)
+     ```
+
+   After all cascades are resolved, suggest a git commit: "Recommend committing these changes: `git commit -m 'Remove [entity title] and update references'`"
 
 ---
 
