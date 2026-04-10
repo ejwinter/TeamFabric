@@ -162,6 +162,7 @@ The `staging/` directory is a drop zone for raw content. All contents except `RE
 | /update-fabric | Apply updates from the TeamFabric source repo to this instance. Uses `.claude/fabric-source.md` to locate the source; falls back to cloning from the remote URL; asks if both fail. |
 | /report | Generate reports from the backlog: `mindmap` (D3 radial tree), `gantt` (D3 timeline), or `day/week/month/quarter/year` (markdown activity summary). Requires Backlog module for mindmap and gantt. |
 | /open-questions | List all unchecked open questions across the instance. Default output groups by entity. Accepts an optional entity hint (`/open-questions R-42`) to scope to one entity. Useful for answering "what's blocking X?" |
+| /ask | Cross-entity natural-language query. Accepts an optional scope hint and a question. Returns a cited answer with conflicts surfaced. Add `--deep` to include full Context Log in the scan. |
 | /transition | Manage entity state transitions with pre-flight checks. Usage: `/transition [entity] [to-state]`. Supported transitions: New → Active (checks blockers and open questions), Active → Resolved/Closed (walks acceptance criteria), Any → Removed (scans dependents). Never deletes entity files. |
 | /check | Instance health lint. Scans for coherence problems: integrity violations, drift, orphaned references, schema mismatches. `/check` reports findings; `/check --fix` enters an interactive resolution session; `/check [entity]` scopes to one entity or subtree. |
 
@@ -177,6 +178,7 @@ The `staging/` directory is a drop zone for raw content. All contents except `RE
 | fabric-guidance | Help users understand and maintain their Fabric. Explain structure, suggest improvements, answer "how do I..." questions about the system itself. |
 | entity-transitions | Guard and execute state transitions for entities. Checks blockers, open questions, acceptance criteria, and dependents before writing any state change. Invoked by `/transition` or implicitly when state-change intent is detected in conversation. |
 | reporting | Generate interactive HTML reports (mindmap, gantt) and markdown activity summaries from the backlog working memory. Handles data traversal, hours rollup from tasks, title shortening, and all three renderers. |
+| query | Execute the `/ask` retrieval and synthesis pipeline: seed entity identification, connected graph expansion, section loading, Knowledge Repository scan, conflict detection with Contextual Authority, and cited answer generation. |
 
 ## Framework File Ownership
 
