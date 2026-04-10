@@ -25,3 +25,7 @@ Depends on: FHIR Resource Parser
 ## Items this depends on
 
 FHIR Resource Parser must be complete before mapping can be validated.
+
+## Context Log
+
+- 2026-04-01 - Marcus Chen via standup: Discovered FHIR R4 cancelled encounters (status=cancelled) are dropped by current ADT mapper rather than passed through with a flag. Needs handling before validation suite can pass.

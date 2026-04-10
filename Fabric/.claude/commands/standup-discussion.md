@@ -106,7 +106,7 @@ For each candidate item, offer once:
 - If the item is in context (assigned items): match directly and propose the specific item.
 - If the member names an item: locate it by keyword search in `backlog/` and confirm before writing.
 - If the member asks the agent to find it: search by keyword, propose the best match, confirm before writing.
-- Notes are appended to a `## Notes` section on the entity (`- YYYY-MM-DD [standup]: [note]`). Create the section if absent.
+- General discovery/risk/context notes are appended to the entity's `## Context Log` (`- YYYY-MM-DD - [Member Name] via standup: [note]`). Create the section if absent. Blockers, open questions, and decisions route to their canonical sections per the routing table in `fabric-standup.md`.
 - Do not change status, priority, or any other field — notes only.
 - Do not write without explicit confirmation.
 

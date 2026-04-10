@@ -7,7 +7,3 @@
 ## Suggested Level
 
 [optional — Epic | Feature | Work Item | Unknown]
-
-## Notes
-
-[optional — any additional context, links, or conversation references that informed this item]

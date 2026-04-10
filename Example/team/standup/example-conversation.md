@@ -92,7 +92,7 @@ This document shows what a `/standup-discussion` session looks like in practice.
 
 **Agent:** Here's what I'll append to the work item:
 
-> `- 2026-04-03 [standup]: Architecture decision — using Confluent Schema Registry over AWS Glue. Rationale: lower ops overhead at current scale given existing Kafka infrastructure. Dana recommended; Marcus to confirm technical approach.`
+> `- 2026-04-03 - Leo Kim via standup: Architecture decision — using Confluent Schema Registry over AWS Glue. Rationale: lower ops overhead at current scale given existing Kafka infrastructure. Dana recommended; Marcus to confirm technical approach.`
 
 Does that capture it accurately?
 
