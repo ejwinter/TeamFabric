@@ -13,7 +13,7 @@ When invoked implicitly, identify the target entity and desired state from conte
 
 ## Entity File Retention
 
-**Never delete entity files.** Setting `State: Removed` is the removal action. Resolved and Closed entities remain in place. Physical cleanup is deferred to a future garbage collection skill. If a user asks to delete an entity file, redirect: "I'll set the state to Removed and leave the file in place — physical cleanup is handled by the garbage collection process."
+**Never delete entity files.** Setting `State: Removed` is the removal action. Resolved and Closed entities remain in place. Physical cleanup is handled by `/clean-fabric` (garbage collection). If a user asks to delete an entity file, redirect: "I'll set the state to Removed and leave the file in place — physical cleanup is handled by `/clean-fabric`."
 
 ---
 

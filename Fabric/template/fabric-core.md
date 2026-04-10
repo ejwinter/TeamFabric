@@ -162,6 +162,7 @@ The `staging/` directory is a drop zone for raw content. All contents except `RE
 | /report | Generate reports from the backlog: `mindmap` (D3 radial tree), `gantt` (D3 timeline), or `day/week/month/quarter/year` (markdown activity summary). Requires Backlog module for mindmap and gantt. |
 | /open-questions | List all unchecked open questions across the instance. Default output groups by entity. Accepts an optional entity hint (`/open-questions R-42`) to scope to one entity. Useful for answering "what's blocking X?" |
 | /transition | Manage entity state transitions with pre-flight checks. Usage: `/transition [entity] [to-state]`. Supported transitions: New → Active (checks blockers and open questions), Active → Resolved/Closed (walks acceptance criteria), Any → Removed (scans dependents). Never deletes entity files. |
+| /check | Instance health lint. Scans for coherence problems: integrity violations, drift, orphaned references, schema mismatches. `/check` reports findings; `/check --fix` enters an interactive resolution session; `/check [entity]` scopes to one entity or subtree. |
 
 ## Core Skills
 
@@ -283,6 +284,8 @@ Some stakeholders have profile directories at `team/stakeholders/<name>/profile.
 ## Fabric GC
 
 The `/clean-fabric` command scans the instance for stale and terminal-state artifacts and removes or archives them after review. Default retention is 90 days after `Terminated:` for most artifacts; 1 year for epics and requests.
+
+The `/check` command scans for active integrity violations — drift, orphaned references, schema mismatches, and field inconsistencies. `/clean-fabric` removes the dead; `/check` keeps the living honest. Teams that want a single maintenance cadence can run both in sequence.
 
 Teams may override defaults by adding a `## Fabric GC` table to their `CLAUDE.md` or `team/team.md`:
 

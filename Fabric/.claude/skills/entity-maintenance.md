@@ -94,6 +94,10 @@ Insert the `## Child Summary` section after `## Items this depends on` (or after
 - Follows the "propose and confirm" pattern — all entity edits require human confirmation.
 - Staleness: if a child has been modified outside of refinement, the rollup may be stale. This is flagged during refinement rather than kept perpetually in sync.
 
+## Relationship to /check
+
+This skill handles **proactive** maintenance — keeping entities current as the agent encounters them during normal operations. The `/check` command handles **reactive** auditing — scanning the full instance for integrity violations that slipped through (orphaned references, field drift, schema mismatches, departed-owner assignments). When `/check --fix` proposes corrections, the same propose-and-confirm pattern from this skill applies.
+
 ## Notes
 
 - Entity maintenance is always human-guided. The AI proposes, the human confirms.
