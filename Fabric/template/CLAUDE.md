@@ -41,8 +41,18 @@
 
 ## Knowledge Repositories
 
-<!-- Where does your team's content live? SharePoint, shared drives, wikis, repos? -->
-<!-- The AI uses this section to generate nudges when ingesting content. -->
+<!--
+  One level-3 heading per repository. All fields are optional — a minimal entry is
+  just a heading and a description of what lives there and what triggers a nudge.
+
+  ### My Repo
+  Readable: Yes          # agent can read local clone for context (requires Expect-Local)
+  Writable: Yes          # agent can draft content into local clone (requires Expect-Local)
+  Expect-Local: Yes      # expect a sibling folder; warn lazily if not found
+  URL: https://...       # web URL or git remote; last path segment = expected folder name
+
+  Description: what lives here, what triggers a nudge, how the team uses it.
+-->
 
 ## Notification Rules
 

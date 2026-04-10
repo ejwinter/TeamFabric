@@ -39,9 +39,26 @@ Iteration Duration: 14 days
 
 ## Knowledge Repositories
 
-- Confluence: team wiki and runbooks
-- GitHub: source repositories
-- Shared Drive: project documentation and reports
+### Confluence
+URL: https://riverdale.atlassian.net/wiki
+Team wiki and runbooks. Nudge when ingested content is a reusable procedure,
+onboarding step, or operational runbook. Nudge when a retro action item results
+in a documented process change.
+
+### GitHub
+URL: https://github.com/riverdale-de
+Source repositories. Reference only — no local read needed beyond linked repos
+on individual requests and epics.
+
+### Internal Docs
+Readable: Yes
+Writable: Yes
+Expect-Local: Yes
+URL: https://github.com/riverdale-de/internal-docs
+MkDocs site for internal engineering documentation. Read existing pages before
+suggesting new ones to avoid duplication. Write draft pages to docs/drafts/ —
+team reviews and commits from that repository. Nudge when ingested content
+describes environment setup, cross-product patterns, or recurring operational steps.
 
 ## Notification Rules
 
