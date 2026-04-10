@@ -25,3 +25,7 @@ Related to: Kafka Consumer Framework
 ## Items this depends on
 
 Kafka Consumer Framework.
+
+## Context Log
+
+- 2026-04-03 - Leo Kim via standup: Architecture decision — using Confluent Schema Registry over AWS Glue. Rationale: lower ops overhead at current scale given existing Kafka infrastructure. Dana recommended; Marcus to confirm technical approach.

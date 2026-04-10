@@ -88,13 +88,23 @@ Each `discuss-today.md` uses this structure:
 
 ### Backlog Notes from Standup
 
-During standup, a member may mention something worth capturing on a backlog item — a discovery, a risk, a decision made, a dependency identified. At the end of the conversation, the agent reviews the discussion for such items and offers to append a dated note to the relevant entity file.
+During standup, a member may mention something worth capturing on a backlog item — a discovery, a risk, a decision made, a dependency identified, or a blocker. At the end of the conversation, the agent reviews the discussion for such items and offers to route each one to the appropriate section of the relevant entity file.
 
-- Notes are appended to a `## Notes` section on the backlog entity. If the section does not exist, it is created.
-- Note format: `- YYYY-MM-DD [standup]: [note text]`
-- The agent offers once per item, does not write without confirmation, and does not change status or priority — notes only.
-- If the member cannot identify the item, the agent may search `backlog/` by keyword and propose the best match for confirmation.
+**Routing by type:**
+
+| What was mentioned | Route to |
+|--------------------|----------|
+| Blocker ("I'm blocked on X", "can't proceed until Y") | `## Blockers` entry + set `Blocked: Yes` in Properties |
+| Open question ("we need to figure out X", "TBD") | `## Open Questions` checkbox item |
+| Decision made ("we decided to...", "going with X") | `## Decisions` entry |
+| General discovery, risk, or context | `## Context Log` entry |
+
+For blockers specifically: ask who flagged it (defaults to the standup member), what the cause is (open question, dependency, external, other), and whether it relates to an existing open question or dependency on that entity. Propose the full Blockers entry for confirmation before writing.
+
+- The agent offers once per item, does not write without confirmation.
+- If the member cannot identify the entity, the agent may search `backlog/` or `requests/` by keyword and propose the best match for confirmation.
 - Assigned items already in context are matched directly without a search.
+- General notes use format: `- YYYY-MM-DD - [Member Name] via standup: [note text]`
 
 ### Scope of Agent Assistance
 
