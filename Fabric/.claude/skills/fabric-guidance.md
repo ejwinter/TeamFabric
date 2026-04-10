@@ -88,6 +88,12 @@ backlog/
 - Default retention: 90 days after `Terminated:` for most artifacts; 1 year for epics and requests.
 - Teams can override retention per artifact type by adding a `## Fabric GC` table to CLAUDE.md or team.md.
 
+**"How do I check for consistency problems?"**
+- Run `/check`. It scans for integrity violations: orphaned references, field drift, schema mismatches, departed-member assignments, and more.
+- `/check --fix` enters an interactive resolution session where each finding gets a proposed fix you can accept or skip.
+- `/check [entity]` scopes the scan to one entity and its descendants.
+- `/clean-fabric` removes the dead; `/check` keeps the living honest.
+
 **"What commands are available?"**
 - Point the user to the Core Commands table in the loaded CLAUDE.md (via `@.claude/fabric-core.md`).
 - Each module adds its own commands — Backlog adds `/refine` and `/rollup-backlog`; Triage adds `/evaluate-request`; Standup adds `/standup-discussion`; Retrospective adds the `/retro` family.
