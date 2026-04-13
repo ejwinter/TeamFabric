@@ -57,7 +57,7 @@ On-Call Contact: Leo Kim (primary), Marcus Chen (escalation)
 
 ## Communication
 
-Meeting Cadence: Daily standup (15 min), weekly planning (1 hr)
+Meeting Cadence: Standup (15 min, Tuesday & Thursday), weekly planning (1 hr Friday)
 Primary Channel: Slack (#data-eng)
 Secondary Channel: Email
 On-Call Channel: PagerDuty -> Slack (#data-eng-alerts)

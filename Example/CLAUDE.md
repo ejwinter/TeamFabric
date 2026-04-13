@@ -22,6 +22,9 @@ Default workflow and rubrics: requests/workflow/default/
 Iteration Start: 2026-04-01
 Iteration Duration: 14 days
 
+### Standup
+Schedule: Tuesday, Thursday
+
 ### Labels
 
 - **service-type** — The type of service this work relates to
@@ -80,5 +83,5 @@ describes environment setup, cross-product patterns, or recurring operational st
 | Product | Enabled | Product definitions and context |
 | Backlog | Enabled | Hierarchical work tracking — epics, features, work items, tasks |
 | Effort Tracking | Enabled | Capture actual hours on close, rollup to parent |
-| Standup | Enabled | Daily standup conversations and team summary |
+| Standup | Enabled | Standup conversations (Tuesday & Thursday) and team summary |
 | Retrospective | Enabled | Periodic retros with team summary and action item routing |

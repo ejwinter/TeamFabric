@@ -7,7 +7,20 @@
 
 ## Overview
 
-The Standup module supports asynchronous daily standups. Each team member runs a brief conversation with the agent to share progress, surface blockers, and flag questions or needs. The agent collates these into a per-member daily record and a team-level summary.
+The Standup module supports asynchronous standups on a team-defined cadence. Each team member runs a brief conversation with the agent to share progress, surface blockers, and flag questions or needs. The agent collates these into a per-member record and a team-level summary.
+
+## Configuration
+
+Teams may configure the standup schedule in the `### Standup` subsection of "How We Work" in their CLAUDE.md:
+
+```markdown
+### Standup
+Schedule: Tuesday, Thursday
+```
+
+Valid day names: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday. Comma-separated for multi-day schedules. Omit the subsection entirely to leave the schedule open — the module will accept standups on any day.
+
+When `Schedule:` is set, the `standup-report` skill uses it to determine which members are expected to have checked in for the current cycle, rather than treating any gap as a missing update.
 
 ## Directory Structure
 
@@ -37,7 +50,7 @@ team/standup/
 | Skill | Description |
 |-------|-------------|
 | `standup-context` | Enriches standup context: loads assigned work, scans product repos for contributions, reads team standup for follow-up items. Invoked by `/standup-discussion` before conversation begins. |
-| `standup-report` | Reads all members' standup records, produces a team-wide summary with sync opportunities and breakout suggestions. Handles team-level rollover on generation. |
+| `standup-report` | Reads all members' standup records, produces a team-wide summary with sync opportunities and breakout suggestions. Handles team-level rollover on generation. Add `weekly` to aggregate across multiple check-ins within the current week — supplemental for teams with 2+ standups per week. |
 
 ## Behavioral Rules
 
@@ -46,6 +59,8 @@ team/standup/
 "Yesterday" is relative, not literal. For each member, yesterday means their most recent prior `discuss-today.md` — regardless of how many calendar days have passed. For the team, yesterday means the period covered by `team/standup/standup-today.md` before the current report was generated.
 
 Members who have not run `/standup-discussion` since the last team standup are noted as having no update for this cycle. Their prior record remains in place and is not re-rolled.
+
+When a `Schedule:` is configured, a member is only considered missing for a cycle if at least one scheduled standup day has passed since the last team standup. A gap that falls entirely between scheduled days is expected, not a missing update.
 
 ### Member File Lifecycle
 
