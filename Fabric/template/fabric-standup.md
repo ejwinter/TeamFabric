@@ -121,6 +121,24 @@ For blockers specifically: ask who flagged it (defaults to the standup member), 
 - Assigned items already in context are matched directly without a search.
 - General notes use format: `- YYYY-MM-DD - [Member Name] via standup: [note text]`
 
+### Untracked Work Scan
+
+After the backlog note pass for existing entities, the agent scans the full conversation for work mentioned that has no backlog home — tasks done or planned, problems worth tracking, ideas surfaced — that don't map to any assigned item or entity identified during the note pass.
+
+For each untracked item, the agent recommends one action:
+
+| Mention type | Recommended action |
+|--------------|--------------------|
+| Concrete task or piece of work | Create a work item |
+| Broader theme or new capability | Create a feature |
+| Needs more thought or context | Log to `backlog/inbox/` for later refinement |
+
+Same discipline as the note pass: offer once per item, do not create without explicit confirmation. Recommendations must be specific and named — vague mentions that aren't clearly actionable are not flagged.
+
+### Post-Standup Action Checklist
+
+After the standup record is written, the agent produces a short markdown checkbox list of items the member still needs to act on: deferred or declined backlog gaps from the untracked work scan, follow-up actions surfaced during the conversation, and manual backlog updates the member indicated they'd handle themselves. The checklist is omitted entirely if there are no outstanding items.
+
 ### Scope of Agent Assistance
 
 - The agent uses the `standup-context` skill to arrive at the conversation informed. It does not recite context back — it uses it to ask specific questions.
