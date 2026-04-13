@@ -110,6 +110,20 @@ For each candidate item, offer once:
 - Do not change status, priority, or any other field — notes only.
 - Do not write without explicit confirmation.
 
+#### Untracked Work Scan
+
+After the note pass for existing entities, scan the full conversation a second time for work mentioned that has no backlog home — tasks done or planned, problems worth tracking, ideas surfaced — that don't map to any assigned item or entity identified during the note pass.
+
+For each untracked item, recommend one action:
+
+| Mention type | Recommended action |
+|--------------|--------------------|
+| Concrete task or piece of work | Create a work item |
+| Broader theme or new capability | Create a feature |
+| Needs more thought or context | Log to `backlog/inbox/` for later refinement |
+
+Offer once per item with the same discipline — do not create without explicit confirmation. If the member agrees, create the item using the appropriate backlog template and confirm. Keep recommendations specific and named — do not flag vague mentions that aren't clearly actionable.
+
 ### 6. Write the Standup Record
 
 Present a brief preview of `discuss-today.md` and ask for confirmation. The member may request corrections before the file is saved.
@@ -119,7 +133,24 @@ Write using the format in `fabric-standup.md`:
 - Omit "Resolved in Standup" and "Notes" sections if empty.
 - Write "None" explicitly under Blockers if the member reported none.
 
-### 7. Close
+### 7. Post-Standup Action Checklist
+
+Before closing, produce a short checklist of items the member can work through at their own pace. Include:
+
+- Untracked items they deferred or declined during the scan but may want to revisit
+- Follow-up actions surfaced during the conversation that haven't been handled yet (e.g., "Log outcome after today's design meeting", "Add blocker once dependency is confirmed with [Name]")
+- Backlog items they indicated they'll update manually
+
+Present as a markdown checkbox list:
+
+> **Post-standup checklist**
+> - [ ] Create work item for [X]
+> - [ ] Log outcome of [meeting/decision] to [entity]
+> - [ ] Confirm blocker with [Name] and add to [item] if so
+
+Omit this step entirely if there are no outstanding items — do not generate an empty checklist.
+
+### 8. Close
 
 Confirm the file was written. If not all team members have checked in, mention it. Remind the member that the team summary can be generated with the `standup-report` skill.
 
