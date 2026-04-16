@@ -37,6 +37,6 @@
 
 ## Notes
 
-- Read-only until confirmation. No meta mode required for state changes on non-structural entities.
+- Read-only until confirmation. No meta mode required for state changes on work items, tasks, features, or epics. Meta mode is only required for structural mutations: removing, renaming, or re-scoping epics and features.
 - The transition skill is also invoked implicitly when the agent detects state-change intent in conversation — this command is the explicit path.
 - Resolved, Closed, and Removed entities are never deleted. Physical cleanup is deferred to the garbage collection process.
