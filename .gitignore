@@ -5,3 +5,6 @@ staging/*
 
 # Git worktrees
 .worktrees/
+
+# Review output — ephemeral, not committed
+output/
