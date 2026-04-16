@@ -65,5 +65,5 @@ Regenerate Child Summary sections on epics and features to reflect current child
 
 ## Notes
 
-- Requires meta mode (modifies structural entity files).
+- Does not require meta mode. Child Summary sections are auto-maintained computed output, not structural decisions. (Structural mutations on epics and features — remove, rename, rescope — still require meta mode.)
 - The rollup logic is implemented in the entity-maintenance skill. This command handles target resolution, scan orchestration, and the `--deep` flag.

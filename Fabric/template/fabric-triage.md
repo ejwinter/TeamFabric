@@ -55,15 +55,23 @@ requests/
 
 ### Repository Linking on Requests
 
-Requests support an optional `Repository:` field in their Properties section. This is the git remote URL of the working repository for the engagement — where the team's implementation work lives. It is a work repository, not a product entity.
+Requests support optional `Repository:` and `Repository Path:` fields in their Properties section. `Repository:` is the git remote URL of the working repository for the engagement — where the team's implementation work lives. It is a work repository, not a product entity. `Repository Path:` scopes context operations to a subfolder within that repository, which is useful when the team works in a monorepo or shared repository.
 
 ```
-Repository: https://github.com/org/sepsis-model
+Repository: https://github.com/org/shared-repo
+Repository Path: initiatives/project-name
 ```
+
+`Repository Path:` is relative to the repository root and stored without a leading slash. When absent, all context operations apply to the full repository root.
 
 **Lookup convention:** The repo is expected as a sibling folder next to this Fabric instance, named after the repository slug (e.g. `https://github.com/org/sepsis-model` → `../sepsis-model`). Teams are responsible for keeping that clone present.
 
 **Context surfacing:** When a request has `Repository:` set and someone asks about the request, check whether the sibling folder exists. If it does, the agent may read from it on request — recent commits, file structure, open issues — to provide relevant context. Do not read the repo proactively on every query; surface it when the user asks about implementation status, technical details, or code context for the request.
+
+When `Repository Path:` is set, scope all repo reads to `<sibling-folder>/<repository-path>`. For git log operations, append `-- <repository-path>` to limit commits to those touching that path:
+```
+git log --author=<email> --since=<date> --oneline -- <repository-path>
+```
 
 If the sibling folder is absent, note this clearly rather than failing silently:
 > "R-NNN has a linked repository (github.com/org/sepsis-model) but it isn't cloned locally. Clone it as a sibling folder to access code context."

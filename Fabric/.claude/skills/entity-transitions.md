@@ -96,7 +96,20 @@ When invoked implicitly, identify the target entity and desired state from conte
 
 9. On confirmation: set `State: Resolved` or `State: Closed` as appropriate for the entity type. Update any confirmed explicit DoD checkboxes. Write `Terminated: <today's date>` to the Properties block if not already set.
 
-10. **Cascade scan** (after writing state change): scan for entities that reference this entity and may need updating. Work through each category in order; skip any with no results.
+10. **Rollup offer** (work items and features only — not epics): after writing the state change, identify the immediate parent entity. Offer to refresh its Child Summary:
+    ```
+    [Entity Title] is now [Resolved/Closed]. The parent [Feature/Epic] '[Parent Title]' has a stale Child Summary.
+    Refresh the Child Summary now? (yes / no)
+    ```
+    If yes: run the rollup logic for the parent inline (same behavior as `/rollup-backlog [parent]`). Propose the updated Child Summary section, then write on confirmation.
+
+    After the rollup (or if the user declines), check whether **all** direct children of the parent are now in a terminal state (Closed, Resolved, or Removed). If so, surface the parent as a transition candidate:
+    ```
+    All children of '[Parent Title]' are now complete. Would you like to close it too? (yes / no)
+    ```
+    If yes: invoke this same transition path for the parent.
+
+11. **Cascade scan** (after writing state change): scan for entities that reference this entity and may need updating. Work through each category in order; skip any with no results.
 
     a. **Dependency cascade**: search all entity files for `## Items this depends on` sections referencing this entity (match by ID or title). For each found:
        - Propose removing the dependency entry (the work is done — the dependency is resolved).
@@ -177,3 +190,26 @@ When invoked implicitly, identify the target entity and desired state from conte
 - Be direct about issues but not alarmist. A warning is informational; the user decides whether to proceed.
 - Do not repeat the same concern multiple times in the same transition.
 - Keep confirmation prompts short. The user has already seen the findings.
+
+---
+
+## Post-Transition Commit Offer
+
+After all cascade steps are resolved and any rollup offer has been handled, offer to commit the Fabric state changes:
+
+```
+Transition complete. Commit?
+  worklog: [verb] [entity-type] [entity-slug]
+  e.g. worklog: close feature fhir-r4-parser-260315
+       worklog: activate work-item adt-event-mapping
+       worklog: remove epic ehr-pipeline-modernization
+
+Commit with this message? (yes / edit / skip)
+```
+
+- **verb**: `activate`, `resolve`, `close`, or `remove` — matching the transition taken.
+- **entity-type**: `epic`, `feature`, `work-item`, or `task` — singular, hyphenated.
+- **entity-slug**: the folder name (slug) of the entity.
+- If the user chooses "edit", show the proposed message and let them revise it, then commit.
+- After committing, ask: "Push to remote? (yes / no)"
+- Stage only the files changed during this transition: the entity file, any cascaded files, and any rolled-up parent. Do not stage unrelated changes.
