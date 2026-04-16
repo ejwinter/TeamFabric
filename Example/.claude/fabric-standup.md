@@ -49,7 +49,7 @@ team/standup/
 
 | Skill | Description |
 |-------|-------------|
-| `standup-context` | Enriches standup context: loads assigned work, scans product repos for contributions, reads team standup for follow-up items. Invoked by `/standup-discussion` before conversation begins. |
+| `standup-context` | Enriches standup context: loads assigned work, scans engagement and product repos for contributions, runs assignment hygiene checks, reads team standup for follow-up items. Invoked by `/standup-discussion` before conversation begins. |
 | `standup-report` | Reads all members' standup records, produces a team-wide summary with sync opportunities and breakout suggestions. Handles team-level rollover on generation. Add `weekly` to aggregate across multiple check-ins within the current week — supplemental for teams with 2+ standups per week. |
 
 ## Behavioral Rules
@@ -138,6 +138,24 @@ Same discipline as the note pass: offer once per item, do not create without exp
 ### Post-Standup Action Checklist
 
 After the standup record is written, the agent produces a short markdown checkbox list of items the member still needs to act on: deferred or declined backlog gaps from the untracked work scan, follow-up actions surfaced during the conversation, and manual backlog updates the member indicated they'd handle themselves. The checklist is omitted entirely if there are no outstanding items.
+
+### Engagement Repository Detection
+
+The `standup-context` skill checks each directly assigned epic and request for a `Repository:` field. For each one found, it resolves the local clone using the sibling-directory convention (last path segment of the URL, relative to the Fabric instance root) and runs `git log --author --since` to detect commits since the member's last standup. Results appear in the context bundle as `engagement_contributions` and are surfaced in the conversation alongside product contributions.
+
+This addresses the common pattern where initiative work lives in per-engagement repositories that are not registered as products. Without this check, a member actively committing to an engagement repo would appear to have no contributions.
+
+### Assignment Hygiene Check
+
+After loading assigned items, the `standup-context` skill scans for three gap types and surfaces them as specific questions during the conversation:
+
+| Gap type | Signal | Suggested question style |
+|----------|--------|--------------------------|
+| `context_log_stale` | Most recent `## Context Log` entry predates last team standup | "Anything worth capturing on [Entity] from the past week?" |
+| `repository_gap` | `Repository:` is set but no commits found for this member since last standup | "I didn't see commits in [repo] — is that paused, or happening elsewhere?" |
+| `state_lag` | Prior standup described item as complete, but `State:` is still Active or New | "Last standup you said [Entity] was wrapping up — still Active, did you want to transition it?" |
+
+Hygiene gaps are surfaced once per item, conversationally, and only if the member's answers haven't already resolved them.
 
 ### Scope of Agent Assistance
 

@@ -54,11 +54,29 @@ If the `standup-context` skill found mentions of this member in the prior team s
 
 > "In the last team standup, [Name] had a question for you about [X] — were you able to connect? Any update there?"
 
+**Engagement contributions** *(if detected)*
+
+If the context skill found git commits in an engagement repo (from an assigned epic or request) since their last standup, surface them the same way as product contributions:
+
+> "It looks like you've been committing to [repo] for [Entity] — want to include that in yesterday's summary?"
+
 **Product contributions** *(if detected)*
 
 If the context skill found git commits in a product repo since their last standup, surface them naturally:
 
 > "It looks like you contributed to [Product] — want to include what you did there in yesterday's summary?"
+
+**Hygiene gaps** *(if any were found in context)*
+
+After contributions, surface hygiene gaps as specific, named questions woven into the conversation — not as a list or reminder. Use the `suggested_question` from the context bundle as the basis. One question per gap, asked once only.
+
+Examples by gap type:
+
+- *Context log stale*: "Your [Entity Name] hasn't had a context log entry since [date] — anything worth capturing there from the past week?"
+- *Repository gap*: "[Entity Name] has [repo] linked, but I didn't find any commits from you there since your last standup. Is that work happening in a different branch or repo, or has it been paused?"
+- *State lag*: "Last standup you mentioned [Entity Name] was wrapping up — it's still showing Active. Did you want to transition it, or is there more work left?"
+
+Do not surface gaps that are clearly explained by what the member has already said in the conversation.
 
 **Yesterday** — What did they work on? Reference specific assigned items and any contributions from context. Ask how it went, not just what they did.
 
