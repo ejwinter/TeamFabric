@@ -18,6 +18,7 @@ Effort Estimate: [Not Set | Small (< 1 week) | Medium (1-4 weeks) | Large (> 1 m
 Effort: [hours of planning/discovery work invested in this request — populated on close]
 External: [None | e.g., ADO Epic #1234 — https://dev.azure.com/org/project/_workitems/edit/1234]
 Repository: [optional — git remote URL of the working repository for this engagement]
+Repository Path: [optional — subfolder within the repository where this engagement's work lives, relative to repo root without a leading slash, e.g. initiatives/project-name]
 Labels: [optional, comma-separated key=value pairs matching the team's label schema]
 
 ### Requestor Details

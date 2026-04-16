@@ -68,6 +68,7 @@ Properties:
 - State: New | Active | Resolved | Removed | Closed
 - External URL: [optional link to an external representation such as ADO url]
 - Repository: [optional — git remote URL of the working repository for this engagement, e.g. https://github.com/org/repo]
+- Repository Path: [optional — subfolder within the repository where this epic's work lives, relative to repo root without a leading slash, e.g. initiatives/project-name]
 - Start Date: [optional]
 - Target Date: [optional]
 - Duration: [optional]
@@ -320,7 +321,7 @@ A match is confident when the agent would naturally reach for the template given
 - When writing a label value, validate it against the team's label schema in CLAUDE.md. If the value is not listed, flag it and suggest the nearest valid option before writing. If no schema is defined, accept any key=value pair.
 - After writing or updating a description or acceptance criteria, cross-reference the content against the label schema descriptions and proactively offer label suggestions. One suggestion per key, only when confident.
 - `Size:` is a relative estimate for backlog prioritization. Do not infer or suggest values — only set it when the user provides one.
-- When an epic has `Repository:` set, the repo is expected as a sibling folder next to the Fabric instance, named after the repository slug (e.g. `https://github.com/org/sepsis-model` → `../sepsis-model`). When the user asks about implementation status, code structure, recent commits, or technical details for that epic, check whether the sibling folder exists and read from it on request. Do not read the repo proactively on every query. If the folder is absent, surface this clearly: "This epic has a linked repository (github.com/org/repo) but it isn't cloned locally."
+- When an epic has `Repository:` set, the repo is expected as a sibling folder next to the Fabric instance, named after the repository slug (e.g. `https://github.com/org/sepsis-model` → `../sepsis-model`). When the user asks about implementation status, code structure, recent commits, or technical details for that epic, check whether the sibling folder exists and read from it on request. Do not read the repo proactively on every query. If the folder is absent, surface this clearly: "This epic has a linked repository (github.com/org/repo) but it isn't cloned locally." When `Repository Path:` is also set, scope all repo reads to `<sibling-folder>/<repository-path>` and filter git log operations with `-- <repository-path>` to limit commits to those touching that path.
 
 Classification, inbox refinement, assignment recommendations, and reclassification guidance are in the backlog-refinement skill.
 
@@ -379,7 +380,7 @@ When promoting a request to an epic:
 1. **Create the epic** under `backlog/epics/` using the epic template.
 2. **Carry forward** the request's description as the epic's description. It can be refined later during backlog breakdown.
 3. **Carry forward the External URL** if the request already has one (e.g. an ADO epic link). The backlog epic inherits this link.
-4. **Carry forward the Repository** if the request has a `Repository:` field. Copy the value verbatim to the epic's `Repository:` property.
+4. **Carry forward the Repository** if the request has a `Repository:` field. Copy the value verbatim to the epic's `Repository:` property. If the request also has a `Repository Path:` field, carry that forward as well.
 5. **Carry forward Labels** if the request has a `Labels:` field. Copy the value verbatim to the epic's `Labels:` property. Validate each label value against the backlog label schema; flag any mismatches and offer to reconcile before writing.
 6. **Link back to the request** in the epic's Related Items section (e.g. "Originated from request R-044").
 7. **Write the cross-reference back to the request.** Add or update the `Backlog Epic:` field in the request's header to point to the new epic ID. Include this in the confirmation proposal in step 9.
@@ -395,7 +396,7 @@ Use this path when the request is feature-scale — it fits within an existing e
 1. **Scan `backlog/epics/` for Active epics** and present the list to the user. This is proactive — surface what already exists so the user can place the feature correctly and avoid creating unnecessary epics. If the user indicates that none of the existing epics are appropriate, suggest the epic promotion path instead.
 2. **User selects the parent epic.**
 3. **Carry forward** the request's description as the feature's description. It can be refined later.
-4. **Carry forward the External URL**, **Repository**, and **Labels** from the request using the same rules as epic promotion above.
+4. **Carry forward the External URL**, **Repository**, **Repository Path**, and **Labels** from the request using the same rules as epic promotion above.
 5. **Link back to the request** in the feature's Related Items section (e.g. "Originated from request R-044").
 6. **Write the cross-reference back to the request.** Add or update the `Backlog Feature:` field in the request's header to point to the new feature ID. Include this in the confirmation proposal in step 8.
 7. **Do not change the request's triage state.**

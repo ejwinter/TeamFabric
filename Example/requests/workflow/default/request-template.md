@@ -19,6 +19,7 @@ Effort: [hours of planning/discovery work invested in this request — populated
 Engagement Model: [Not Set | Full-Service | Collaborative | Advisory]
 External: [None | e.g., ADO Epic #1234 — https://dev.azure.com/org/project/_workitems/edit/1234]
 Repository: [optional — git remote URL of the working repository for this engagement, e.g. https://github.com/org/repo]
+Repository Path: [optional — subfolder within the repository where this engagement's work lives, relative to repo root without a leading slash, e.g. initiatives/project-name]
 Labels: [optional, comma-separated key=value pairs matching the team's label schema, e.g. service-type=data-extraction]
 
 ### Requestor Details

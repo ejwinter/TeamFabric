@@ -36,6 +36,7 @@ Read `products/` to identify products this member is active on. For each product
 1. Check the product's `product.md` for a `Repo:` field containing a local path or a remote URL that resolves to a local clone.
 2. If a discoverable repo path exists and is accessible:
    - Run: `git log --author=<member-email> --since=<last-standup-date> --oneline`
+   - If the product or a linked entity has a `Repository Path:` set, append `-- <repository-path>` to scope the log to commits touching that path only.
    - Use the date from `discuss-yesterday.md` as `--since`. If no prior standup exists, use 2 days ago as a fallback.
    - If commits are found, record the product name and a brief summary of the commits (message lines only — do not read diffs).
 3. If no `Repo:` field or the path is not accessible, skip silently.
