@@ -29,3 +29,7 @@ Part of epic: Operational Reporting V2
 ## Items this depends on
 
 Department KPI Feeds — catalog needs standardized metrics to index.
+
+## Child Summary
+
+[Auto-maintained by /rollup-backlog. Summary of child work items and their status.]

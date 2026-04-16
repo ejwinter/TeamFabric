@@ -29,3 +29,7 @@ Part of epic: EHR Pipeline Modernization
 ## Items this depends on
 
 None — can proceed independently of FHIR and streaming work.
+
+## Child Summary
+
+[Auto-maintained by /rollup-backlog. Summary of child work items and their status.]

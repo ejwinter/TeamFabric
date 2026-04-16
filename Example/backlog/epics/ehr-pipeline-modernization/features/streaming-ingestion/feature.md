@@ -29,3 +29,7 @@ Part of epic: EHR Pipeline Modernization
 ## Items this depends on
 
 FHIR R4 Support — streaming events will use FHIR format.
+
+## Child Summary
+
+[Auto-maintained by /rollup-backlog. Summary of child work items and their status.]
