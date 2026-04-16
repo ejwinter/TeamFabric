@@ -311,7 +311,7 @@ A match is confident when the agent would naturally reach for the template given
 - The statuses, types, and scoping definitions above are defaults. Teams can override any of these in the "How We Work" section of their constitution (CLAUDE.md). When custom values are defined there, use those instead of the defaults.
 - When creating any backlog entity (epic, feature, work item, task), generate an ID following the convention in the Entity IDs section above (or the team's custom convention if defined). Propose the generated ID to the user before writing so it can be adjusted.
 - When creating a backlog entity, check `backlog/templates/` for applicable team templates before drafting. See the Team Templates section for matching, suggestion, and application rules.
-- Backlog entities are structural and protected by meta mode.
+- Backlog entity **structure** is protected by meta mode: removing, renaming, or re-scoping epics and features requires meta mode. Creating new backlog entities, state transitions on features, and Child Summary section updates are **not** structural — they do not require meta mode, consistent with how `/transition` already treats work items.
 - When creating a new feature, check if it should reference an existing product (if Product module is enabled).
 - Status rollup: when all child entities are complete, suggest updating the parent's status.
 - Do not create backlog entities autonomously. Propose the entity and wait for confirmation.
