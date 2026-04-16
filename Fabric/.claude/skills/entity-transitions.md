@@ -190,3 +190,26 @@ When invoked implicitly, identify the target entity and desired state from conte
 - Be direct about issues but not alarmist. A warning is informational; the user decides whether to proceed.
 - Do not repeat the same concern multiple times in the same transition.
 - Keep confirmation prompts short. The user has already seen the findings.
+
+---
+
+## Post-Transition Commit Offer
+
+After all cascade steps are resolved and any rollup offer has been handled, offer to commit the Fabric state changes:
+
+```
+Transition complete. Commit?
+  worklog: [verb] [entity-type] [entity-slug]
+  e.g. worklog: close feature fhir-r4-parser-260315
+       worklog: activate work-item adt-event-mapping
+       worklog: remove epic ehr-pipeline-modernization
+
+Commit with this message? (yes / edit / skip)
+```
+
+- **verb**: `activate`, `resolve`, `close`, or `remove` — matching the transition taken.
+- **entity-type**: `epic`, `feature`, `work-item`, or `task` — singular, hyphenated.
+- **entity-slug**: the folder name (slug) of the entity.
+- If the user chooses "edit", show the proposed message and let them revise it, then commit.
+- After committing, ask: "Push to remote? (yes / no)"
+- Stage only the files changed during this transition: the entity file, any cascaded files, and any rolled-up parent. Do not stage unrelated changes.
