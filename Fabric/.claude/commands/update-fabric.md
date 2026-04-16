@@ -68,8 +68,10 @@ For each recommendation, briefly explain the new capability and what the team co
 
 ### Stakeholder Profiles
 
-Check if `team/team.md` has a `## Stakeholders` table with entries AND `team/stakeholders/` either doesn't exist or has no profile directories.
+1. Read `team/team.md` and collect every stakeholder name from the `## Stakeholders` table.
+2. For each name, check whether `team/stakeholders/<name>/profile.md` exists.
+3. Build a list of names that have no profile file.
 
-If so, suggest: "Stakeholder profile directories are now supported at `team/stakeholders/<name>/profile.md`. For stakeholders who are closely engaged with your team, a profile can capture communication preferences, areas of expertise, and an ingestion context log. Based on your current stakeholders table, candidates worth considering: [list names from the table]. You can create profiles via `/meta`."
+If there are any stakeholders without profiles, suggest: "Stakeholder profile directories are now supported at `team/stakeholders/<name>/profile.md`. For stakeholders who are closely engaged with your team, a profile can capture communication preferences, areas of expertise, and an ingestion context log. The following stakeholders do not yet have profiles: [list only the missing names]. You can create profiles via `/meta`."
 
-If `team/stakeholders/` already has profiles, no recommendation needed.
+If every stakeholder already has a profile, or if the `## Stakeholders` table is absent or empty, output nothing for this section.
