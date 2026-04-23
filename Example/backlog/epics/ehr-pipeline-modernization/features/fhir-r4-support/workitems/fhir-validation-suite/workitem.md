@@ -2,11 +2,12 @@
 
 ## Properties
 
-- State: New
+- State: Active
 - Type: Story
-- Iteration:
+- Iteration: 260415-260428
 - External URL:
-- Assigned to:
+- Assigned to: marcus.chen@riverdale.org
+- Blocked: Yes
 
 ## Description
 
@@ -25,3 +26,11 @@ None.
 ## Items this depends on
 
 FHIR Resource Parser.
+
+## Blockers
+
+### 2026-04-18 US Core profile definitions not yet available in test environment
+- **Flagged by:** Marcus Chen
+- **Cause:** External — waiting on platform team to publish US Core profile bundle to the validation sandbox
+- **Follow-up:** 2026-04-25 — checking back with platform team
+- **Status:** Active

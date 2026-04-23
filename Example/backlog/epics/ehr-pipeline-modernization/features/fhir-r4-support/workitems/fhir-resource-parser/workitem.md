@@ -4,7 +4,7 @@
 
 - State: Active
 - Type: Story
-- Iteration: Sprint 2026-08
+- Iteration: 260415-260428
 - External URL:
 - Assigned to: marcus.chen@riverdale.org
 
