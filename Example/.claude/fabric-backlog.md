@@ -410,6 +410,7 @@ After promotion, the feature is a normal backlog item under its parent epic — 
 |---------|-------------|
 | /refine | Enter a backlog refinement conversation. Accepts an entity target, inbox item, or request ID. |
 | /rollup-backlog | Refresh Child Summary sections on epics and features. |
+| /personal-backlog | Generate a personal work queue for the current user, filtered to the current iteration if configured. |
 
 ## Skills
 
