@@ -22,6 +22,16 @@ Valid day names: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.
 
 When `Schedule:` is set, the `standup-report` skill uses it to determine which members are expected to have checked in for the current cycle, rather than treating any gap as a missing update.
 
+Teams may also configure section label terminology using the `Terminology:` key. This is useful for teams that meet on a weekly cadence, where "Yesterday" and "Today" don't match how members think about the check-in period:
+
+```markdown
+### Standup
+Schedule: Thursday
+Terminology: Use "Since Last Week" and "This Next Week" instead of "Yesterday" and "Today".
+```
+
+`Terminology:` is a free-form instruction. The agent interprets it to derive the two section labels and applies them throughout the standup conversation and written record. Teams that do not set `Terminology:` default to "Yesterday" and "Today".
+
 ## Directory Structure
 
 ```
@@ -62,6 +72,17 @@ Members who have not run `/standup-discussion` since the last team standup are n
 
 When a `Schedule:` is configured, a member is only considered missing for a cycle if at least one scheduled standup day has passed since the last team standup. A gap that falls entirely between scheduled days is expected, not a missing update.
 
+### Standup Terminology
+
+When `Terminology:` is set in the `### Standup` config, both `/standup-discussion` and `standup-report` read it at the start of each session and derive two section labels — the "yesterday" label (what was done since the last standup) and the "today" label (what will be done until the next standup).
+
+The labels are applied consistently:
+- Section headers in `discuss-today.md` use the configured labels instead of "Yesterday" and "Today"
+- The conversation uses the configured labels in questions and prompts
+- Per-member summaries in `standup-today.md` use the configured labels in the bold summary lines
+
+Teams that do not set `Terminology:` see no change — "Yesterday" and "Today" remain the defaults.
+
 ### Member File Lifecycle
 
 - `discuss-today.md` is created or overwritten each time a member completes `/standup-discussion`.
@@ -100,6 +121,8 @@ Each `discuss-today.md` uses this structure:
 ## Notes
 [Any additional context from the conversation — omit section if none]
 ```
+
+When the team has configured `Terminology:` in their CLAUDE.md, the `## Yesterday` and `## Today` headers are replaced with the team's preferred labels (e.g., `## Since Last Week` and `## This Next Week`). All other sections remain unchanged.
 
 ### Backlog Notes from Standup
 
