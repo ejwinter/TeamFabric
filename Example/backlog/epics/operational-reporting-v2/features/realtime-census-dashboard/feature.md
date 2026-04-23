@@ -29,3 +29,7 @@ Part of epic: Operational Reporting V2
 ## Items this depends on
 
 Depends on Streaming Ingestion feature from EHR Pipeline Modernization epic.
+
+## Child Summary
+
+[Auto-maintained by /rollup-backlog. Summary of child work items and their status.]

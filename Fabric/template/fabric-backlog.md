@@ -94,6 +94,7 @@ Properties:
 - Priority: [optional 1(lowest)-5(highest)]
 - Size: [optional, relative size estimate — any numeric value or ?. Fibonacci sequence (1, 2, 3, 5, 8, 13, 21) is conventional but not enforced. Distinct from Effort and task hour fields.]
 - Area: [optional area path representing a product or service line]
+- Assigned to: [optional — email of the team member primarily responsible for this feature]
 - Effort: [optional, direct hours at the feature level — refinement, design, or coordination work not captured in child work items; also used by teams that track at the feature level without breaking down further]
 - Labels: [optional, comma-separated key=value pairs e.g. service-type=data-extraction]
 
@@ -410,6 +411,7 @@ After promotion, the feature is a normal backlog item under its parent epic — 
 |---------|-------------|
 | /refine | Enter a backlog refinement conversation. Accepts an entity target, inbox item, or request ID. |
 | /rollup-backlog | Refresh Child Summary sections on epics and features. |
+| /personal-backlog | Generate a personal work queue for the current user, filtered to the current iteration if configured. |
 
 ## Skills
 

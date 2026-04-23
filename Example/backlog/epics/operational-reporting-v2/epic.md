@@ -21,3 +21,7 @@ Impacts product: Operational Dashboards
 ## Items this depends on
 
 Partially depends on EHR Pipeline Modernization — streaming ingestion enables real-time census.
+
+## Child Summary
+
+[Auto-maintained by /rollup-backlog. Summary of child features and their status.]
