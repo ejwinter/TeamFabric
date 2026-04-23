@@ -11,6 +11,7 @@
 - Duration: 3.5 months
 - Priority: 4
 - Area: Clinical Data Lake
+- Assigned to: marcus.chen@riverdale.org
 - Labels: service-type=data-extraction, data-domain=clinical, security-sensitive=true
 
 ## Description
