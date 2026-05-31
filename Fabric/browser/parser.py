@@ -24,6 +24,10 @@ PROP_LINE_RE = re.compile(r"^-?\s*([^:\n]+?):\s*(.*?)\s*$", re.MULTILINE)
 UNSET = {"", "none", "tbd", "not set", "n/a", "na", "—", "-"}
 CLOSED_STATES = {"closed", "removed"}
 
+_GRAVESTONE_TITLE_RE = re.compile(r"^#\s+(.*?)\s+—\s+Archived\s+\d{4}-\d{2}-\d{2}\s*$", re.MULTILINE)
+_TERMINATED_RE = re.compile(r"^Terminated:\s*(\S.*?)\s*$", re.MULTILINE)
+_STATE_AT_ARCHIVE_RE = re.compile(r"^State at archive:\s*(\S.*?)\s*$", re.MULTILINE)
+
 
 # ---------------------------------------------------------------------------
 # Low-level helpers
@@ -302,6 +306,45 @@ def collect_requests(repo_root: Path) -> list[dict]:
         e["id"] = req_md.parent.name
         reqs.append(e)
     return reqs
+
+
+def parse_gravestone(path: Path, repo_root: Path, kind: str) -> dict:
+    """Parse a gravestone (archive) file into a summary dict."""
+    text = _read(path)
+    tm = _GRAVESTONE_TITLE_RE.search(text)
+    raw_title = tm.group(1).strip() if tm else path.stem
+    title = re.sub(r"^R-\d+:\s*", "", raw_title)
+    sm = _STATE_AT_ARCHIVE_RE.search(text)
+    state = sm.group(1).strip() if sm else "archived"
+    term_m = _TERMINATED_RE.search(text)
+    terminated = term_m.group(1).strip() if term_m else ""
+    props = parse_properties(text)
+    desc = _first_paragraph(text, "Summary", "Description")
+    return {
+        "id": path.stem,
+        "kind": kind,
+        "title": title,
+        "state": state,
+        "terminated": terminated,
+        "path": path.relative_to(repo_root).as_posix(),
+        "properties": props,
+        "desc": desc,
+        "dates": {"start": terminated, "target": ""},
+    }
+
+
+def collect_archived_epics(repo_root: Path) -> list[dict]:
+    archive_dir = repo_root / "backlog" / "archive"
+    if not archive_dir.exists():
+        return []
+    return [parse_gravestone(md, repo_root, "archived-epic") for md in sorted(archive_dir.glob("*.md"))]
+
+
+def collect_archived_requests(repo_root: Path) -> list[dict]:
+    archive_dir = repo_root / "requests" / "archive"
+    if not archive_dir.exists():
+        return []
+    return [parse_gravestone(md, repo_root, "archived-request") for md in sorted(archive_dir.glob("*.md"))]
 
 
 def parse_all(repo_root: Path) -> dict:

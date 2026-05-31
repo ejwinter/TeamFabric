@@ -62,6 +62,7 @@ If a `## Fabric GC` table is found, use its values to override the defaults belo
 | Work Item | `Closed`, `Removed` | 90 days | Delete directory |
 | Task | `Closed`, `Removed` | 90 days | Delete directory |
 | Inbox Item | Any (age from file mtime) | 90 days | Delete file |
+| Staging file | Any (age from file mtime) | 90 days | Delete file |
 | Standup log | Date in filename | 90 days | Delete file |
 | Member discuss-log | Date in filename | 90 days | Delete file |
 | Retro folder | `Status: Closed` + `Closed:` date | 90 days | Delete directory |
@@ -86,6 +87,8 @@ Identify all artifacts past their retention threshold.
 **Tasks** — scan all `*/tasks/*/task.md` files. Check `State:` and `Terminated:`.
 
 **Inbox Items** — scan `backlog/inbox/*.md`. Use file mtime as the age.
+
+**Staging files** — scan `staging/` for any files (excluding `README.md`). Use file mtime as the age.
 
 **Standup logs** — scan `team/standup/standup-log/YYYY-MM-DD.md`. Parse date from filename. Age = today − filename date.
 
@@ -169,6 +172,9 @@ Files: team/standup/standup-log/ — N files, date range YYYY-MM-DD to YYYY-MM-D
 | Retro | Closed | Age |
 |-------|--------|-----|
 
+### Staging Files (N)
+N files older than 90 days in staging/.
+
 ### Inbox Items (N)
 N files older than 90 days.
 
@@ -215,6 +221,7 @@ For each eligible epic:
 2. Build the gravestone file (see format below).
 3. Write gravestone to `backlog/archive/<slug>.md`. Create the directory if needed.
 4. Delete the epic's source directory: `backlog/epics/<slug>/` (including all descendant features, work items, and tasks).
+5. Cross-reference cleanup: search active requests for any `Backlog Epic:` or `Backlog Feature:` line referencing this epic's slug. For each match, remove or blank that line and note the request ID in the Final Report.
 
 **Epic gravestone format:**
 
@@ -247,6 +254,7 @@ For each eligible request:
 1. Build the gravestone file.
 2. Write to `requests/archive/R-NNN.md`. Create the directory if needed.
 3. Delete the request's source directory: `requests/R-NNN/`.
+4. Cross-reference cleanup: if the request's Properties block contains `Backlog Epic:` or `Backlog Feature:`, check whether that epic/feature still exists in the active backlog. If it does, remove the corresponding `Request:` back-reference on that entity and note the change in the Final Report.
 
 **Request gravestone format:**
 
@@ -362,6 +370,10 @@ Delete each eligible `standup-log/YYYY-MM-DD.md` and `discuss-log/YYYY-MM-DD.md`
 
 Delete each eligible `team/retros/<retro-slug>/` directory in full.
 
+### Deleting Staging Files
+
+Delete each eligible file in `staging/` (never delete `staging/README.md`).
+
 ### Deleting Inbox Items
 
 Delete each eligible file in `backlog/inbox/`.
@@ -399,6 +411,7 @@ Do not commit automatically. The user commits.
 ## Notes
 
 - The `output/` directory is gitignored in deployed instances. The report is ephemeral.
-- Never touch: `CLAUDE.md`, `.claude/fabric-*.md`, `team/team.md`, `staging/`, `requests/workflow/`, `backlog/archive/`, `requests/archive/`, `team/archive/`, `products/archive/`, `output/`.
+- Never touch: `CLAUDE.md`, `.claude/fabric-*.md`, `team/team.md`, `requests/workflow/`, `backlog/archive/`, `requests/archive/`, `team/archive/`, `products/archive/`, `output/`.
 - `discuss-today.md`, `discuss-yesterday.md`, `standup-today.md`, `standup-yesterday.md` are managed by their modules — do not touch.
 - If `output/` does not exist, create it. Do not create a `.gitignore` entry — that should already exist in a properly initialized instance.
+- **Incomplete Descendants (known behavior):** If features or work items under an epic were deleted in a prior 90-day cleanup run before the epic reached its 1-year archive threshold, the Descendants section of the epic's gravestone will only list children still present at archive time. The git history for the deleted children remains accessible via `git log -- backlog/epics/<slug>/features/`. This is expected — note it in the Final Report if it occurs.

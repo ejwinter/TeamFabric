@@ -69,6 +69,24 @@ export interface GitResult {
 
 export type SearchResult = BacklogEntity & { snippet: string };
 
+export interface ArchivedItem {
+  id: string;
+  kind: 'archived-epic' | 'archived-request';
+  title: string;
+  state: string;
+  terminated: string;
+  path: string;
+  properties: Record<string, string>;
+  desc: string;
+  dates: Dates;
+}
+
+export interface ArchiveSummary {
+  epics: ArchivedItem[];
+  requests: ArchivedItem[];
+  total: number;
+}
+
 /** Flat row types used by ItemListComponent */
 export type ListRow =
   | { type: 'epic-header'; epic: Epic }

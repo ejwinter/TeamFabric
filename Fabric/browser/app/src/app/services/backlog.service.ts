@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, shareReplay, Subject, switchMap, startWith } from 'rxjs';
 import {
-  BacklogTree, Stats, ItemDetail, GitResult, SearchResult
+  BacklogTree, Stats, ItemDetail, GitResult, SearchResult, ArchiveSummary
 } from '../models/backlog.models';
 
 @Injectable({ providedIn: 'root' })
@@ -28,6 +28,10 @@ export class BacklogService {
 
   saveItem(path: string, content: string): Observable<ItemDetail> {
     return this.http.put<ItemDetail>('/api/item', { path, content });
+  }
+
+  getArchive(): Observable<ArchiveSummary> {
+    return this.http.get<ArchiveSummary>('/api/archive');
   }
 
   search(q: string, includeClosed = false): Observable<SearchResult[]> {

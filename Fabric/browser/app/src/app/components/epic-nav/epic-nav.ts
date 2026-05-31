@@ -1,10 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs/operators';
 import { BacklogService } from '../../services/backlog.service';
 import { FilterService } from '../../services/filter.service';
 import { StateBadge } from '../state-badge/state-badge';
@@ -12,8 +14,8 @@ import { Epic } from '../../models/backlog.models';
 
 @Component({
   selector: 'app-epic-nav',
-  imports: [CommonModule, MatListModule, MatIconModule, MatDividerModule,
-            MatProgressSpinnerModule, StateBadge],
+  imports: [CommonModule, RouterLink, RouterLinkActive, MatListModule, MatIconModule,
+            MatDividerModule, MatProgressSpinnerModule, StateBadge],
   template: `
     @if (tree(); as t) {
       <mat-nav-list dense>
@@ -47,6 +49,16 @@ import { Epic } from '../../models/backlog.models';
             <span class="epic-dot" [style.background]="epicColor(epic)" matListItemIcon></span>
             <span matListItemTitle class="epic-title">{{ epic.title }}</span>
             <app-state-badge [state]="epic.state" matListItemMeta />
+          </mat-list-item>
+        }
+
+        @if (archiveTotal() > 0) {
+          <mat-divider />
+          <mat-list-item class="nav-item archive-item" routerLink="/archive" routerLinkActive="active"
+                         (click)="filter.selectAll()">
+            <mat-icon matListItemIcon>inventory_2</mat-icon>
+            <span matListItemTitle>Archived</span>
+            <span matListItemMeta class="count">{{ archiveTotal() }}</span>
           </mat-list-item>
         }
       </mat-nav-list>
@@ -92,6 +104,8 @@ import { Epic } from '../../models/backlog.models';
       border-radius: 8px;
       padding: 1px 6px;
     }
+    .archive-item { opacity: 0.7; }
+    .archive-item:hover { opacity: 1; }
     .loading { display: flex; justify-content: center; padding: 24px; }
     mat-nav-list { padding: 0; }
   `],
@@ -101,6 +115,7 @@ export class EpicNav {
   filter = inject(FilterService);
 
   tree = toSignal(this.svc.getTree());
+  archiveTotal = toSignal(this.svc.getArchive().pipe(map(a => a.total)), { initialValue: 0 });
 
   private readonly EPIC_COLORS = [
     '#5e6ad2', '#26b5ce', '#4cb782', '#f2994a',

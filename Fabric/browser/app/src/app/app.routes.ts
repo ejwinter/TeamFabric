@@ -16,5 +16,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./components/sprint-board/sprint-board').then(m => m.SprintBoard),
   },
+  {
+    path: 'archive',
+    loadComponent: () =>
+      import('./components/archive-view/archive-view').then(m => m.ArchiveView),
+  },
   { path: '**', redirectTo: '' },
 ];

@@ -139,6 +139,17 @@ def api_search(q: str = Query(default=""), include_closed: str = Query(default="
     return bp.search_all(_repo_root, q.strip(), include_closed == "1")
 
 
+@app.get("/api/archive")
+def api_archive():
+    archived_epics = bp.collect_archived_epics(_repo_root)
+    archived_requests = bp.collect_archived_requests(_repo_root)
+    return {
+        "epics": archived_epics,
+        "requests": archived_requests,
+        "total": len(archived_epics) + len(archived_requests),
+    }
+
+
 @app.post("/api/git/commit")
 def api_git_commit(body: CommitBody):
     if not body.message.strip():
