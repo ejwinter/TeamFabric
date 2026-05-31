@@ -1,0 +1,40 @@
+<div class="search-view">
+  <div class="search-header">
+    <mat-icon>search</mat-icon>
+    <h2>Results for "{{ query() }}"</h2>
+    @if (!loading()) {
+      <span class="count">{{ results().length }} match{{ results().length !== 1 ? 'es' : '' }}</span>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="loading"><mat-spinner diameter="32" /></div>
+  }
+
+  @if (!loading() && results().length === 0 && query()) {
+    <div class="empty-state">
+      <mat-icon>search_off</mat-icon>
+      <p>No results for "{{ query() }}"</p>
+      @if (!filter.showClosed()) {
+        <p class="hint">Try enabling "Show closed" in the toolbar to include closed items.</p>
+      }
+    </div>
+  }
+
+  <div class="results-list">
+    @for (r of results(); track r.path) {
+      <div class="result-row" (click)="openItem(r)">
+        <div class="result-header">
+          <span class="kind-chip">{{ KIND_LABELS[r.kind] }}</span>
+          <h3 class="result-title">{{ r.title }}</h3>
+          <app-state-badge [state]="r.state" />
+        </div>
+        @if (r.snippet) {
+          <p class="snippet" [innerHTML]="highlightSnippet(r.snippet)"></p>
+        }
+        <p class="result-path muted">{{ r.path }}</p>
+      </div>
+      <mat-divider />
+    }
+  </div>
+</div>

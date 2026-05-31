@@ -1,0 +1,55 @@
+<div class="app-shell">
+
+  <!-- Top toolbar -->
+  <mat-toolbar class="toolbar">
+    <button mat-icon-button (click)="leftNav.toggle()" matTooltip="Toggle nav">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="app-title">Backlog Browser</span>
+
+    <form class="search-form" (submit)="doSearch($event)">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput [(ngModel)]="searchQuery" name="q"
+               placeholder="Search backlog…" autocomplete="off">
+      </mat-form-field>
+    </form>
+
+    <span class="spacer"></span>
+
+    <button mat-button [class.active-toggle]="filter.showClosed()"
+            (click)="toggleClosed()"
+            matTooltip="Show or hide closed and removed items">
+      <mat-icon>{{ filter.showClosed() ? 'visibility' : 'visibility_off' }}</mat-icon>
+      {{ filter.showClosed() ? 'Closed visible' : 'Hide closed' }}
+    </button>
+
+    <button mat-icon-button (click)="refresh()" matTooltip="Refresh backlog data">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <!-- Three-panel body -->
+  <mat-sidenav-container class="sidenav-container">
+
+    <mat-sidenav #leftNav mode="side" opened class="left-nav">
+      <app-epic-nav />
+    </mat-sidenav>
+
+    <mat-sidenav #detailDrawer position="end" mode="over" class="detail-drawer"
+                 (closedStart)="onDrawerClosed()">
+      <app-item-detail-panel />
+    </mat-sidenav>
+
+    <mat-sidenav-content class="main-content">
+      <router-outlet />
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
+
+  <!-- Bottom git bar -->
+  <div class="git-bar-wrapper">
+    <app-git-actions />
+  </div>
+
+</div>

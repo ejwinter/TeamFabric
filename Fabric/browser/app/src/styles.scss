@@ -1,0 +1,53 @@
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$violet-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  background: #f4f5f7;
+  color: #1a1a2e;
+}
+
+:root {
+  --nav-width: 220px;
+  --detail-width: 440px;
+  --toolbar-height: 56px;
+  --git-bar-height: 52px;
+  --muted: #8a8f98;
+  --border: #e5e7eb;
+  --surface: #ffffff;
+  --hover-bg: #f0f1f5;
+  --active-bg: #ebebf5;
+  --accent: #5e6ad2;
+  --state-new-bg: #dbeafe;       --state-new-fg: #1d4ed8;
+  --state-active-bg: #dcfce7;    --state-active-fg: #15803d;
+  --state-resolved-bg: #f3e8ff;  --state-resolved-fg: #7e22ce;
+  --state-closed-bg: #f1f5f9;    --state-closed-fg: #64748b;
+  --state-removed-bg: #fce7f3;   --state-removed-fg: #9d174d;
+  --state-default-bg: #fefce8;   --state-default-fg: #a16207;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+.muted { color: var(--muted); }
+.entity-id {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-weight: 400;
+}

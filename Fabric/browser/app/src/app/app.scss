@@ -1,0 +1,84 @@
+:host {
+  display: block;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.toolbar {
+  flex-shrink: 0;
+  height: var(--toolbar-height) !important;
+  min-height: var(--toolbar-height) !important;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  gap: 8px;
+  color: #1a1a2e;
+  z-index: 100;
+  padding: 0 8px;
+}
+
+.app-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  margin-right: 8px;
+}
+
+.search-form {
+  flex: 1;
+  max-width: 400px;
+  display: flex;
+}
+.search-field {
+  width: 100%;
+  --mdc-outlined-text-field-container-height: 36px;
+}
+
+.spacer { flex: 1; }
+
+.active-toggle {
+  background: var(--active-bg) !important;
+  color: var(--accent) !important;
+}
+
+.sidenav-container {
+  flex: 1;
+  overflow: hidden;
+}
+
+.left-nav {
+  width: var(--nav-width);
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  overflow-y: auto;
+}
+
+.detail-drawer {
+  width: var(--detail-width);
+  border-left: 1px solid var(--border);
+  background: var(--surface);
+  overflow: hidden;
+  box-shadow: -4px 0 16px rgba(0,0,0,0.08);
+}
+
+.main-content {
+  background: #f4f5f7;
+  overflow-y: auto;
+}
+
+.git-bar-wrapper {
+  flex-shrink: 0;
+  height: var(--git-bar-height);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -1px 4px rgba(0,0,0,0.06);
+}

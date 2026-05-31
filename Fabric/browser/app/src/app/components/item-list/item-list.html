@@ -1,0 +1,105 @@
+<!-- Stats bar -->
+@if (stats(); as s) {
+  <div class="stats-bar">
+    <span>{{ s.epics }} epics</span>
+    <span class="dot">·</span>
+    <span>{{ s.features }} features</span>
+    <span class="dot">·</span>
+    <span>{{ s.items }} items</span>
+  </div>
+}
+
+<!-- Filter chips -->
+@if (allStates().length > 0 || allTypes().length > 0) {
+  <div class="filter-bar">
+    @if (allStates().length > 0) {
+      <span class="filter-label">State:</span>
+      @for (state of allStates(); track state) {
+        <button class="filter-chip" [class.active]="activeStates().has(state)"
+                (click)="toggleState(state)">{{ state }}</button>
+      }
+    }
+    @if (allTypes().length > 0) {
+      <span class="filter-sep"></span>
+      <span class="filter-label">Type:</span>
+      @for (type of allTypes(); track type) {
+        <button class="filter-chip" [class.active]="activeTypes().has(type)"
+                (click)="toggleType(type)">{{ type }}</button>
+      }
+    }
+  </div>
+}
+
+<mat-divider />
+
+<!-- Row list -->
+<div class="row-list">
+  @if (!tree()) {
+    <div class="loading"><mat-spinner diameter="32" /></div>
+  }
+
+  @for (row of rows(); track $index) {
+    @if (isEpicHeader(row)) {
+      <div class="epic-header-row">
+        <span class="epic-dot" [style.background]="'var(--accent)'"></span>
+        <span class="epic-header-title">{{ row.epic.title }}</span>
+        <app-state-badge [state]="row.epic.state" />
+      </div>
+    }
+    @if (isFeatureHeader(row)) {
+      <div class="feature-header-row">
+        <span class="feature-header-title">{{ row.feature.title }}</span>
+        <app-state-badge [state]="row.feature.state" />
+      </div>
+    }
+    @if (isWorkItem(row)) {
+      <div class="item-row" [class.selected]="isSelected(row)"
+           [class.closed]="filter.isClosed(row.item.state)"
+           (click)="openItem(row)">
+        <span class="priority-dot"
+              [style.background]="priorityColor(row.item)"
+              [matTooltip]="'Priority ' + (row.item.properties['Priority'] || '—')">
+        </span>
+        <div class="item-main">
+          <div class="item-title">{{ row.item.title }}</div>
+          <div class="item-sub">
+            <span class="breadcrumb">{{ row.epicTitle }} › {{ row.featureTitle }}</span>
+          </div>
+        </div>
+        <div class="item-meta">
+          <app-state-badge [state]="row.item.state" />
+          @if (row.item.properties['Type']) {
+            <span class="type-chip">{{ row.item.properties['Type'] }}</span>
+          }
+          @if (assigneeInitials(row.item)) {
+            <span class="assignee" [matTooltip]="row.item.properties['Assigned to']">
+              {{ assigneeInitials(row.item) | uppercase }}
+            </span>
+          }
+          @if (row.item.dates.target) {
+            <span class="date muted">{{ row.item.dates.target }}</span>
+          }
+        </div>
+      </div>
+    }
+    @if (isRequest(row)) {
+      <div class="item-row" [class.selected]="isSelected(row)" (click)="openItem(row)">
+        <span class="priority-dot" style="background: #6b7280"></span>
+        <div class="item-main">
+          <div class="item-title">{{ row.item.title }}</div>
+          <div class="item-sub"><span class="breadcrumb">Request · {{ row.item.id }}</span></div>
+        </div>
+        <div class="item-meta">
+          <app-state-badge [state]="row.item.state" />
+        </div>
+      </div>
+    }
+  }
+
+  @if (rows().length === 0 && tree()) {
+    <div class="empty-state">
+      <mat-icon>filter_list_off</mat-icon>
+      <p>No items match your filters</p>
+    </div>
+  }
+</div>

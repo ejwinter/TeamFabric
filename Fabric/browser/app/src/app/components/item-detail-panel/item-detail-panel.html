@@ -1,0 +1,101 @@
+@if (loading()) {
+  <div class="panel-loading"><mat-spinner diameter="32" /></div>
+}
+
+@if (!loading() && detail(); as d) {
+  <div class="panel-content">
+
+    <!-- Header -->
+    <div class="panel-header">
+      <div class="header-top">
+        <span class="kind-chip">{{ KIND_LABELS[d.kind] }}</span>
+        <div class="header-actions">
+          @if (!editing()) {
+            <button mat-icon-button (click)="startEdit()" matTooltip="Edit this item">
+              <mat-icon>edit</mat-icon>
+            </button>
+          }
+          <button mat-icon-button (click)="close()" matTooltip="Close">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <h2 class="item-title">{{ d.title }}</h2>
+      <div class="item-meta">
+        <span class="entity-id">{{ d.id }}</span>
+        <app-state-badge [state]="d.state" />
+      </div>
+
+      @if (breadcrumb.length > 1) {
+        <div class="breadcrumb">
+          @for (crumb of breadcrumb; track crumb; let last = $last) {
+            <span class="crumb">{{ crumb }}</span>
+            @if (!last) { <span class="crumb-sep">›</span> }
+          }
+        </div>
+      }
+    </div>
+
+    <mat-divider />
+
+    @if (!editing()) {
+      <!-- Properties -->
+      @if (orderedProps(d.properties).length > 0) {
+        <div class="props-section">
+          @for (prop of orderedProps(d.properties); track prop.key) {
+            <div class="prop-row">
+              <span class="prop-key">{{ prop.key }}</span>
+              <span class="prop-val">{{ prop.value }}</span>
+            </div>
+          }
+        </div>
+        <mat-divider />
+      }
+
+      <!-- Dates -->
+      @if (d.dates.start || d.dates.target) {
+        <div class="props-section">
+          @if (d.dates.start) {
+            <div class="prop-row">
+              <span class="prop-key">Start Date</span>
+              <span class="prop-val">{{ d.dates.start }}</span>
+            </div>
+          }
+          @if (d.dates.target) {
+            <div class="prop-row">
+              <span class="prop-key">Target Date</span>
+              <span class="prop-val">{{ d.dates.target }}</span>
+            </div>
+          }
+        </div>
+        <mat-divider />
+      }
+
+      <!-- Rendered markdown body -->
+      <div class="markdown-body" [innerHTML]="d.html"></div>
+
+    } @else {
+      <!-- Edit mode -->
+      <div class="edit-area">
+        <textarea class="edit-textarea" [(ngModel)]="editContent"
+                  placeholder="Edit markdown…" [disabled]="saving()"></textarea>
+        <div class="edit-actions">
+          <button mat-flat-button color="primary" (click)="saveEdit()" [disabled]="saving()">
+            @if (saving()) { <mat-spinner diameter="16" /> }
+            @else { Save }
+          </button>
+          <button mat-stroked-button (click)="cancelEdit()" [disabled]="saving()">Cancel</button>
+        </div>
+      </div>
+    }
+
+  </div>
+}
+
+@if (!loading() && !detail()) {
+  <div class="empty-state">
+    <mat-icon>article</mat-icon>
+    <p>Select an item to view details</p>
+  </div>
+}

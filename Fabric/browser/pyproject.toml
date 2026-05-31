@@ -1,0 +1,16 @@
+[project]
+name = "backlog-browser"
+version = "0.1.0"
+description = "Local web app for browsing and editing the TeamFabric backlog"
+authors = [
+    {name = "Eric Winter", email = "Winter.Eric@mayo.edu"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "flask>=3.0",
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
