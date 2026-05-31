@@ -220,7 +220,7 @@ def main() -> None:
 
     ap = argparse.ArgumentParser(description="Backlog Browser — local web server")
     ap.add_argument("--root", default=None, help="Path to team repo root (auto-detected if omitted)")
-    ap.add_argument("--port", type=int, default=5000, help="Port to listen on (default: 5000)")
+    ap.add_argument("--port", type=int, default=8082, help="Port to listen on (default: 8082)")
     ap.add_argument("--no-open", action="store_true", help="Do not open a browser automatically")
     args = ap.parse_args()
 
@@ -238,7 +238,7 @@ def main() -> None:
         f"Work items: {stats['workitems']} | "
         f"Tasks: {stats['tasks']}"
     )
-    print(f"  URL:   http://localhost:{args.port}")
+    print(f"  URL:   http://127.0.0.1:{args.port}")
     print()
 
     if not args.no_open:
@@ -247,12 +247,12 @@ def main() -> None:
         def _open():
             import time
             time.sleep(1.2)
-            webbrowser.open(f"http://localhost:{args.port}")
+            webbrowser.open(f"http://127.0.0.1:{args.port}")
 
         threading.Thread(target=_open, daemon=True).start()
 
     print("Press Ctrl+C to stop.\n")
-    app.run(host="localhost", port=args.port, debug=False)
+    app.run(host="127.0.0.1", port=args.port, debug=False)
 
 
 if __name__ == "__main__":

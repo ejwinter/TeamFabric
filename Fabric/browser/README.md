@@ -28,14 +28,19 @@ poetry install        # first time only — installs Flask
 poetry run python server.py
 ```
 
-Your browser opens automatically at **http://localhost:5000**.
+Your browser opens automatically at **http://127.0.0.1:8082**.
+
+> The app uses the `127.0.0.1` IP rather than the hostname `localhost` on purpose:
+> some corporate web proxies (e.g. Zscaler) intercept `localhost` and return an
+> "Access to localhost was denied / HTTP ERROR 403" page, while the loopback IP is
+> bypassed. If you reach the app by typing the URL yourself, use `127.0.0.1`.
 
 Press `Ctrl+C` in the terminal to stop.
 
 ### Options
 
 ```
---port 8080      Use a different port (default: 5000)
+--port 8080      Use a different port (default: 8082)
 --no-open        Do not open the browser automatically
 --root /path     Point to a different repo root (auto-detected if omitted)
 ```
@@ -101,7 +106,7 @@ the Python API server:
 ```bash
 # Terminal 1 — Python API server (no static serving needed)
 cd backlog/browser
-poetry run python server.py --no-open --port 5000
+poetry run python server.py --no-open --port 8082
 
 # Terminal 2 — Angular dev server with proxy to API
 cd backlog/browser/app
@@ -112,13 +117,13 @@ Create `app/proxy.conf.json`:
 ```json
 {
   "/api": {
-    "target": "http://localhost:5000",
+    "target": "http://127.0.0.1:8082",
     "secure": false
   }
 }
 ```
 
-Then open http://localhost:4200.
+Then open http://127.0.0.1:4200.
 
 ---
 
