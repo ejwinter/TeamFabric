@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // .tool_response.filePath // empty'); case \"$f\" in /Users/WINTE/source/AIServices/TeamFabric/requests/*|/Users/WINTE/source/AIServices/TeamFabric/backlog/*) poetry -C /Users/WINTE/source/AIServices/TeamFabric/fabscripts run python /Users/WINTE/source/AIServices/TeamFabric/fabscripts/backlog_index.py ;; esac",
+            "statusMessage": "Regenerating backlog-index.md..."
+          }
+        ]
+      }
+    ]
+  }
+}
