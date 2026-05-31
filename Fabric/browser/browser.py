@@ -59,9 +59,8 @@ def build():
         )
         sys.exit(1)
 
-    if not (APP_DIR / "node_modules").exists():
-        print("→ npm install")
-        _run(npm, "install", cwd=APP_DIR)
+    print("→ npm install")
+    _run(npm, "install", cwd=APP_DIR)
 
     npx = shutil.which("npx") or "npx"
     print("→ ng build")
