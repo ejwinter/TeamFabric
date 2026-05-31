@@ -8,3 +8,4 @@ staging/*
 
 # Review output — ephemeral, not committed
 output/
+**/*.pyc
