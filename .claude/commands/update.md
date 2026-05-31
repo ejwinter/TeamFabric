@@ -22,11 +22,14 @@ The following framework-owned files are candidates for update:
 - `.claude/fabric-core.md` — always a candidate
 - `.claude/fabric-triage.md`, `fabric-product.md`, `fabric-backlog.md`, `fabric-scrum.md` — candidate only if the file already exists in the target (modules are not added silently)
 - All files under `.claude/commands/` and `.claude/skills/`
+- `fabscripts/` — always a candidate; copy the full directory from `Fabric/../fabscripts/` (backlog utility scripts)
+- `backlog/browser/` — candidate only if the directory already exists in the target (teams opt in; copy from `Fabric/browser/`)
 
 ### Never touch
 
 - `CLAUDE.md` — team-owned content
-- `team/`, `requests/`, `products/`, `backlog/`, `staging/` — team data
+- `team/`, `requests/`, `products/`, `staging/` — team data
+- `backlog/` team data — **exception:** `backlog/browser/` is framework code and is a candidate above
 - `.gitignore`, `.claude/fabric-source.md` — instance-specific config
 - `.claude/fabric-checksums.md` — rewritten as part of this command, not a candidate for source copy
 

@@ -35,12 +35,14 @@ When using a local clone, check whether it is behind the remote before applying 
 - `.claude/commands/` — all files replaced from `<source>/Fabric/.claude/commands/`
 - `.claude/skills/` — all files replaced from `<source>/Fabric/.claude/skills/`
 - `.claude/fabric-core.md` — always updated from `<source>/Fabric/template/fabric-core.md`
+- `fabscripts/` — always replaced from `<source>/fabscripts/` (backlog utility scripts)
 
-### Conditionally overwrite (only if the file already exists here)
+### Conditionally overwrite (only if the directory or file already exists here)
 - `.claude/fabric-triage.md`
 - `.claude/fabric-product.md`
 - `.claude/fabric-backlog.md`
 - `.claude/fabric-scrum.md`
+- `backlog/browser/` — replaced from `<source>/Fabric/browser/` (local web app for browsing the backlog; teams opt in by having this directory)
 
 ### Never touch
 - `CLAUDE.md`
@@ -48,7 +50,7 @@ When using a local clone, check whether it is behind the remote before applying 
 - `team/`
 - `requests/`
 - `products/`
-- `backlog/`
+- `backlog/` team data — **exception:** `backlog/browser/` is framework code and is listed above
 - `staging/`
 - `.gitignore`
 
