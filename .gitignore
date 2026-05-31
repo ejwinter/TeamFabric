@@ -9,3 +9,7 @@ staging/*
 # Review output — ephemeral, not committed
 output/
 **/*.pyc
+
+# Python virtual environments
+.venv/
+**/.venv/

@@ -7,12 +7,14 @@ No server required beyond your laptop — just Python and git.
 
 ## Prerequisites
 
-| Tool | Minimum version | Why |
-|------|----------------|-----|
-| Python | 3.12 | Required by TeamFabric |
-| [Poetry](https://python-poetry.org/docs/#installation) | 1.8+ | Manages the Python environment |
-| Node.js | 18+ | Required to build the Angular frontend (one-time setup) |
-| git | any | Required by TeamFabric; used by the Commit/Push buttons |
+| Tool | Who needs it | Why |
+|------|-------------|-----|
+| Python 3.12+ | Everyone | Runs the browser server |
+| git | Everyone | Required by TeamFabric; used by the Commit/Push buttons |
+| Node.js 18+ | Engineering only | Builds the Angular frontend (one-time; `dist/` is committed so others skip this) |
+| [Poetry](https://python-poetry.org/docs/#installation) | Engineering only | Optional — only needed for development workflows |
+
+`browser.py` installs Flask into a local `.venv` automatically on first run — no Poetry or manual `pip install` needed.
 
 ---
 
@@ -34,8 +36,8 @@ Your browser opens automatically at **http://127.0.0.1:8082**.
 Press `Ctrl+C` in the terminal to stop.
 
 `browser.py` handles everything automatically:
-- If `dist/` is missing and `npm` is available, it builds the Angular app first.
-- If Flask is not installed, it installs dependencies via Poetry before starting.
+- **First run only:** creates a `.venv` inside `backlog/browser/` and installs Flask via pip. This takes about 10 seconds and only happens once.
+- If `dist/` is missing and `npm` is available, it builds the Angular app first (engineering setup only).
 
 ### Options
 
