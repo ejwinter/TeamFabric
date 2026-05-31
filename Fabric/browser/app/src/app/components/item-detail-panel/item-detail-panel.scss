@@ -124,6 +124,29 @@
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
   hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 8px 0 12px;
+    font-size: 13px;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    text-align: left;
+  }
+  th {
+    background: var(--active-bg);
+    font-weight: 600;
+    color: #1a1a2e;
+  }
+  tr:nth-child(even) td { background: #f9fafb; }
+  blockquote {
+    margin: 8px 0;
+    padding: 4px 12px;
+    border-left: 3px solid var(--border);
+    color: var(--muted);
+  }
 }
 
 /* Edit mode */

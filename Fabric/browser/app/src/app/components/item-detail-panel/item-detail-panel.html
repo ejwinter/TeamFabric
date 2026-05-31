@@ -73,7 +73,7 @@
       }
 
       <!-- Rendered markdown body -->
-      <div class="markdown-body" [innerHTML]="d.html"></div>
+      <markdown class="markdown-body" [data]="d.raw" />
 
     } @else {
       <!-- Edit mode -->

@@ -8,6 +8,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MarkdownComponent } from 'ngx-markdown';
 import { BacklogService } from '../../services/backlog.service';
 import { FilterService } from '../../services/filter.service';
 import { StateBadge } from '../state-badge/state-badge';
@@ -18,7 +19,7 @@ import { ItemDetail } from '../../models/backlog.models';
   imports: [
     CommonModule, FormsModule, MatButtonModule, MatIconModule,
     MatProgressSpinnerModule, MatExpansionModule, MatDividerModule,
-    MatTooltipModule, StateBadge,
+    MatTooltipModule, StateBadge, MarkdownComponent,
   ],
   templateUrl: './item-detail-panel.html',
   styleUrl: './item-detail-panel.scss',
