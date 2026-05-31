@@ -74,12 +74,12 @@ def build():
 # ---------------------------------------------------------------------------
 
 def ensure_env():
-    """Ensure Flask is available; create a local .venv via pip if needed."""
+    """Ensure FastAPI + uvicorn are available; create a local .venv via pip if needed."""
     if not VENV_PYTHON.exists():
         print("First-time setup: creating local Python environment...")
         _run(sys.executable, "-m", "venv", str(VENV_DIR))
-        print("Installing Flask...")
-        _run(str(VENV_PIP), "install", "flask", "--quiet")
+        print("Installing dependencies...")
+        _run(str(VENV_PIP), "install", "fastapi", "uvicorn", "--quiet")
         print("Done.\n")
 
 
@@ -88,9 +88,10 @@ def ensure_env():
 # ---------------------------------------------------------------------------
 
 def launch():
-    # Fast path: Flask is already importable in this interpreter.
+    # Fast path: FastAPI + uvicorn are already importable in this interpreter.
     try:
-        import flask  # noqa: F401
+        import fastapi  # noqa: F401
+        import uvicorn  # noqa: F401
         sys.argv = [str(SERVER)] + sys.argv[1:]
         runpy.run_path(str(SERVER), run_name="__main__")
         return

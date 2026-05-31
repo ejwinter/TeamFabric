@@ -1,4 +1,4 @@
-"""Backlog Browser — local Flask server.
+"""Backlog Browser — local FastAPI server.
 
 Serves the pre-built Angular SPA and a JSON API that reads the team's
 backlog markdown files.  Use the launcher instead of running this directly:
@@ -12,14 +12,15 @@ Or pass --root explicitly:
 from __future__ import annotations
 
 import argparse
-import json
 import subprocess
 import sys
 import threading
 import webbrowser
 from pathlib import Path
 
-from flask import Flask, jsonify, request, send_from_directory
+from fastapi import FastAPI, Query
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from pydantic import BaseModel
 
 import parser as bp  # backlog parser
 
@@ -68,97 +69,97 @@ def safe_path(raw: str) -> Path | None:
 
 
 # ---------------------------------------------------------------------------
-# Flask app
+# Request body models
 # ---------------------------------------------------------------------------
 
-app = Flask(__name__, static_folder=None)
+class SaveItemBody(BaseModel):
+    path: str
+    content: str
+
+
+class CommitBody(BaseModel):
+    message: str
+
+
+# ---------------------------------------------------------------------------
+# FastAPI app
+# ---------------------------------------------------------------------------
+
+app = FastAPI(docs_url=None, redoc_url=None)
 
 
 # -- API routes ---------------------------------------------------------------
 
-@app.route("/api/backlog")
-def api_backlog():
-    refresh = request.args.get("refresh") == "1"
-    return jsonify(get_tree(refresh))
+@app.get("/api/backlog")
+def api_backlog(refresh: str = Query(default="0")):
+    return get_tree(refresh == "1")
 
 
-@app.route("/api/stats")
+@app.get("/api/stats")
 def api_stats():
-    return jsonify(bp.compute_stats(get_tree()))
+    return bp.compute_stats(get_tree())
 
 
-@app.route("/api/item", methods=["GET"])
-def api_item_get():
-    raw = request.args.get("path", "")
-    if not raw:
-        return jsonify({"error": "path required"}), 400
-    p = safe_path(raw)
+@app.get("/api/item")
+def api_item_get(path: str = Query(default="")):
+    if not path:
+        return JSONResponse({"error": "path required"}, status_code=400)
+    p = safe_path(path)
     if p is None or not p.exists():
-        return jsonify({"error": "not found"}), 404
+        return JSONResponse({"error": "not found"}, status_code=404)
     text = p.read_text(encoding="utf-8")
     kind = _infer_kind(p)
     entity = bp.parse_entity(p, _repo_root, kind)
     entity["html"] = bp.render_to_html(text)
     entity["raw"] = text
-    return jsonify(entity)
+    return entity
 
 
-@app.route("/api/item", methods=["PUT"])
-def api_item_put():
-    data = request.get_json(force=True)
-    raw = (data or {}).get("path", "")
-    content = (data or {}).get("content", "")
-    if not raw:
-        return jsonify({"error": "path required"}), 400
-    p = safe_path(raw)
+@app.put("/api/item")
+def api_item_put(body: SaveItemBody):
+    if not body.path:
+        return JSONResponse({"error": "path required"}, status_code=400)
+    p = safe_path(body.path)
     if p is None:
-        return jsonify({"error": "invalid path"}), 400
+        return JSONResponse({"error": "invalid path"}, status_code=400)
     if not p.exists():
-        return jsonify({"error": "file not found"}), 404
-    p.write_text(content, encoding="utf-8")
-    # Bust cache so next /api/backlog reflects the change
+        return JSONResponse({"error": "file not found"}, status_code=404)
+    p.write_text(body.content, encoding="utf-8")
     global _tree_cache
     _tree_cache = None
-    # Return the re-parsed entity
     kind = _infer_kind(p)
     entity = bp.parse_entity(p, _repo_root, kind)
-    entity["html"] = bp.render_to_html(content)
-    entity["raw"] = content
-    return jsonify(entity)
+    entity["html"] = bp.render_to_html(body.content)
+    entity["raw"] = body.content
+    return entity
 
 
-@app.route("/api/search")
-def api_search():
-    q = request.args.get("q", "").strip()
-    include_closed = request.args.get("include_closed", "0") == "1"
-    results = bp.search_all(_repo_root, q, include_closed)
-    return jsonify(results)
+@app.get("/api/search")
+def api_search(q: str = Query(default=""), include_closed: str = Query(default="0")):
+    return bp.search_all(_repo_root, q.strip(), include_closed == "1")
 
 
-@app.route("/api/git/commit", methods=["POST"])
-def api_git_commit():
-    data = request.get_json(force=True)
-    message = (data or {}).get("message", "").strip()
-    if not message:
-        return jsonify({"error": "commit message required"}), 400
+@app.post("/api/git/commit")
+def api_git_commit(body: CommitBody):
+    if not body.message.strip():
+        return JSONResponse({"error": "commit message required"}, status_code=400)
     try:
-        # Stage backlog and requests directories
         subprocess.run(
             ["git", "add", "backlog/", "requests/"],
             cwd=_repo_root, check=True, capture_output=True, text=True,
         )
         result = subprocess.run(
-            ["git", "commit", "-m", message],
+            ["git", "commit", "-m", body.message.strip()],
             cwd=_repo_root, capture_output=True, text=True,
         )
         if result.returncode == 0:
-            return jsonify({"ok": True, "output": result.stdout.strip()})
-        return jsonify({"ok": False, "output": result.stdout + result.stderr}), 400
+            return {"ok": True, "output": result.stdout.strip()}
+        return JSONResponse({"ok": False, "output": result.stdout + result.stderr}, status_code=400)
     except Exception as exc:
-        return jsonify({"error": str(exc)}), 500
+        return JSONResponse({"error": str(exc)}, status_code=500)
 
 
-@app.route("/api/git/push", methods=["POST"])
+@app.post("/api/git/push")
 def api_git_push():
     try:
         result = subprocess.run(
@@ -167,28 +168,28 @@ def api_git_push():
         )
         output = (result.stdout + result.stderr).strip()
         if result.returncode == 0:
-            return jsonify({"ok": True, "output": output})
-        return jsonify({"ok": False, "output": output}), 400
+            return {"ok": True, "output": output}
+        return JSONResponse({"ok": False, "output": output}, status_code=400)
     except Exception as exc:
-        return jsonify({"error": str(exc)}), 500
+        return JSONResponse({"error": str(exc)}, status_code=500)
 
 
-# -- Static file serving (Angular SPA) ----------------------------------------
+# -- Static file serving (Angular SPA) — must be last -------------------------
 
-@app.route("/", defaults={"path": ""})
-@app.route("/<path:path>")
-def serve_spa(path: str):
-    if path and (DIST / path).exists():
-        return send_from_directory(DIST, path)
+@app.get("/{full_path:path}")
+def serve_spa(full_path: str):
+    if full_path:
+        file_path = DIST / full_path
+        if file_path.exists() and file_path.is_file():
+            return FileResponse(file_path)
     index = DIST / "index.html"
     if index.exists():
-        return send_from_directory(DIST, "index.html")
-    return (
+        return FileResponse(index)
+    return HTMLResponse(
         "<h2>Backlog Browser</h2>"
         "<p>The Angular app has not been built yet. "
         "See <code>README.md</code> for build instructions.<br>"
-        "The API is available at <a href='/api/backlog'>/api/backlog</a>.</p>",
-        200,
+        "The API is available at <a href='/api/backlog'>/api/backlog</a>.</p>"
     )
 
 
@@ -198,14 +199,10 @@ def serve_spa(path: str):
 
 def _infer_kind(p: Path) -> str:
     name = p.name
-    if name == "epic.md":
-        return "epic"
-    if name == "feature.md":
-        return "feature"
-    if name == "workitem.md":
-        return "workitem"
-    if name == "request.md":
-        return "request"
+    if name == "epic.md":     return "epic"
+    if name == "feature.md":  return "feature"
+    if name == "workitem.md": return "workitem"
+    if name == "request.md":  return "request"
     return "task"
 
 
@@ -214,17 +211,18 @@ def _infer_kind(p: Path) -> str:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
+    import uvicorn
+
     global _repo_root
 
     ap = argparse.ArgumentParser(description="Backlog Browser — local web server")
-    ap.add_argument("--root", default=None, help="Path to team repo root (auto-detected if omitted)")
-    ap.add_argument("--port", type=int, default=8082, help="Port to listen on (default: 8082)")
+    ap.add_argument("--root",    default=None, help="Path to team repo root (auto-detected if omitted)")
+    ap.add_argument("--port",    type=int, default=8082, help="Port to listen on (default: 8082)")
     ap.add_argument("--no-open", action="store_true", help="Do not open a browser automatically")
     args = ap.parse_args()
 
     _repo_root = discover_root(args.root)
 
-    # Warm the cache and print startup summary
     tree = get_tree()
     stats = bp.compute_stats(tree)
     print()
@@ -250,7 +248,7 @@ def main() -> None:
         threading.Thread(target=_open, daemon=True).start()
 
     print("Press Ctrl+C to stop.\n")
-    app.run(host="127.0.0.1", port=args.port, debug=False)
+    uvicorn.run(app, host="127.0.0.1", port=args.port, log_level="warning")
 
 
 if __name__ == "__main__":
