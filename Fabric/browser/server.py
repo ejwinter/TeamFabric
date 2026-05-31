@@ -1,15 +1,13 @@
 """Backlog Browser — local Flask server.
 
 Serves the pre-built Angular SPA and a JSON API that reads the team's
-backlog markdown files.  Run from your team repo root:
+backlog markdown files.  Use the launcher instead of running this directly:
 
-    cd backlog/browser
-    poetry install          # one-time
-    poetry run python server.py
+    python backlog/browser/browser.py
 
 Or pass --root explicitly:
 
-    poetry run python server.py --root /path/to/team-repo
+    python backlog/browser/browser.py --root /path/to/team-repo
 """
 from __future__ import annotations
 

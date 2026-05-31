@@ -17,6 +17,20 @@
 
     <span class="spacer"></span>
 
+    <button mat-button [class.active-toggle]="!isSprintBoard()"
+            (click)="goToBacklog()"
+            matTooltip="Backlog list view">
+      <mat-icon>view_list</mat-icon>
+      Backlog
+    </button>
+
+    <button mat-button [class.active-toggle]="isSprintBoard()"
+            (click)="goToSprint()"
+            matTooltip="Sprint board view">
+      <mat-icon>view_kanban</mat-icon>
+      Sprint Board
+    </button>
+
     <button mat-button [class.active-toggle]="filter.showClosed()"
             (click)="toggleClosed()"
             matTooltip="Show or hide closed and removed items">

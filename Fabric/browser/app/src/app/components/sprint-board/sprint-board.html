@@ -1,0 +1,96 @@
+<div class="sprint-board">
+
+  <!-- Header: title + sprint chips -->
+  <div class="board-header">
+    <span class="board-title">
+      <mat-icon>view_kanban</mat-icon>
+      Sprint Board
+    </span>
+
+    @if (tree() && sprints().length > 0) {
+      <div class="sprint-chips">
+        @for (s of sprints(); track s) {
+          <button class="sprint-chip" [class.active]="effectiveSprint() === s"
+                  (click)="selectSprint(s)">{{ s }}</button>
+        }
+      </div>
+    }
+
+    @if (tree() && sprintItems().length > 0) {
+      <span class="item-count">{{ sprintItems().length }} item{{ sprintItems().length === 1 ? '' : 's' }}</span>
+    }
+  </div>
+
+  <!-- Loading -->
+  @if (!tree()) {
+    <div class="centered"><mat-spinner diameter="32" /></div>
+  }
+
+  <!-- No sprints configured -->
+  @else if (sprints().length === 0) {
+    <div class="empty-state">
+      <mat-icon>event_note</mat-icon>
+      <p>No sprints found.</p>
+      <p class="hint">Add an <code>Iteration:</code> property to work items to assign them to a sprint.</p>
+    </div>
+  }
+
+  <!-- No items in selected sprint -->
+  @else if (columns().length === 0) {
+    <div class="empty-state">
+      <mat-icon>inbox</mat-icon>
+      <p>No items assigned to <strong>{{ effectiveSprint() }}</strong>.</p>
+    </div>
+  }
+
+  <!-- Kanban board -->
+  @else {
+    <div class="board-columns">
+      @for (col of columns(); track col.state) {
+        <div class="column">
+          <div class="col-header">
+            <span class="col-title">{{ col.state }}</span>
+            <span class="col-count">{{ col.items.length }}</span>
+          </div>
+
+          <div class="col-cards">
+            @for (item of col.items; track item.id) {
+              <div class="card" [class.selected]="isSelected(item)"
+                   (click)="openItem(item)">
+                <div class="card-title">{{ item.title }}</div>
+                <div class="card-breadcrumb">{{ item.epicTitle }} › {{ item.featureTitle }}</div>
+
+                <div class="card-meta">
+                  @if (item.properties['Type']) {
+                    <span class="type-chip">{{ item.properties['Type'] }}</span>
+                  }
+                  @if (assigneeInitials(item)) {
+                    <span class="assignee" [matTooltip]="item.properties['Assigned to']">
+                      {{ assigneeInitials(item) }}
+                    </span>
+                  }
+                  @if (item.dates.target) {
+                    <span class="due-date">{{ item.dates.target }}</span>
+                  }
+                </div>
+
+                @if (item.tasks.length > 0) {
+                  <div class="tasks">
+                    @for (task of item.tasks; track task.id) {
+                      <div class="task-row">
+                        <span class="task-dot" [class]="taskDotClass(task.state)"></span>
+                        <span class="task-name">{{ task.title }}</span>
+                        <span class="task-state">{{ task.state }}</span>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+</div>

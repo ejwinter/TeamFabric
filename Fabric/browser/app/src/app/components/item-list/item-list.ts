@@ -62,10 +62,7 @@ export class ItemList {
 
     const result: ListRow[] = [];
     for (const epic of epicsToShow) {
-      if (!epicId) {
-        // Only add epic header in "All" view
-        result.push({ type: 'epic-header', epic });
-      }
+      result.push({ type: 'epic-header', epic });
       for (const feat of epic.features) {
         const visibleItems = feat.workitems.filter(wi => {
           if (!showClosed && this.filter.isClosed(wi.state)) return false;

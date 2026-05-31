@@ -1,7 +1,9 @@
 import { Component, inject, signal, computed, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { filter, map, startWith } from 'rxjs/operators';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -37,6 +39,17 @@ export class App {
   rightWidth = signal(Math.round(window.innerWidth * 0.25));
   detailOpen = computed(() => !!this.filter.openItem());
   isResizing = signal(false);
+
+  private currentUrl = toSignal(
+    this.router.events.pipe(
+      filter(e => e instanceof NavigationEnd),
+      map((e: NavigationEnd) => e.urlAfterRedirects),
+      startWith(this.router.url),
+    ),
+    { initialValue: this.router.url },
+  );
+
+  isSprintBoard = computed(() => this.currentUrl().startsWith('/sprint'));
 
   private _resizeSide: 'left' | 'right' | null = null;
   private _resizeStartX = 0;
@@ -80,6 +93,14 @@ export class App {
     const q = this.searchQuery.trim();
     if (!q) { this.router.navigate(['/']); return; }
     this.router.navigate(['/search'], { queryParams: { q } });
+  }
+
+  goToBacklog(): void {
+    this.router.navigate(['/']);
+  }
+
+  goToSprint(): void {
+    this.router.navigate(['/sprint']);
   }
 
   refresh(): void {

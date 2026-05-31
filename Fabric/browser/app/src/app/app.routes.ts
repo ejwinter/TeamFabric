@@ -11,5 +11,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./components/search-view/search-view').then(m => m.SearchView),
   },
+  {
+    path: 'sprint',
+    loadComponent: () =>
+      import('./components/sprint-board/sprint-board').then(m => m.SprintBoard),
+  },
   { path: '**', redirectTo: '' },
 ];
