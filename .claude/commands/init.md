@@ -88,6 +88,7 @@ After module selection, create the following structure in the target folder:
   - Copy all `Fabric/backlog/template-*.md` files into `backlog/` (entity templates for new epics, features, work items, tasks, and inbox items)
   - Create `backlog/templates/` (empty — team-defined item templates live here; see fabric-backlog.md Team Templates section)
   - Create `output/.gitkeep` (report output directory — created but gitignored via `.gitignore`)
+  - **Ask:** "Would you like to include the Backlog Browser? It's a local web app for browsing, searching, and editing the backlog (requires Python 3.12+)." If yes, copy `Fabric/browser/` to `backlog/browser/`, excluding `.venv/`, `node_modules/`, and `.angular/`.
 
 ### 3. Create `.claude/fabric-source.md`
 

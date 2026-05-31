@@ -23,7 +23,9 @@ The following framework-owned files are candidates for update:
 - `.claude/fabric-triage.md`, `fabric-product.md`, `fabric-backlog.md`, `fabric-scrum.md` — candidate only if the file already exists in the target (modules are not added silently)
 - All files under `.claude/commands/` and `.claude/skills/`
 - `fabscripts/` — always a candidate; copy the full directory from `Fabric/../fabscripts/` (backlog utility scripts)
-- `backlog/browser/` — candidate only if the directory already exists in the target (teams opt in; copy from `Fabric/browser/`)
+- `backlog/browser/` — copy from `Fabric/browser/`, excluding `.venv/`, `node_modules/`, and `.angular/`:
+  - If `backlog/browser/` already exists in the target: always a candidate (update it)
+  - If `backlog/browser/` does not exist: skip the copy but **mention it in the report** and ask if the team wants to add it now
 
 ### Never touch
 

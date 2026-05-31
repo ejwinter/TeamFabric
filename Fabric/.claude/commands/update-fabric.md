@@ -42,7 +42,9 @@ When using a local clone, check whether it is behind the remote before applying 
 - `.claude/fabric-product.md`
 - `.claude/fabric-backlog.md`
 - `.claude/fabric-scrum.md`
-- `backlog/browser/` — replaced from `<source>/Fabric/browser/` (local web app for browsing the backlog; teams opt in by having this directory)
+- `backlog/browser/` — copied from `<source>/Fabric/browser/`, excluding `.venv/`, `node_modules/`, and `.angular/`:
+  - If `backlog/browser/` already exists here: replace it (framework-owned code)
+  - If `backlog/browser/` does not exist: skip the copy but **mention it in the report** and ask: "The Backlog Browser is available but not enabled for this instance. Would you like to add it? It's a local web app for browsing, searching, and editing the backlog (requires Python 3.12+)."
 
 ### Never touch
 - `CLAUDE.md`
