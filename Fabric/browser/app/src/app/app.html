@@ -2,7 +2,7 @@
 
   <!-- Top toolbar -->
   <mat-toolbar class="toolbar">
-    <button mat-icon-button (click)="leftNav.toggle()" matTooltip="Toggle nav">
+    <button mat-icon-button (click)="leftOpen.update(v => !v)" matTooltip="Toggle nav">
       <mat-icon>menu</mat-icon>
     </button>
     <span class="app-title">Backlog Browser</span>
@@ -30,22 +30,27 @@
   </mat-toolbar>
 
   <!-- Three-panel body -->
-  <mat-sidenav-container class="sidenav-container">
+  <div class="panels-body" [class.is-resizing]="isResizing()">
 
-    <mat-sidenav #leftNav mode="side" opened class="left-nav">
-      <app-epic-nav />
-    </mat-sidenav>
+    @if (leftOpen()) {
+      <div class="panel left-panel" [style.width.px]="leftWidth()">
+        <app-epic-nav />
+      </div>
+      <div class="resize-handle" (mousedown)="startResize($event, 'left')"></div>
+    }
 
-    <mat-sidenav #detailDrawer position="end" mode="over" class="detail-drawer"
-                 (closedStart)="onDrawerClosed()">
-      <app-item-detail-panel />
-    </mat-sidenav>
-
-    <mat-sidenav-content class="main-content">
+    <div class="panel center-panel">
       <router-outlet />
-    </mat-sidenav-content>
+    </div>
 
-  </mat-sidenav-container>
+    @if (detailOpen()) {
+      <div class="resize-handle" (mousedown)="startResize($event, 'right')"></div>
+      <div class="panel right-panel" [style.width.px]="rightWidth()">
+        <app-item-detail-panel />
+      </div>
+    }
+
+  </div>
 
   <!-- Bottom git bar -->
   <div class="git-bar-wrapper">

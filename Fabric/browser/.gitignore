@@ -2,4 +2,3 @@ __pycache__/
 *.pyc
 .venv/
 app/node_modules/
-# app/dist/ is intentionally NOT ignored — it's the pre-built artifact

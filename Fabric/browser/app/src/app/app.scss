@@ -50,29 +50,57 @@
   color: var(--accent) !important;
 }
 
-.sidenav-container {
+.panels-body {
   flex: 1;
+  display: flex;
+  overflow: hidden;
+
+  &.is-resizing {
+    cursor: col-resize;
+    user-select: none;
+  }
+}
+
+.panel {
+  flex-shrink: 0;
   overflow: hidden;
 }
 
-.left-nav {
-  width: var(--nav-width);
-  border-right: 1px solid var(--border);
+.left-panel {
   background: var(--surface);
   overflow-y: auto;
+  min-width: 140px;
 }
 
-.detail-drawer {
-  width: var(--detail-width);
-  border-left: 1px solid var(--border);
+.center-panel {
+  flex: 1;
+  flex-shrink: 1;
+  background: #f4f5f7;
+  overflow-y: auto;
+  min-width: 200px;
+}
+
+.right-panel {
   background: var(--surface);
   overflow: hidden;
   box-shadow: -4px 0 16px rgba(0,0,0,0.08);
+  min-width: 240px;
 }
 
-.main-content {
-  background: #f4f5f7;
-  overflow-y: auto;
+.resize-handle {
+  flex-shrink: 0;
+  width: 4px;
+  background: var(--border);
+  cursor: col-resize;
+  transition: background 0.15s;
+
+  &:hover {
+    background: var(--accent);
+  }
+}
+
+.panels-body.is-resizing .resize-handle {
+  background: var(--accent);
 }
 
 .git-bar-wrapper {

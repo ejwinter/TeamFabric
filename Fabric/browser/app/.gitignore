@@ -1,7 +1,7 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
-# /dist is intentionally NOT ignored — it is the pre-built artifact checked into git
+/dist
 /tmp
 /out-tsc
 /bazel-out

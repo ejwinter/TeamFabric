@@ -1,8 +1,7 @@
-import { Component, inject, ViewChild, effect } from '@angular/core';
+import { Component, inject, signal, computed, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,7 +19,7 @@ import { BacklogService } from './services/backlog.service';
   selector: 'app-root',
   imports: [
     CommonModule, RouterOutlet, FormsModule,
-    MatSidenavModule, MatToolbarModule, MatButtonModule,
+    MatToolbarModule, MatButtonModule,
     MatIconModule, MatInputModule, MatFormFieldModule,
     MatTooltipModule, MatSnackBarModule,
     EpicNav, ItemDetailPanel, GitActions,
@@ -33,22 +32,43 @@ export class App {
   filter = inject(FilterService);
   private svc = inject(BacklogService);
 
-  @ViewChild('detailDrawer') detailDrawer!: MatSidenav;
+  leftOpen = signal(true);
+  leftWidth = signal(Math.round(window.innerWidth * 0.25));
+  rightWidth = signal(Math.round(window.innerWidth * 0.25));
+  detailOpen = computed(() => !!this.filter.openItem());
+  isResizing = signal(false);
+
+  private _resizeSide: 'left' | 'right' | null = null;
+  private _resizeStartX = 0;
+  private _resizeStartWidth = 0;
 
   searchQuery = '';
 
-  constructor() {
-    // Open/close the detail drawer based on filter state
-    effect(() => {
-      const item = this.filter.openItem();
-      if (this.detailDrawer) {
-        item ? this.detailDrawer.open() : this.detailDrawer.close();
-      }
-    });
+  startResize(event: MouseEvent, side: 'left' | 'right'): void {
+    this._resizeSide = side;
+    this._resizeStartX = event.clientX;
+    this._resizeStartWidth = side === 'left' ? this.leftWidth() : this.rightWidth();
+    this.isResizing.set(true);
+    event.preventDefault();
   }
 
-  onDrawerClosed(): void {
-    this.filter.closeDetail();
+  @HostListener('document:mousemove', ['$event'])
+  onMouseMove(event: MouseEvent): void {
+    if (!this._resizeSide) return;
+    const delta = event.clientX - this._resizeStartX;
+    if (this._resizeSide === 'left') {
+      this.leftWidth.set(Math.max(140, Math.min(600, this._resizeStartWidth + delta)));
+    } else {
+      this.rightWidth.set(Math.max(240, Math.min(800, this._resizeStartWidth - delta)));
+    }
+  }
+
+  @HostListener('document:mouseup')
+  onMouseUp(): void {
+    if (this._resizeSide) {
+      this._resizeSide = null;
+      this.isResizing.set(false);
+    }
   }
 
   toggleClosed(): void {

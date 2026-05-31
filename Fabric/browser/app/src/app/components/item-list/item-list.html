@@ -40,14 +40,16 @@
 
   @for (row of rows(); track $index) {
     @if (isEpicHeader(row)) {
-      <div class="epic-header-row">
+      <div class="epic-header-row" [class.selected]="isSelected(row)"
+           (click)="openItem(row)" matTooltip="View epic details">
         <span class="epic-dot" [style.background]="'var(--accent)'"></span>
         <span class="epic-header-title">{{ row.epic.title }}</span>
         <app-state-badge [state]="row.epic.state" />
       </div>
     }
     @if (isFeatureHeader(row)) {
-      <div class="feature-header-row">
+      <div class="feature-header-row" [class.selected]="isSelected(row)"
+           (click)="openItem(row)" matTooltip="View feature details">
         <span class="feature-header-title">{{ row.feature.title }}</span>
         <app-state-badge [state]="row.feature.state" />
       </div>

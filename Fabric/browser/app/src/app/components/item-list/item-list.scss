@@ -64,8 +64,13 @@
   font-weight: 600;
   color: #1a1a2e;
   border-top: 1px solid var(--border);
+  border-left: 3px solid transparent;
   margin-top: 4px;
+  cursor: pointer;
+  transition: background 0.1s;
   &:first-child { border-top: none; margin-top: 0; }
+  &:hover { background: var(--hover-bg); }
+  &.selected { background: var(--active-bg); border-left-color: var(--accent); }
 }
 .epic-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 .epic-header-title { flex: 1; }
@@ -80,6 +85,11 @@
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  transition: background 0.1s;
+  &:hover { background: var(--hover-bg); }
+  &.selected { background: var(--active-bg); border-left-color: var(--accent); color: var(--accent); }
 }
 .feature-header-title { flex: 1; }
 

@@ -171,7 +171,11 @@ poetry run python server.py --root /path/to/your/team-repo
 ```
 
 **App shows "Angular app has not been built yet"**
-The `app/dist/` folder is missing. Ask your framework admin to restore it from the TeamFabric source.
+The `app/dist/` folder is missing or empty. A developer on your team needs to build the frontend and commit it:
+```bash
+cd backlog/browser/app && npm install && npx ng build --configuration production
+git add dist/ && git commit -m "chore: build backlog browser frontend"
+```
 
 **Push fails — authentication error**
 Your git remote credentials need to be configured. For HTTPS on macOS:

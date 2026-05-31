@@ -11,10 +11,24 @@ No server required beyond your laptop — just Python and git.
 |------|----------------|-----|
 | Python | 3.12 | Required by TeamFabric |
 | [Poetry](https://python-poetry.org/docs/#installation) | 1.8+ | Manages the Python environment |
+| Node.js | 18+ | Required to build the Angular frontend (one-time setup) |
 | git | any | Required by TeamFabric; used by the Commit/Push buttons |
 
-Node.js is **not** required to run the app. It is only needed if you are rebuilding
-the Angular frontend (see [Rebuilding the frontend](#rebuilding-the-frontend) below).
+---
+
+## First-time setup (engineering team)
+
+After receiving the browser files (via `/init` or `/update-fabric`), a developer on the team must build the frontend once and commit `dist/` to the team repo. Non-developers can then run the app without Node.js.
+
+```bash
+cd backlog/browser/app
+npm install
+npx ng build --configuration production
+git add dist/
+git commit -m "chore: build backlog browser frontend"
+```
+
+This only needs to be repeated when the framework ships Angular source changes (i.e. after running `/update-fabric` and pulling new `app/src/` files).
 
 ---
 
@@ -84,18 +98,16 @@ poetry run python server.py --port 8080
 
 ---
 
-## Rebuilding the frontend (for developers)
+## Building and updating the frontend (for developers)
 
-The pre-built Angular output in `app/dist/` is checked into git so end users
-do not need Node.js. If you make changes to the Angular source code under `app/src/`,
-rebuild and commit the new dist:
+`app/dist/` is committed to the **team repo** (not to TeamFabric itself) so non-developers can run the app without Node.js. Rebuild and recommit whenever Angular source changes are pulled in:
 
 ```bash
 cd backlog/browser/app
 npm install              # first time only
 npx ng build --configuration production
 git add dist/
-git commit -m "chore: rebuild backlog browser"
+git commit -m "chore: build backlog browser frontend"
 ```
 
 ### Development mode (live reload)

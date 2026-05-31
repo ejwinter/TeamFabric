@@ -157,6 +157,8 @@ export class ItemList {
   openItem(row: ListRow): void {
     if (row.type === 'work-item') this.filter.openDetail(row.item);
     if (row.type === 'request') this.filter.openDetail(row.item);
+    if (row.type === 'epic-header') this.filter.openDetail(row.epic);
+    if (row.type === 'feature-header') this.filter.openDetail(row.feature);
   }
 
   isSelected(row: ListRow): boolean {
@@ -164,6 +166,8 @@ export class ItemList {
     if (!open) return false;
     if (row.type === 'work-item') return open.path === row.item.path;
     if (row.type === 'request') return open.path === row.item.path;
+    if (row.type === 'epic-header') return open.path === row.epic.path;
+    if (row.type === 'feature-header') return open.path === row.feature.path;
     return false;
   }
 
