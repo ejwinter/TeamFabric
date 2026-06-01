@@ -32,6 +32,7 @@ Mission: [1-2 sentences describing what your team does and for whom]
 | Core           | Enabled              | Always on                                        |
 | Triage         | [Enabled / Disabled] | Request intake and rubric evaluation             |
 | Product        | [Enabled / Disabled] | Product definitions and context                  |
+| Release        | [Enabled / Disabled] | Release tracking and docs (requires Product)     |
 | Backlog        | [Enabled / Disabled] | Epic/feature/work-item hierarchy                 |
 | Standup        | [Enabled / Disabled] | Daily async standup conversations and summary    |
 | Retrospective  | [Enabled / Disabled] | Periodic retros with action item routing         |

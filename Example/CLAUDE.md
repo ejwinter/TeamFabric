@@ -1,6 +1,7 @@
 @.claude/fabric-core.md
 @.claude/fabric-triage.md
 @.claude/fabric-product.md
+@.claude/fabric-release.md
 @.claude/fabric-backlog.md
 @.claude/fabric-standup.md
 @.claude/fabric-retro.md
@@ -81,6 +82,7 @@ describes environment setup, cross-product patterns, or recurring operational st
 | Core | Enabled | Team definition, members, constitution, ingestion, queries |
 | Triage | Enabled | Request intake, workflows, rubric evaluation |
 | Product | Enabled | Product definitions and context |
+| Release | Enabled | Product release tracking — v3.0 in progress for Clinical Data Lake |
 | Backlog | Enabled | Hierarchical work tracking — epics, features, work items, tasks |
 | Effort Tracking | Enabled | Capture actual hours on close, rollup to parent |
 | Standup | Enabled | Standup conversations (Tuesday & Thursday) and team summary |

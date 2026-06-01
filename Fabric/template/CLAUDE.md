@@ -1,6 +1,7 @@
 @.claude/fabric-core.md
 @.claude/fabric-triage.md
 @.claude/fabric-product.md
+@.claude/fabric-release.md
 @.claude/fabric-standup.md
 @.claude/fabric-retro.md
 
@@ -76,6 +77,7 @@
 | Core | Enabled | Team definition, members, constitution, ingestion, queries |
 | Triage | Enabled | Request intake, workflows, rubric evaluation |
 | Product | Enabled | Product definitions and context |
+| Release | Disabled | Product release tracking and planning documents (requires Product) |
 | Backlog | Disabled | Epic/feature/work-item hierarchy |
 | Effort Tracking | Disabled | Capture actual hours on close, rollup to parent |
 | Standup | Disabled | Daily standup conversations and team summary |

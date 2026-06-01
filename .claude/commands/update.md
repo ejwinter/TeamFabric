@@ -20,7 +20,7 @@ Update framework-owned files in an existing Fabric instance. This command runs f
 The following framework-owned files are candidates for update:
 
 - `.claude/fabric-core.md` — always a candidate
-- `.claude/fabric-triage.md`, `fabric-product.md`, `fabric-backlog.md`, `fabric-scrum.md` — candidate only if the file already exists in the target (modules are not added silently)
+- `.claude/fabric-triage.md`, `fabric-product.md`, `fabric-release.md`, `fabric-backlog.md`, `fabric-scrum.md` — candidate only if the file already exists in the target (modules are not added silently)
 - All files under `.claude/commands/` and `.claude/skills/`
 - `fabscripts/` — always a candidate; copy the full directory from `Fabric/../fabscripts/` (backlog utility scripts)
 - `backlog/browser/` — copy from `Fabric/browser/`, excluding `.venv/`, `node_modules/`, and `.angular/`:
