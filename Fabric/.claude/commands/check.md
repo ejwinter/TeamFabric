@@ -64,6 +64,13 @@ Work through each check category. Collect every finding — do not stop at the f
 | Check | Condition |
 |---|---|
 | `feature-missing-product` | Feature has a `Product:` field referencing a product that has no directory under `products/` |
+| `feature-target-no-release` | Feature has a `Product Target Release:` field set but no matching `products/<slug>/releases/<version>/` folder exists for that product (Release module only) |
+
+#### Release Checks (Release module only)
+
+| Check | Condition |
+|---|---|
+| `release-missing-product` | A release folder exists at `products/<slug>/releases/<version>/` but the parent `products/<slug>/product.md` is missing, or the product's `Status:` is `Retired` or `Sunset` |
 
 #### Team Checks
 
@@ -120,6 +127,11 @@ N findings across N check categories.
 | # | Check | Entity | Location | Finding |
 |---|-------|--------|----------|---------|
 
+### Releases (N)
+
+| # | Check | Entity | Location | Finding |
+|---|-------|--------|----------|---------|
+
 ## No Findings
 [Include this section only if the scan produced zero findings:]
 No integrity violations found.
@@ -140,6 +152,7 @@ Health scan complete. Report written to output/check-report.md.
   N backlog structure findings
   N team findings
   N request findings
+  N release findings
 
   N total findings
 ```

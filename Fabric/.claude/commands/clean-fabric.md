@@ -32,6 +32,7 @@ Terminal states by artifact:
 - Epic, Feature, Work Item, Task: `State: Closed` or `State: Removed`
 - Request: `Status: Declined`, `Status: Withdrawn`, `Status: Complete` (and any team-defined terminal states in their triage module)
 - Product: `Status: Retired` or `Status: Sunset`
+- Release: `Status: Released` or `Status: Cancelled`
 - Member profile: `Status: Departed`
 - Stakeholder profile: `Status: Departed`
 
@@ -69,6 +70,7 @@ If a `## Fabric GC` table is found, use its values to override the defaults belo
 | Member profile | `Status: Departed` + `Terminated:` | 90 days | Archive → `team/archive/members/<slug>.md` |
 | Stakeholder profile | `Status: Departed` + `Terminated:` | 90 days | Archive → `team/archive/stakeholders/<slug>.md` |
 | Product | `Retired`, `Sunset` | 90 days | Archive → `products/archive/<slug>.md` |
+| Release folder | `Released`, `Cancelled` | 1 year | Archive → `products/<slug>/releases/archive/<version>.md` (gravestone), then delete folder |
 
 ---
 
@@ -101,6 +103,8 @@ Identify all artifacts past their retention threshold.
 **Stakeholder profiles** — scan `team/stakeholders/*/profile.md` (exclude `template/`). Read `Status:` and `Terminated:`.
 
 **Products** — scan `products/*/product.md` (exclude `template/`). Read `Status:` and `Terminated:`.
+
+**Releases** — scan `products/*/releases/*/<version>.md` (exclude `release-templates/` and `archive/`). Read `Status:` and `Terminated:`. If terminal (`Released` or `Cancelled`) and past retention, add to candidates. Gravestone is written to `products/<slug>/releases/archive/<version>.md` (a single file); the full version folder is then deleted.
 
 ---
 

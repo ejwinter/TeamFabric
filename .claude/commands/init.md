@@ -48,6 +48,7 @@ In the **Interactive Flow**, ask the user which modules to enable:
 - **Core** — always enabled, not optional
 - **Triage** — request intake, workflows, rubric evaluation (recommended for most teams)
 - **Product** — product definitions and context (recommended if the team owns deliverables)
+- **Release** — product release tracking, version milestones, and attached planning documents (requires Product enabled)
 - **Backlog** — epic/feature/work-item hierarchy (for teams that break work into structured deliverables)
 - **Scrum** — sprint ceremonies and daily facilitation (not yet available)
 
@@ -67,6 +68,7 @@ After module selection, create the following structure in the target folder:
     fabric-core.md      # Always copy from Fabric/template/
     fabric-triage.md    # Copy if Triage enabled
     fabric-product.md   # Copy if Product enabled
+    fabric-release.md   # Copy if Release enabled
     fabric-backlog.md   # Copy if Backlog enabled
     fabric-source.md    # Always copy from Fabric/template/ (fill in Local and Remote)
   team/
@@ -82,6 +84,7 @@ After module selection, create the following structure in the target folder:
 
 - If **Triage** enabled: create `requests/workflow/default/` and copy `Fabric/requests/REQUESTS.md` and contents of `Fabric/requests/workflow/default/` if present. **Skip workflow files if `requests/workflow/default/` already contains files** — on reinit of an existing instance, workflow files are team-owned and must not be overwritten.
 - If **Product** enabled: create `products/` with `products/template/` copied from `Fabric/products/template/`
+- If **Release** enabled: copy `Fabric/template/fabric-release.md` to `<target>/.claude/fabric-release.md`. The `releases/` directory under each product is created on demand by `/new-release` — no init-time directory needed.
 - If **Backlog** enabled:
   - Create `backlog/epics/`
   - Create `backlog/inbox/` and copy `Fabric/backlog/template-inbox-README.md` as `backlog/inbox/README.md`
