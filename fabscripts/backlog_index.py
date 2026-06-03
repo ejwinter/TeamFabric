@@ -143,7 +143,7 @@ def collect_backlog() -> list[dict]:
 
 
 def fmt(entity: dict, indent: int, kind: str) -> str:
-    pad = "  " * indent
+    pad = "    " * indent
     desc = f" — {entity['desc']}" if entity["desc"] else ""
     return (f"{pad}- **{kind}: [{entity['title']}]({entity['link']})** — "
             f"`{entity['state']}`{entity['dates']}{desc}\n")
