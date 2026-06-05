@@ -171,6 +171,7 @@ name          = YYMMDD-YYMMDD  (e.g. 260401-260414)
 - When the user says "add to current sprint/iteration", compute the current iteration name from today's date and write it to `Iteration:`.
 - When the user says "add to next sprint/iteration", compute iteration n+1 and write that name.
 - When displaying or suggesting iteration names, always derive them on the fly — never hard-code or cache names.
+- When the user asks what's on the current (or next) sprint/iteration, compute the iteration name on the fly and filter the backlog index (`backlog-index.slim.md` or `backlog-index.json`) by the `Iteration:` field — the index already carries iteration membership per work item. Do not persist a separate sprint index: a cached sprint view would go stale at the iteration boundary with no entity change, and the freshness check (which is mtime-based) would not catch it.
 - During backlog refinement, if an iteration config is present and a work item has no `Iteration:` set, offer to assign it to the current or next iteration as appropriate.
 
 Note: If the Scrum module is enabled, it may extend iterations with ceremonies, velocity tracking, and sprint-level reporting. The Backlog module treats iterations only as a scheduling label.
