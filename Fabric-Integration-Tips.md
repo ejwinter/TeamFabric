@@ -84,3 +84,65 @@ git commit -m "close: <work item title>"
 ```
 
 This keeps the Fabric story current without requiring a separate context switch.
+
+---
+
+## Pattern 5 — Install auto-triggering skills in your product repo
+
+The patterns above are intentional: you explicitly ask Claude to read a work item. Pattern 5 goes
+ambient — install a skill that auto-triggers whenever you casually mention Fabric, a backlog entity,
+or an entity ID during a coding session.
+
+TeamFabric ships ready-made skills for this in `product-repo-skills/`. Copy what you want into
+your product repo's `.claude/skills/` directory:
+
+```bash
+# From the TeamFabric source repo
+cp -r product-repo-skills/fabric-aware /path/to/your-product-repo/.claude/skills/
+```
+
+### The `fabric-aware` skill
+
+`fabric-aware` is an ambient context skill. It triggers automatically when you mention Fabric,
+backlog, work items, stories, features, epics, acceptance criteria, or a backlog entity ID
+(pattern: `word-word-YYMMDD`) — without you having to explicitly invoke a command.
+
+**What it does:**
+- Locates your Fabric instance via `.claude/fabric-link.md` (see below) or the sibling-directory convention
+- Uses the backlog index for fast entity lookup
+- Surfaces the right sections based on what you asked: AC for scope, Description + spec for approach, Open Questions when asking what's unresolved
+- Surfaces team constraints once per entity per session (blockers, security labels, hard constraints from the Fabric CLAUDE.md)
+- Checks for `spec.md` alongside work items (forward-compatible with the SpecDriven module)
+- Offers to write context log entries mid-implementation — but never changes entity state (use `/fabric-backlog wrap` for that)
+
+**Pointing it at your Fabric instance:**
+
+By default the skill uses the sibling-directory convention. To use a custom path, create
+`.claude/fabric-link.md` in your product repo:
+
+```
+Path: ../AcmeFabric
+```
+
+This file is the single source of truth for skills and for manual cross-repo reads — no
+duplication needed.
+
+**Example interactions:**
+
+```
+"What does the AC say about the retry endpoint?"
+→ Finds the work item, surfaces relevant AC items annotated as in/out of scope.
+
+"Is auto-expiry in scope for the auth refresh story?"
+→ Loads the work item, checks AC for expiry — flags it if it belongs to a different item.
+
+"I just found that the session format needs to change — worth logging?"
+→ Proposes a context log entry on the work item.
+
+"What open questions are still on the retry feature?"
+→ Loads the feature, surfaces ## Open Questions.
+```
+
+This is the active counterpart to the static patterns above. Patterns 1–4 handle intentional
+lookups and lifecycle ceremonies; `fabric-aware` handles ambient, conversational access during
+implementation.
