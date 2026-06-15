@@ -89,6 +89,7 @@ After module selection, create the following structure in the target folder:
   - Create `backlog/epics/`
   - Create `backlog/inbox/` and copy `Fabric/backlog/template-inbox-README.md` as `backlog/inbox/README.md`
   - Copy all `Fabric/backlog/template-*.md` files into `backlog/` (entity templates for new epics, features, work items, tasks, and inbox items)
+  - Copy the full `fabscripts/` directory from `Fabric/../fabscripts/` into `<target>/fabscripts/` (backlog utility scripts — `backlog_index.py` generates the precomputed backlog index referenced in fabric-backlog.md)
   - Create `backlog/templates/` (empty — team-defined item templates live here; see fabric-backlog.md Team Templates section)
   - Create `output/.gitkeep` (report output directory — created but gitignored via `.gitignore`)
   - **Ask:** "Would you like to include the Backlog Browser? It's a local web app for browsing, searching, and editing the backlog (requires Python 3.12+)." If yes, copy `Fabric/browser/` to `backlog/browser/`, excluding `.venv/`, `node_modules/`, and `.angular/`.
