@@ -50,6 +50,7 @@ In the **Interactive Flow**, ask the user which modules to enable:
 - **Product** — product definitions and context (recommended if the team owns deliverables)
 - **Release** — product release tracking, version milestones, and attached planning documents (requires Product enabled)
 - **Backlog** — epic/feature/work-item hierarchy (for teams that break work into structured deliverables)
+- **Spec** — co-located `spec.md` on work items with Draft→Approved lifecycle and `/spec` commands (requires Backlog enabled)
 - **Scrum** — sprint ceremonies and daily facilitation (not yet available)
 
 In the **Form-Driven Flow**, read module selections from the form's Modules table.
@@ -92,6 +93,7 @@ After module selection, create the following structure in the target folder:
   - Copy the full `fabscripts/` directory from `Fabric/../fabscripts/` into `<target>/fabscripts/` (backlog utility scripts — `backlog_index.py` generates the precomputed backlog index referenced in fabric-backlog.md)
   - Create `backlog/templates/` (empty — team-defined item templates live here; see fabric-backlog.md Team Templates section)
   - Create `output/.gitkeep` (report output directory — created but gitignored via `.gitignore`)
+  - **Ask:** "Would you like to enable the Spec module? It adds co-located implementation specs on work items with a Draft→Approved lifecycle and `/spec` commands." If yes: copy `Fabric/template/fabric-spec.md` to `<target>/.claude/fabric-spec.md` and add `@.claude/fabric-spec.md` to the generated CLAUDE.md imports (after `@.claude/fabric-backlog.md`). Note in the Enabled Modules table.
   - **Ask:** "Would you like to include the Backlog Browser? It's a local web app for browsing, searching, and editing the backlog (requires Python 3.12+)." If yes, copy `Fabric/browser/` to `backlog/browser/`, excluding `.venv/`, `node_modules/`, and `.angular/`.
 
 ### 3. Create `.claude/fabric-source.md`

@@ -38,10 +38,29 @@ Progressive detailing appropriate to the entity level:
 
 - **Epic:** Clear problem statement, scope boundaries (what's in/out), product references, rough target timeline.
 - **Feature:** Description tied to a specific product, acceptance criteria (happy + unhappy paths), product target release if known.
-- **Work Item:** Concrete implementation description, acceptance criteria, type classification (Story/Request/Bug).
+- **Work Item:** Concrete implementation description, acceptance criteria, type classification (Story/Request/Bug). See Spec Integration below.
 - **Task:** Description, estimated hours.
 
 Ask about what's missing, not what's already there. If the user provided a rich description up front, skip to gaps.
+
+#### Spec Integration (Work Items — Spec module only)
+
+When refining a Story-type work item and the Spec module is enabled, check for a sibling `spec.md`:
+
+**If a spec exists:** Read it and use it as a source of ground truth about *how* the work will be done. Then apply two pressure-test passes:
+
+1. **Spec → AC coverage**: for each significant decision, component, or approach described in the spec (Approach, Components Affected, Schema Changes, API Changes, UI Changes), verify that the work item's `## Acceptance Criteria` reflect it. Flag gaps:
+   > "The spec describes changes to the Patient resource mapping, but the AC don't include a criterion for that. Should we add one?"
+
+2. **AC → spec coverage**: for each acceptance criterion, verify the spec's approach plausibly satisfies it. Flag criteria the spec's current approach does not appear to address:
+   > "AC item 3 requires handling of valueCodeableConcept — the spec's test plan mentions it, but the Approach section doesn't describe how. Is that covered implicitly, or does the spec need a note?"
+
+Also load context from the parent chain — parent feature's description and AC, parent epic's description, and any linked request (`Backlog Epic:` or `Backlog Feature:` on the request file) — to surface higher-level requirements the work item's AC might be missing.
+
+**If no spec exists** and the work item is a Story with non-trivial scope (more than 1-2 days of work): note it as a refinement gap, but do not block:
+> "No spec yet for this Story. If the approach isn't already obvious, consider `/spec create [wi-id]` to capture it before refining AC further — the spec often surfaces missing criteria."
+
+**If spec exists and is Approved:** The spec is authoritative on the *how*. Focus AC refinement on the *what* and *when* — don't second-guess the approach unless the user raises it.
 
 ### Split
 
@@ -139,6 +158,7 @@ Teams override these in "How We Work" section of their CLAUDE.md. If custom DoR 
 - Dependencies identified
 - Passes implementer lens: "Is this enough to pick up and build?"
 - Passes tester lens: "How would you verify this works?"
+- **Spec (Story-type, Spec module only):** if the item is a Story, an approved spec is a readiness signal — not a hard requirement, but flag its absence or non-Approved state when surfacing readiness gaps. Surface it as: "Spec: [state / missing] — consider approving before activation."
 
 ### Task DoR
 

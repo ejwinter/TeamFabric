@@ -26,8 +26,23 @@ When invoked implicitly, identify the target entity and desired state from conte
 1. Load the entity file.
 2. **Blocker check**: scan `## Blockers` for entries with `Status: Active`. Apply follow-up date filtering — only surface actionable blockers (no follow-up date, or follow-up ≤ today).
 3. **Open question check**: scan `## Open Questions` for unchecked items. Apply follow-up date filtering — only surface actionable questions.
-4. **Dependency check**: scan `## Items this depends on`. If any named dependency has `State: New` or is blocked, flag it.
-5. Surface findings:
+4. **Spec check** (Spec module only — Story-type work items): if the Spec module is enabled and the work item's `Type:` is `Story`, check for a sibling `spec.md`:
+   - **No spec exists**: offer to create one now:
+     ```
+     ⚠ No spec found for this Story work item.
+     Create a spec now before activating? (yes / skip)
+     ```
+     If yes: run the `/spec create [wi-id]` flow inline, then return to this activation check. If skip: proceed.
+   - **Spec exists but `State:` is not `Approved`**: surface the current state and let the user decide:
+     ```
+     ⚠ Spec exists (State: [Draft/Ready]) but hasn't been approved yet.
+     Approve it now, or proceed with activation anyway? (approve / proceed)
+     ```
+     If approve: run the `/spec approve [wi-id]` flow inline, then confirm the activation. If proceed: continue.
+   - **Spec is Approved**: no nudge needed — note it in the summary and proceed.
+
+5. **Dependency check**: scan `## Items this depends on`. If any named dependency has `State: New` or is blocked, flag it.
+6. Surface findings:
    ```
    Ready to activate: [Entity Title]
 
@@ -45,7 +60,7 @@ When invoked implicitly, identify the target entity and desired state from conte
    Proceed with activation? (yes / no)
    ```
    If no issues found: "No blockers, open questions, or unready dependencies found. Activate [Entity Title]? (yes / no)"
-6. On confirmation: set `State: Active`. Propose the edit, write on confirmation.
+7. On confirmation: set `State: Active`. Propose the edit, write on confirmation.
 
 ---
 

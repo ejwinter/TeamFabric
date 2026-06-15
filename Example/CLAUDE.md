@@ -3,6 +3,7 @@
 @.claude/fabric-product.md
 @.claude/fabric-release.md
 @.claude/fabric-backlog.md
+@.claude/fabric-spec.md
 @.claude/fabric-standup.md
 @.claude/fabric-retro.md
 
@@ -84,6 +85,7 @@ describes environment setup, cross-product patterns, or recurring operational st
 | Product | Enabled | Product definitions and context |
 | Release | Enabled | Product release tracking — v3.0 in progress for Clinical Data Lake |
 | Backlog | Enabled | Hierarchical work tracking — epics, features, work items, tasks |
+| Spec | Enabled | Co-located implementation specs on work items — Draft→Approved lifecycle |
 | Effort Tracking | Enabled | Capture actual hours on close, rollup to parent |
 | Standup | Enabled | Standup conversations (Tuesday & Thursday) and team summary |
 | Retrospective | Enabled | Periodic retros with team summary and action item routing |

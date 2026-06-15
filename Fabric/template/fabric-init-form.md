@@ -34,6 +34,7 @@ Mission: [1-2 sentences describing what your team does and for whom]
 | Product        | [Enabled / Disabled] | Product definitions and context                  |
 | Release        | [Enabled / Disabled] | Release tracking and docs (requires Product)     |
 | Backlog        | [Enabled / Disabled] | Epic/feature/work-item hierarchy                 |
+| Spec           | [Enabled / Disabled] | Implementation specs on work items (requires Backlog) |
 | Standup        | [Enabled / Disabled] | Daily async standup conversations and summary    |
 | Retrospective  | [Enabled / Disabled] | Periodic retros with action item routing         |
 

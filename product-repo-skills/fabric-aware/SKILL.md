@@ -105,9 +105,15 @@ Read the full entity file. Then check for a co-located spec:
 ls $(dirname <entity-path>)/spec.md 2>/dev/null
 ```
 
-If `spec.md` exists, note it to the user: "There's an implementation spec alongside this work item —
-want me to load that too?" Read it if they confirm or if their question is clearly about the
-technical approach.
+If `spec.md` exists, read it and surface it based on its state:
+
+- **`State: Approved`** — surface it proactively as the pre-implementation brief: "There's an approved spec for this work item — reading it now." Present the spec content alongside the entity, since an Approved spec is the authoritative *how* for the work.
+- **`State: Ready`** — note it: "A spec exists (State: Ready) but hasn't been approved yet. Load it for context? (yes / skip)"
+- **`State: Draft`** — note it: "There's a spec in Draft — it may not be complete. Load it anyway? (yes / skip)"
+- **`State: Superseded`** — mention it briefly: "A superseded spec exists — likely replaced by a newer direction. Skip it unless you need the history."
+- **No state field or unrecognized value** — treat as Draft.
+
+If the question is clearly about technical approach or design, always read the spec without asking.
 
 ---
 
