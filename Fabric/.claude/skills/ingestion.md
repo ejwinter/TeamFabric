@@ -1,8 +1,12 @@
+---
+spec-sha: ca91894e2e89
+---
 # Skill: Content Ingestion
 
 ## Purpose
 Process incoming content into Fabric's structured entity model. This is the core "people dump raw content in, AI organizes it" capability.
 
+<!-- spec:begin -->
 ## Three Ingestion Paths
 
 ### Quick File
@@ -95,3 +99,4 @@ Before appending, check recent context log entries for overlap:
 - Check notification rules and suggest notifications if applicable.
 - Never modify first-class fields without explicit human confirmation.
 - When ingesting against an entity, flag it as stale if the new content may invalidate the summary.
+<!-- spec:end -->

@@ -1,11 +1,21 @@
+---
+spec-sha: beef0b5ae963
+---
 # TeamFabric Core
 
 <!--
   Framework-owned file. Do not edit directly.
   Updates to this file are applied by running /update from the TeamFabric repo.
   Team-specific instructions belong in your CLAUDE.md, below the @import lines.
+
+  spec:begin/spec:end markers delimit the load-bearing behavioral constitution
+  that TeamFabricHosted translates into its foundational system prompt. Only the
+  text between those markers is hashed into spec-sha (drift detection). Editing
+  inside the markers changes the contract — bump the implementing graph's
+  `# implements:` tag in the TFH repo to match.
 -->
 
+<!-- spec:begin -->
 ## User Identification
 
 Active user is identified by matching `git config user.email` against the Email field in member profiles under team/members/.
@@ -141,6 +151,7 @@ Entities may also carry an **explicit `## Definition of Done` section** — a ch
 ### Staleness Detection
 
 When new content is ingested against an entity, its summary may become outdated. Do not proactively rewrite summaries. Instead, flag entities as potentially stale when new context arrives. When someone queries that entity, note the staleness and offer to reconcile.
+<!-- spec:end -->
 
 ## Staging Directory
 
@@ -196,6 +207,7 @@ If a user asks to modify any of these files, do not edit them. Instead, redirect
 
 These files may only be edited via meta mode during an `/update-fabric` operation or when explicitly working on the framework itself (i.e., from the TeamFabric source repo). Surface this constraint clearly if a user attempts to modify them.
 
+<!-- spec:begin -->
 ## Behavioral Defaults
 
 ### Agent-First Workflow
@@ -275,6 +287,7 @@ When `Writable: Yes` and `Expect-Local: Yes`: the agent may propose drafting con
 - Do not autonomously update first-class fields on entities. Propose changes and wait for human confirmation.
 - When capacity is relevant (staffing, acceptance decisions), load team/team.md for current allocation and engagement counts.
 - When communications, escalations, or decisions involve external parties, load team/team.md and surface relevant stakeholders from the `## Stakeholders` section. Do not assume the user knows who to loop in.
+<!-- spec:end -->
 
 ### Stakeholder Profiles
 
