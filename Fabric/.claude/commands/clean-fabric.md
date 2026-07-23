@@ -66,6 +66,7 @@ If a `## Fabric GC` table is found, use its values to override the defaults belo
 | Staging file | Any (age from file mtime) | 90 days | Delete file |
 | Standup log | Date in filename | 90 days | Delete file |
 | Member discuss-log | Date in filename | 90 days | Delete file |
+| Ingested log archive | Date in filename (YYYY-MM) | 1 year | Delete file |
 | Retro folder | `Status: Closed` + `Closed:` date | 90 days | Delete directory |
 | Member profile | `Status: Departed` + `Terminated:` | 90 days | Archive → `team/archive/members/<slug>.md` |
 | Stakeholder profile | `Status: Departed` + `Terminated:` | 90 days | Archive → `team/archive/stakeholders/<slug>.md` |
@@ -95,6 +96,8 @@ Identify all artifacts past their retention threshold.
 **Standup logs** — scan `team/standup/standup-log/YYYY-MM-DD.md`. Parse date from filename. Age = today − filename date.
 
 **Member discuss-logs** — scan `team/members/*/discuss-log/YYYY-MM-DD.md`. Parse date from filename.
+
+**Ingested log archives** — scan `ingested-log/YYYY-MM.md`. Parse month from filename; age = today − last day of that month.
 
 **Retro folders** — scan `team/retros/*/retro.md`. Read `Status:` and `Closed:`. If `Status: Closed` and `(today − Closed) >= retention`, add to candidates.
 
@@ -151,6 +154,11 @@ N items to archive. N items to delete.
 | Product | State | Terminated | Age | Gravestone |
 |---------|-------|-----------|-----|------------|
 
+## To Be Deleted — 1 Year Retention
+
+### Ingested Log Archives (N)
+Files: ingested-log/ — N files, month range YYYY-MM to YYYY-MM
+
 ## To Be Deleted — 90 Day Retention
 
 ### Features (N)
@@ -203,6 +211,7 @@ Cleanup scan complete. Report written to output/cleanup-report.md.
   X members / stakeholders / products eligible for archiving
   X features, work items, and tasks eligible for deletion
   X standup/discuss logs eligible for deletion
+  X ingested log archives eligible for deletion
   X retros eligible for deletion
   X inbox items eligible for deletion
 
@@ -368,7 +377,7 @@ Delete each eligible directory in full. No gravestone. Git history is sufficient
 
 ### Deleting Log Files
 
-Delete each eligible `standup-log/YYYY-MM-DD.md` and `discuss-log/YYYY-MM-DD.md` file individually.
+Delete each eligible `standup-log/YYYY-MM-DD.md`, `discuss-log/YYYY-MM-DD.md`, and `ingested-log/YYYY-MM.md` file individually.
 
 ### Deleting Retro Folders
 
@@ -397,6 +406,7 @@ Update `output/cleanup-report.md` — append a `## Actions Taken` section:
 
 ### Deleted
 - 12 standup log files (team/standup/standup-log/)
+- 4 ingested log archives (ingested-log/)
 - 3 retro folders (team/retros/)
 - 8 backlog entities (features, work items, tasks)
 
@@ -416,6 +426,6 @@ Do not commit automatically. The user commits.
 
 - The `output/` directory is gitignored in deployed instances. The report is ephemeral.
 - Never touch: `CLAUDE.md`, `.claude/fabric-*.md`, `team/team.md`, `requests/workflow/`, `backlog/archive/`, `requests/archive/`, `team/archive/`, `products/archive/`, `output/`.
-- `discuss-today.md`, `discuss-yesterday.md`, `standup-today.md`, `standup-yesterday.md` are managed by their modules — do not touch.
+- `discuss-today.md`, `discuss-yesterday.md`, `standup-today.md`, `standup-yesterday.md`, `ingested-log/ingested-log.md` are managed by their modules — do not touch. Only dated `ingested-log/YYYY-MM.md` archives are GC-eligible.
 - If `output/` does not exist, create it. Do not create a `.gitignore` entry — that should already exist in a properly initialized instance.
 - **Incomplete Descendants (known behavior):** If features or work items under an epic were deleted in a prior 90-day cleanup run before the epic reached its 1-year archive threshold, the Descendants section of the epic's gravestone will only list children still present at archive time. The git history for the deleted children remains accessible via `git log -- backlog/epics/<slug>/features/`. This is expected — note it in the Final Report if it occurs.

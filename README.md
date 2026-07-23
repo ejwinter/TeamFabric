@@ -8,6 +8,11 @@ The goal is to lower the friction of keeping team knowledge current and actionab
 
 > **Go deeper:** A NotebookLM project with deep dives, audio overviews, and generated documents is maintained at [notebooklm.google.com/notebook/7288a5b1-773a-4dfa-86b5-3e8296cf4cd9](https://notebooklm.google.com/notebook/7288a5b1-773a-4dfa-86b5-3e8296cf4cd9). Content there is continuously updated and may drift from the current codebase — this README is the authoritative reference.
 
+> **TeamFabric Studio — Coming Soon**
+> A web interface for TeamFabric — built for teams who want structured working memory without the CLI. Available as a hosted service and as an on-prem licensed installation.
+>
+> Watch this repo to be notified at launch.
+
 ---
 
 ## The Problem

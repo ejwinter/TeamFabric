@@ -58,13 +58,14 @@ When `with planning` is used, `/ingest staging` is implied if there are files in
 
 For each piece of content (regardless of input mode):
 
-1. Summarize into a proposed context log entry using the standard format:
+1. If the content is file-based, run the Hash Check (see ingestion skill) and surface any match before proceeding.
+2. Summarize into a proposed context log entry using the standard format:
    ```
    - YYYY-MM-DD HH:MM - [Who] ([email]) via [channel]: [Summary].
      Source: [reference]
    ```
-2. If the content suggests a first-class field change, propose it as an **Update** action showing old and new values.
-3. Run duplicate detection against recent context log entries. Surface overlaps and let the user decide.
+3. If the content suggests a first-class field change, propose it as an **Update** action showing old and new values.
+4. Run duplicate detection against recent context log entries. Surface overlaps and let the user decide.
 
 ### Step 3: Review
 
@@ -79,6 +80,8 @@ Produce a structured digest plan listing all proposed actions, grouped by target
 
 ### [Entity ID]: [Entity Name]
 **Source:** [filename or "provided in chat"]
+**SHA-256:** [hash, or NA if not file-based]
+**Hash Check:** [no prior match | exact match: date/who | possible new version: date/who]
 **Action:** [Append | Update | Conflict | Stale flag | Duplicate | New entity]
 **Proposed entry:**
 - YYYY-MM-DD HH:MM - [Who] ([email]) via [channel]: [Summary].
@@ -106,6 +109,7 @@ The user may:
 
 On confirmation (conversational or plan-based):
 - Append context log entries.
+- Append an ingested-log entry per executed source (see ingestion skill: Ingested Log).
 - Update first-class fields (only if explicitly approved).
 - Create new entities from templates.
 - Set staleness flags where applicable.
