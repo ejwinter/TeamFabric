@@ -1,5 +1,5 @@
 ---
-spec-sha: ca91894e2e89
+spec-sha: de8749235c36
 ---
 # Skill: Content Ingestion
 
@@ -16,10 +16,11 @@ Trigger: User says something like "this is for R-42" or "file this under WI-1234
 
 Procedure:
 1. Load the referenced entity's header and recent context log.
-2. Summarize the content against that entity's context.
-3. Present the proposed context log entry for confirmation.
-4. On confirmation, append to the entity's context log.
-5. Set the entity's staleness flag if the summary may affect first-class fields.
+2. If the content is file-based, run the Hash Check and surface any match before proceeding.
+3. Summarize the content against that entity's context.
+4. Present the proposed context log entry for confirmation.
+5. On confirmation, append to the entity's context log and append an Ingested Log entry.
+6. Set the entity's staleness flag if the summary may affect first-class fields.
 
 ### Direct Ingest
 User provides content with a scope hint but no specific entity.
@@ -47,10 +48,10 @@ Trigger: User invokes a digest command or asks to process staged content.
 
 Procedure:
 1. Read all files in staging/ (excluding README.md).
-2. For each piece of content, classify and summarize.
-3. Produce a digest plan document listing all proposed actions.
+2. For each piece of content, run the Hash Check (file-based content only), then classify and summarize.
+3. Produce a digest plan document listing all proposed actions, including each file's Source, SHA-256, and Hash Check outcome.
 4. Present the plan for review.
-5. On confirmation, execute the plan (append entries, update fields, create entities).
+5. On confirmation, execute the plan (append entries, update fields, create entities, append one Ingested Log entry per processed source).
 6. Clear processed files from staging/.
 
 ## Context Log Entry Format
@@ -77,6 +78,37 @@ When proposing actions during ingestion:
 - **Duplicate**: notes redundancy with existing context, recommends skipping
 - **New entity**: proposes creating something that doesn't exist yet
 
+## Ingested Log
+
+An instance-wide, append-only record of ingestion actions, separate from the per-entity Context Log above. One entry per ingested *source* (file, or described content) — not per entity. A source that touches multiple entities gets a single entry with multiple lines in its Actions field, since Source and SHA-256 are properties of the source, not of any one entity.
+
+```
+- YYYY-MM-DD HH:MM - [Who] ([email]): [Source]
+  SHA-256: [64-char hex, or NA]
+  Content: [short, objective description of what was ingested]
+  Hash Check: [no prior match | exact match: [date] by [who] | possible new version of [prior source], last seen [date] by [who]]
+  Actions: [Action Type]: [Entity] - [what changed]; [Action Type]: [Entity] - [what changed]
+```
+
+Fields:
+- Timestamp: when the ingestion action ran — the opposite convention from the Context Log's Timestamp, which records when the content originated. Don't confuse the two.
+- Who: the identity-resolved user performing the ingestion (see User Identification), not necessarily the content's originator.
+- Source: file path, or a short description of the content's origin if not a file (pasted text, dictation, etc.).
+- SHA-256: hash of the file, computed during the Hash Check. `NA` if there's no underlying file.
+- Content: a short, objective description of the source itself — not an entity-specific summary (that belongs in the Context Log entry).
+- Hash Check: the outcome recorded at ingestion time, so the entry is self-explanatory later without re-deriving it.
+- Actions: one segment per entity touched, using the Action Types vocabulary above.
+
+Written only for executed actions. A declined or aborted ingestion — including a rejected item within a partially-approved Staged Batch plan — produces no entry.
+
+### Ingested Log File Lifecycle
+
+- `ingested-log/ingested-log.md` accumulates entries for the current calendar month. Created on first use if it doesn't exist.
+- Before appending a new entry: if the file's most recent entry is from a prior calendar month, roll it over first — archive its current contents to `ingested-log/YYYY-MM.md` (named for the month being archived), start a fresh `ingested-log.md`, then append.
+- If `ingested-log.md` does not yet exist, skip rollover and create it fresh.
+- `ingested-log/` archives are append-only once written. `/clean-fabric` manages culling per the Fabric GC retention table.
+- A Hash Check lookup alone never triggers rollover — only an actual append does.
+
 ## Multi-Entity Content
 
 A single piece of content may be relevant to multiple entities. For example, meeting notes might touch three different requests, or an email might update a request's timeline while also surfacing a new request.
@@ -93,10 +125,26 @@ Before appending, check recent context log entries for overlap:
 - If similar content exists, surface it: "[Person] noted a similar point on [date]. Is this confirming that, updating it, or a separate concern?"
 - Let the user decide whether to append, skip, or merge.
 
+## Hash Check
+
+Applies only to file-based content. Content with no underlying file records `SHA-256: NA` and skips this check entirely — Duplicate Detection above is the only applicable mechanism for pasted or described content.
+
+Before proposing the entry for confirmation:
+1. Compute the file's SHA-256.
+2. Check it against `ingested-log/ingested-log.md` and every retained `ingested-log/YYYY-MM.md` archive.
+3. **Exact hash match**: surface "This exact file was already ingested on [date] by [who]; here's what happened" (pull Content and Actions from the matched entry). Advisory, not blocking — the user may proceed anyway.
+4. **Same source path, different hash, no exact match**: surface as a likely new version, referencing the prior entry's date and who ingested it.
+5. A confirmed override always produces its own new Ingested Log entry — a hash match never silently suppresses logging. Only a declined or aborted ingestion produces no entry.
+
+This check is independent of, and runs before, Duplicate Detection above. A hash match does not automatically make the resulting Action Type "Duplicate" — that's still the user's call, since a byte-identical file can legitimately apply to more than one entity.
+
+Because retention purges old archives (see Fabric GC), the check's lookback is bounded by the configured retention window — a file re-ingested after its original entry has aged out won't be flagged. This is expected, consistent with archived epics/requests losing their gravestone history after their own retention window.
+
 ## Behavioral Rules During Ingestion
 
 - Always check AGENT.md for repository nudges after ingestion (e.g., "should this also go in SharePoint?")
 - Check notification rules and suggest notifications if applicable.
 - Never modify first-class fields without explicit human confirmation.
 - When ingesting against an entity, flag it as stale if the new content may invalidate the summary.
+- Ingested Log entries are written only for executed actions — never for declined or aborted ingestions.
 <!-- spec:end -->
