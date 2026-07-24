@@ -38,30 +38,38 @@ Regenerate Child Summary sections on epics and features to reflect current child
 6. **Write on confirmation.**
    - Replace the existing `## Child Summary` section or insert it after the last existing section (before `## Context Log` if present).
    - Update the `Last updated` date to today.
-   - If any descendants have labels, include a `Labels (rolled up)` line in the Child Summary. Keys are separated by semicolons. Values within a key are comma-separated (unique values only — no counts). Omit the line entirely if no descendants have labels. Example format:
+   - Each child is one bullet line:
+
+     ```text
+     - **[Title](relative/path/to/child-entity.md)** (Level, State) — Brief 1-2 sentence summary. Sizing signal.
+     ```
+
+     - **Link**: relative markdown link from the parent entity file to the child's entity file (e.g. `features/<slug>/feature.md` from an epic, `workitems/<slug>/workitem.md` from a feature) so the row can be clicked through directly in a markdown preview.
+     - **Summary**: the first one to two sentences of the child's `## Description` section, whichever forms a complete thought. Use "No description available." if the section is missing or empty.
+     - **Sizing signal**: child count (e.g. "3 work items" for a feature, "4 tasks" for a work item), followed by the effort contribution when Effort Tracking is enabled (see below).
+
+   - If any descendants have labels, include a `Labels (rolled up)` line below the bullet list. Keys are separated by semicolons. Values within a key are comma-separated (unique values only — no counts). Omit the line entirely if no descendants have labels. Example format:
 
      ```text
      - Labels (rolled up): service-type: data-extraction, reporting; security-sensitive: true
      ```
 
-   If Effort Tracking is enabled, include an effort column in the Child Summary table and an effort total line below it:
+   - If Effort Tracking is enabled, append each child's effort contribution to its bullet's sizing signal, and add an effort total line below the bullet list (and below any Labels line):
 
      ```text
-     | Feature | State | Effort |
-     |---------|-------|--------|
-     | F-001 Auth redesign | Closed | 32h |
-     | F-002 Data pipeline | Active | 18h (partial) |
-     | F-003 Reporting | New | — |
+     - **[Auth Redesign](features/auth-redesign/feature.md)** (Feature, Closed) — Redesigns login to support SSO across internal tools. 4 work items, 32h.
+     - **[Data Pipeline](features/data-pipeline/feature.md)** (Feature, Active) — Builds streaming ingestion for claims data. 6 work items, 18h (partial).
+     - **[Reporting](features/reporting/feature.md)** (Feature, New) — Adds operational reporting dashboards. 2 work items.
 
      - Effort (rolled up): 50h (1 feature pending)
      ```
 
-   Column values:
+   Effort signal values:
    - `Xh` — entity has its own `Effort:` value or a complete subtree sum
    - `Xh (partial)` — subtree sum exists but some descendants have no effort
-   - `—` — no effort anywhere in the subtree
+   - omitted — no effort anywhere in the subtree
 
-   The total line's parenthetical counts direct children with no effort contribution. If Effort Tracking is disabled, omit the effort column and total line entirely.
+   The total line's parenthetical counts direct children with no effort contribution. If Effort Tracking is disabled, omit the effort signal and total line entirely.
 
 ## Notes
 

@@ -58,28 +58,34 @@ Generates and maintains Child Summary sections on epics and features. Invoked by
 ## Child Summary
 Last updated: YYYY-MM-DD
 
-- **child-slug** (Level, State) — Brief description. N work items, ~Xh estimated.
-- **child-slug** (Level, State) — Brief description. Unestimated.
+- **[Title](relative/path/to/child-entity.md)** (Level, State) — Brief 1-2 sentence summary. Sizing signal.
+- **[Title](relative/path/to/child-entity.md)** (Level, State) — Brief 1-2 sentence summary. Sizing signal.
 ```
 
-One line per direct child. Contains: name (folder slug), hierarchy level, state, what it does (from the entity's description first sentence or summary), and a sizing signal (child count, hours if known). Enough to understand scope and spot overlaps without loading child files.
+One line per direct child. Contains:
+
+- **Title**, as a relative markdown link to the child's entity file (`features/<slug>/feature.md` from an epic, `workitems/<slug>/workitem.md` from a feature) so the section doubles as a click-through navigation index in markdown preview.
+- **Level** and **State**, from the child's header.
+- **Summary**: the first one to two sentences of the child's `## Description` section, whichever forms a complete thought. Use "No description available." if the section is missing or empty.
+- **Sizing signal**: child count (work items under a feature, tasks under a work item), plus the effort contribution when Effort Tracking is enabled. See the `/rollup-backlog` command definition for the effort format and aggregation rules.
 
 ### Scanning Process
 
 1. List all direct child directories of the target entity.
 2. For each child, read only the entity file header (everything before the first `##` section) to extract: title (from `# ` heading), state (from `State:` property).
-3. Read the first sentence of the child's `## Description` section for the brief description.
+3. Read the first one to two sentences of the child's `## Description` section for the brief summary — whichever forms a complete thought. Use "No description available." if the section is missing or empty.
 4. For features as children of an epic: count work item subdirectories under `workitems/`.
-5. For work items as children of a feature: count task files under `tasks/` and sum `Estimated Hours` values from task headers.
-6. If hours data is unavailable, use "Unestimated" as the sizing signal.
+5. For work items as children of a feature: count task files under `tasks/`.
+6. If Effort Tracking is enabled, compute the child's effort contribution per the rollup rule in `/rollup-backlog` and append it to the sizing signal.
+7. Construct the relative link from the parent entity file's directory to the child's entity file.
 
 ### Comparison and Update
 
 When an existing Child Summary is present:
 
-1. Parse each line to extract the child slug and state.
+1. Parse each line's link path to extract the child slug, and the parenthetical to extract level and state.
 2. Compare against the scanned children.
-3. Flag: new children not in the summary, children whose state changed, children removed from the directory, estimation changes.
+3. Flag: new children not in the summary, children whose state changed, children removed from the directory, summary or estimation changes.
 4. Propose the updated section showing what changed.
 
 When no Child Summary exists, generate the full section from the scan results.
