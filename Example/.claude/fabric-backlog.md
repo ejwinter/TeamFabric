@@ -13,6 +13,7 @@ The Backlog module provides a hierarchical work tracking structure: Epic > Featu
 
 ```
 backlog/
+  monitoring.md
   inbox/
     <item>.md
   epics/
@@ -308,6 +309,76 @@ A match is confident when the agent would naturally reach for the template given
 
 **Scope:** Templates affect only the initial content of the new file. All normal behavioral rules still apply: entity-transitions for state changes, meta mode protection, DoR gap surfacing during refinement.
 
+## Monitoring Log
+
+A lightweight, instance-wide log for behavior that's suspicious but not yet confirmable — seen once, not reproducible, or not yet worth a full Bug work item. It sits between "create a bug" (too heavy for a one-off, unconfirmed report) and letting it evaporate in conversation (loses the signal if it recurs).
+
+### Directory Structure
+
+```
+backlog/
+  monitoring.md              # single running log
+```
+
+Unlike the Ingested Log, there is no monthly archive rotation — `monitoring.md` is the only file. Entries accumulate here indefinitely; `/clean-fabric` culls individual stale entries in place rather than rotating whole files (see Retention below).
+
+### Entry Format
+
+```
+### [YYYY-MM-DD] Brief description
+- **Reported by:** Name
+- **Urgency:** Low | Medium | High
+- **Description:** [what was observed]
+- **Reproduction attempts:** [what was tried, and the result — "None" is valid]
+- **Occurrences:**
+  - YYYY-MM-DD — [reporter, brief note]
+- **Status:** Watching | Promoted — YYYY-MM-DD, [link to Bug work item] | Stale
+```
+
+- **Occurrences** carries one line per sighting, oldest first, including the initial one — this is the field escalation counts against.
+- **Status** starts at `Watching`. It becomes `Promoted` (with date and a link to the resulting Bug work item) once escalated, or `Stale` if pruned by `/clean-fabric` before ever recurring.
+
+### Logging a Sighting
+
+Trigger: conversational — a report of behavior that's suspicious but not confirmable yet ("saw something weird with X, couldn't reproduce it," "not sure this is a real bug").
+
+1. **Check for a match.** Read `backlog/monitoring.md` for a plausible prior sighting. This is a similarity judgment, not a deterministic key check — the same kind of comparison used for Duplicate Detection during ingestion, since two reporters rarely describe the same behavior in identical words.
+2. **No match:** propose a new entry, `Status: Watching`, with a single Occurrences line for today.
+3. **Plausible match:** surface it — "This looks similar to '[title]' logged on [date]. Same thing recurring, or separate?" On confirmed recurrence, append an Occurrences line and re-run the escalation check below. If the user says it's separate, log it as a new entry.
+4. Always propose the entry for confirmation before writing. Never log a sighting autonomously.
+
+### Escalation
+
+Default thresholds, checked against the Occurrences count after each append:
+- **1st occurrence** — log and stay `Watching`.
+- **2nd occurrence** — reassess: surface the entry and ask whether it's worth acting on yet.
+- **3rd occurrence** — promote: propose creating a Bug work item.
+
+Teams can override both thresholds in a `### Monitoring` subsection of "How We Work" in CLAUDE.md:
+
+```markdown
+### Monitoring
+Reassess At: 2
+Promote At: 3
+```
+
+Absent the subsection, the defaults above apply.
+
+### Promotion to a Bug
+
+When an entry reaches the promote threshold:
+
+1. Propose a Bug work item (see Work Item types above) — under an existing feature if one clearly fits, standalone otherwise. Ask if unclear.
+2. Carry the entry's Description and Occurrences into the work item's Description, so reproduction history isn't lost.
+3. Link both directions: reference the work item in the entry's `Status:` line (`Promoted — YYYY-MM-DD, <path>`), and reference the monitoring entry in the work item's Related Items.
+4. Confirm before creating, same as any backlog entity.
+
+Promotion always requires explicit confirmation — reaching the threshold triggers a proposal, not an automatic action. If the Backlog module is later disabled while promoted or watched entries still exist, there is no escalation target — surface this and let the user decide manually rather than blocking on it.
+
+### Retention
+
+A monitoring entry ages off from its last activity — the most recent Occurrences date, or its Promoted date if promoted — not its creation date. Default retention is **6 months**, overridable via the `monitoring-log` key in the `## Fabric GC` table (see Fabric Core). `/clean-fabric` prunes individual entries out of `monitoring.md` in place once they pass retention; the file itself is never deleted. See that command for scan and prune behavior.
+
 ## Behavioral Rules
 
 - The statuses, types, and scoping definitions above are defaults. Teams can override any of these in the "How We Work" section of their constitution (CLAUDE.md). When custom values are defined there, use those instead of the defaults.
@@ -324,6 +395,8 @@ A match is confident when the agent would naturally reach for the template given
 - After writing or updating a description or acceptance criteria, cross-reference the content against the label schema descriptions and proactively offer label suggestions. One suggestion per key, only when confident.
 - `Size:` is a relative estimate for backlog prioritization. Do not infer or suggest values — only set it when the user provides one.
 - When an epic has `Repository:` set, the repo is expected as a sibling folder next to the Fabric instance, named after the repository slug (e.g. `https://github.com/org/sepsis-model` → `../sepsis-model`). When the user asks about implementation status, code structure, recent commits, or technical details for that epic, check whether the sibling folder exists and read from it on request. Do not read the repo proactively on every query. If the folder is absent, surface this clearly: "This epic has a linked repository (github.com/org/repo) but it isn't cloned locally." When `Repository Path:` is also set, scope all repo reads to `<sibling-folder>/<repository-path>` and filter git log operations with `-- <repository-path>` to limit commits to those touching that path.
+- Monitoring Log entries are proposed and confirmed the same as any backlog write — never logged, escalated, or promoted autonomously.
+- Matching a new sighting to an existing Monitoring Log entry is a similarity judgment, not an exact check; when uncertain, ask rather than guess.
 
 Classification, inbox refinement, assignment recommendations, and reclassification guidance are in the backlog-refinement skill.
 

@@ -315,6 +315,6 @@ Teams may override defaults by adding a `## Fabric GC` table to their `CLAUDE.md
 | member | 1 year |
 ```
 
-Valid artifact keys: `epic`, `request`, `feature`, `workitem`, `task`, `inbox-item`, `standup-log`, `discuss-log`, `ingested-log`, `retro`, `member`, `stakeholder`, `product`, `release`.
+Valid artifact keys: `epic`, `request`, `feature`, `workitem`, `task`, `inbox-item`, `standup-log`, `discuss-log`, `ingested-log`, `monitoring-log`, `retro`, `member`, `stakeholder`, `product`, `release`.
 
 When a team member asks "how do I change retention for X?", point them to this table and explain that it overrides the framework defaults for that artifact type only.

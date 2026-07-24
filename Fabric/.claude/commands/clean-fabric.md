@@ -63,6 +63,7 @@ If a `## Fabric GC` table is found, use its values to override the defaults belo
 | Work Item | `Closed`, `Removed` | 90 days | Delete directory |
 | Task | `Closed`, `Removed` | 90 days | Delete directory |
 | Inbox Item | Any (age from file mtime) | 90 days | Delete file |
+| Monitoring Log entry | Any (age from last Occurrences date, or Promoted date if promoted) | 6 months | Prune entry from backlog/monitoring.md |
 | Staging file | Any (age from file mtime) | 90 days | Delete file |
 | Standup log | Date in filename | 90 days | Delete file |
 | Member discuss-log | Date in filename | 90 days | Delete file |
@@ -90,6 +91,8 @@ Identify all artifacts past their retention threshold.
 **Tasks** — scan all `*/tasks/*/task.md` files. Check `State:` and `Terminated:`.
 
 **Inbox Items** — scan `backlog/inbox/*.md`. Use file mtime as the age.
+
+**Monitoring Log entries** — scan `backlog/monitoring.md`, one candidate per `### [YYYY-MM-DD] ...` entry block. For each entry, compute last-activity date: the most recent date in its `Occurrences` list, or the date in its `Status: Promoted — YYYY-MM-DD, ...` line if promoted, whichever is later. If `(today − last-activity) >= retention`, add the entry to candidates. This is a per-entry scan within a single file, not a file-level check — the file itself is never a deletion candidate.
 
 **Staging files** — scan `staging/` for any files (excluding `README.md`). Use file mtime as the age.
 
@@ -159,6 +162,13 @@ N items to archive. N items to delete.
 ### Ingested Log Archives (N)
 Files: ingested-log/ — N files, month range YYYY-MM to YYYY-MM
 
+## To Be Deleted — 6 Month Retention
+
+### Monitoring Log Entries (N)
+| Entry | Status | Last Activity | Age |
+|-------|--------|---------------|-----|
+| <title> | Watching / Promoted | YYYY-MM-DD | NNN days |
+
 ## To Be Deleted — 90 Day Retention
 
 ### Features (N)
@@ -212,6 +222,7 @@ Cleanup scan complete. Report written to output/cleanup-report.md.
   X features, work items, and tasks eligible for deletion
   X standup/discuss logs eligible for deletion
   X ingested log archives eligible for deletion
+  X monitoring log entries eligible for pruning
   X retros eligible for deletion
   X inbox items eligible for deletion
 
@@ -379,6 +390,10 @@ Delete each eligible directory in full. No gravestone. Git history is sufficient
 
 Delete each eligible `standup-log/YYYY-MM-DD.md`, `discuss-log/YYYY-MM-DD.md`, and `ingested-log/YYYY-MM.md` file individually.
 
+### Pruning Monitoring Log Entries
+
+For each eligible entry, remove its full block (from its `### [YYYY-MM-DD] ...` heading through the line before the next `###` heading, or end of file) from `backlog/monitoring.md`. Never delete `monitoring.md` itself, even if pruning empties it entirely — leave the header in place for the next entry.
+
 ### Deleting Retro Folders
 
 Delete each eligible `team/retros/<retro-slug>/` directory in full.
@@ -407,6 +422,7 @@ Update `output/cleanup-report.md` — append a `## Actions Taken` section:
 ### Deleted
 - 12 standup log files (team/standup/standup-log/)
 - 4 ingested log archives (ingested-log/)
+- 2 monitoring log entries pruned (backlog/monitoring.md)
 - 3 retro folders (team/retros/)
 - 8 backlog entities (features, work items, tasks)
 
@@ -427,5 +443,6 @@ Do not commit automatically. The user commits.
 - The `output/` directory is gitignored in deployed instances. The report is ephemeral.
 - Never touch: `CLAUDE.md`, `.claude/fabric-*.md`, `team/team.md`, `requests/workflow/`, `backlog/archive/`, `requests/archive/`, `team/archive/`, `products/archive/`, `output/`.
 - `discuss-today.md`, `discuss-yesterday.md`, `standup-today.md`, `standup-yesterday.md`, `ingested-log/ingested-log.md` are managed by their modules — do not touch. Only dated `ingested-log/YYYY-MM.md` archives are GC-eligible.
+- `backlog/monitoring.md` is never deleted, even when empty — only individual stale entries within it are GC-eligible, pruned in place.
 - If `output/` does not exist, create it. Do not create a `.gitignore` entry — that should already exist in a properly initialized instance.
 - **Incomplete Descendants (known behavior):** If features or work items under an epic were deleted in a prior 90-day cleanup run before the epic reached its 1-year archive threshold, the Descendants section of the epic's gravestone will only list children still present at archive time. The git history for the deleted children remains accessible via `git log -- backlog/epics/<slug>/features/`. This is expected — note it in the Final Report if it occurs.
