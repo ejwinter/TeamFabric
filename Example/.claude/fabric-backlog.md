@@ -9,6 +9,39 @@
 
 The Backlog module provides a hierarchical work tracking structure: Epic > Feature > Work Item > Task. This is for teams that break work into structured deliverables. Teams that manage work informally or through external tools do not need this module.
 
+## Backlog Index
+
+`fabscripts/backlog_index.py` generates a precomputed index of every request and the
+full epic > feature > work item > task hierarchy, in three forms at the repo root:
+
+- **`backlog-index.slim.md`** — compact, **agent-facing** index. One line per entity with
+  the fields you filter on (state, type, assignee, iteration, priority, blocked, due date,
+  labels; for requests: owner, backlog cross-reference, effort) and a link to the source
+  file. No description prose, so the whole index loads for a fraction of the tokens a tree
+  walk costs.
+- **`backlog-index.md`** — the rich, human-readable index (adds a description excerpt per
+  entity).
+- **`backlog-index.json`** — the same data plus counts, for deterministic, zero-LLM-token
+  filtering by scripts.
+
+**Consult the slim index first.** Before answering a cross-entity question ("what's blocked /
+assigned to me / in this iteration", "which features target release X") or running any
+operation that would otherwise walk the backlog/requests tree, read `backlog-index.slim.md`
+and open only the specific entity files it links to. Do not scan the tree when the index can
+answer the question or pinpoint the few files that can.
+
+**Keep it fresh.** The index is a cache; a stale one forces a re-scan and erases the saving.
+- After creating or editing any backlog or request entity (state change, refinement,
+  ingestion, promotion), re-run `python fabscripts/backlog_index.py` to refresh all three
+  files. This is a cheap filesystem pass — it consumes no model tokens.
+- Before relying on the index, verify freshness with
+  `python fabscripts/backlog_index.py --check` (filesystem-only; prints `STALE` and exits
+  non-zero if any entity is newer than the index, or if an artifact is missing). Regenerate
+  if stale.
+
+The three artifacts are generated working files. Each team decides whether to commit them or
+gitignore them; committing keeps them present in fresh clones and surfaces drift in diffs.
+
 ## Directory Structure
 
 ```
@@ -386,6 +419,7 @@ A monitoring entry ages off from its last activity — the most recent Occurrenc
 - When creating a backlog entity, check `backlog/templates/` for applicable team templates before drafting. See the Team Templates section for matching, suggestion, and application rules.
 - Backlog entity **structure** is protected by meta mode: removing, renaming, or re-scoping epics and features requires meta mode. Creating new backlog entities, state transitions on features, and Child Summary section updates are **not** structural — they do not require meta mode, consistent with how `/transition` already treats work items.
 - When creating a new feature, check if it should reference an existing product (if Product module is enabled).
+- When a feature has `Product Target Release:` set and the Release module is enabled, check whether a release folder exists at `products/<slug>/releases/<version>/` (derive the slug by lowercasing and hyphenating the `Product:` value). If no release folder exists, surface: "Feature targets release `<version>` for `<product>` — no release entity exists yet. Run `/new-release <slug> <version>` to create it."
 - Status rollup: when all child entities are complete, suggest updating the parent's status.
 - Do not create backlog entities autonomously. Propose the entity and wait for confirmation.
 - State changes on backlog entities should invoke the `entity-transitions` skill. Do not directly update `State:` without running the appropriate transition path (blocker/question checks for activation; acceptance criteria review for close; dependent scan for removal).
